@@ -2,58 +2,126 @@
 
 @theme {
   --font-sans: var(--font-poppins), system-ui, -apple-system, sans-serif;
-  --color-brand-50: #ecfdf5;
-  --color-brand-100: #d1fae5;
-  --color-brand-400: #34d399;
-  --color-brand-500: #10b981;
-  --color-brand-600: #059669;
-  --color-brand-900: #064e3b;
+  
+  /* QIFESS Brand Colors */
+  --color-qifess-50: #f0f9ff;
+  --color-qifess-100: #e0f2fe;
+  --color-qifess-500: #0284c7;
+  --color-qifess-600: #0369a1;
+  --color-qifess-700: #075985;
+
+  /* Custom Surface Palette */
+  --color-slate-950: #090d14;
+  --color-slate-900: #0b1018;
+  --color-slate-850: #111821;
+  --color-slate-800: #151e29;
+  --color-slate-750: #1a2533;
+  --color-slate-700: #202a36;
+  --color-slate-600: #334155;
+
+  /* Light Theme Surface Palette */
+  --color-light-bg: #f7f8fa;
+  --color-light-surface: #ffffff;
+  --color-light-elevated: #ffffff;
+  --color-light-border: #e6e8ec;
+  --color-light-text-primary: #171a1f;
+  --color-light-text-secondary: #667085;
+  --color-light-text-muted: #98a2b3;
 }
 
 :root {
-  --background: #020617;
-  --foreground: #f8fafc;
+  --background: #f7f8fa;
+  --surface: #ffffff;
+  --surface-elevated: #ffffff;
+  --border-color: #e6e8ec;
+  --text-primary: #171a1f;
+  --text-secondary: #667085;
+  --text-muted: #98a2b3;
+}
+
+.dark {
+  --background: #090d14;
+  --surface: #111821;
+  --surface-elevated: #151e29;
+  --border-color: #202a36;
+  --text-primary: #f5f7fa;
+  --text-secondary: #9aa6b2;
+  --text-muted: #667085;
 }
 
 body {
   background-color: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-poppins), system-ui, sans-serif;
+  color: var(--text-primary);
+  font-family: var(--font-poppins), system-ui, -apple-system, sans-serif;
   overflow-x: hidden;
+  letter-spacing: -0.01em;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* Custom Glassmorphism Utility */
-.glass-panel {
-  background: rgba(15, 23, 42, 0.7);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+/* Linear / Stripe / Vercel Surface Cards */
+.saas-card {
+  background-color: var(--surface);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.03);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
-/* Scrollbar styles */
+.saas-card:hover {
+  border-color: rgba(2, 132, 199, 0.3);
+}
+
+.dark .saas-card:hover {
+  border-color: rgba(2, 132, 199, 0.4);
+}
+
+/* Compact Table Row Styling */
+.saas-table-row {
+  transition: background-color 0.12s ease;
+  border-bottom: 1px solid var(--border-color);
+}
+.saas-table-row:hover {
+  background-color: rgba(2, 132, 199, 0.03);
+}
+.dark .saas-table-row:hover {
+  background-color: rgba(255, 255, 255, 0.02);
+}
+
+/* Minimal Scrollbars */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 5px;
+  height: 5px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #020617;
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #1e293b;
+  background: var(--border-color);
   border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #10b981;
+  background: var(--text-muted);
 }
 
-/* Custom Hide Scrollbar Utility */
 .scrollbar-none::-webkit-scrollbar {
   display: none;
 }
 .scrollbar-none {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+/* Low-intensity Semantic Badges */
+.badge-dot {
+  display: inline-flex;
+  items-center: center;
+  gap: 5px;
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.2;
 }

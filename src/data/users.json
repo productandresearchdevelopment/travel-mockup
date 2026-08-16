@@ -1,0 +1,52 @@
+[
+  {
+    "id": "USR-001",
+    "name": "Andi Wijaya",
+    "email": "andi@qifess-demo.com",
+    "password": "demo123",
+    "role": "operation_manager",
+    "roleLabel": "Operation Manager",
+    "region": "All Regions",
+    "avatar": "AW"
+  },
+  {
+    "id": "USR-002",
+    "name": "Budi Santoso",
+    "email": "budi@qifess-demo.com",
+    "password": "demo123",
+    "role": "business_manager",
+    "roleLabel": "Business Manager",
+    "region": "East Java",
+    "avatar": "BS"
+  },
+  {
+    "id": "USR-003",
+    "name": "Rina Pratama",
+    "email": "rina@qifess-demo.com",
+    "password": "demo123",
+    "role": "dispatcher",
+    "roleLabel": "Dispatcher",
+    "region": "East Java",
+    "avatar": "RP"
+  },
+  {
+    "id": "USR-004",
+    "name": "Dimas Saputra",
+    "email": "dimas@qifess-demo.com",
+    "password": "demo123",
+    "role": "fleet",
+    "roleLabel": "Fleet Management",
+    "region": "East Java",
+    "avatar": "DS"
+  },
+  {
+    "id": "USR-005",
+    "name": "Sari Lestari",
+    "email": "sari@qifess-demo.com",
+    "password": "demo123",
+    "role": "sdm",
+    "roleLabel": "SDM / Crew Management",
+    "region": "East Java",
+    "avatar": "SL"
+  }
+]
