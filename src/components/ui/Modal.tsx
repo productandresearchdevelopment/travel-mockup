@@ -58,46 +58,46 @@ export function Modal({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 bg-slate-950/80 backdrop-blur-md"
+            className="fixed inset-0 bg-black/60 backdrop-blur-xs"
           />
 
           {/* Modal Card */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+            initial={{ opacity: 0, scale: 0.98, y: 10 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            transition={{ duration: 0.2, ease: "easeOut" }}
+            exit={{ opacity: 0, scale: 0.98, y: 10 }}
+            transition={{ duration: 0.15, ease: "easeOut" }}
             className={cn(
-              "relative w-full bg-slate-900 border border-slate-800 rounded-3xl shadow-2xl overflow-hidden z-10 my-8",
+              "relative w-full bg-white dark:bg-[#172230] border border-[#E4E7EC] dark:border-[#202B38] rounded-2xl shadow-xl overflow-hidden z-10 my-8 text-[#172033] dark:text-[#F8FAFC]",
               maxWidths[maxWidth],
               className
             )}
           >
             {/* Modal Header */}
-            <div className="flex items-start justify-between p-6 sm:p-8 border-b border-slate-800/80 bg-slate-950/30">
-              <div className="space-y-1 pr-6">
+            <div className="flex items-start justify-between p-4 sm:p-5 border-b border-[#E4E7EC] dark:border-[#202B38] bg-[#F9FAFB] dark:bg-[#131D28]">
+              <div className="space-y-0.5 pr-6">
                 {title && (
-                  <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
+                  <h3 className="text-base sm:text-lg font-bold text-[#172033] dark:text-white tracking-tight">
                     {title}
                   </h3>
                 )}
                 {description && (
-                  <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">
+                  <p className="text-xs text-[#667085] dark:text-[#A7B1C0] leading-relaxed">
                     {description}
                   </p>
                 )}
               </div>
               <button
                 onClick={onClose}
-                className="p-2 text-slate-400 hover:text-white bg-slate-800/50 hover:bg-slate-800 rounded-full transition-colors focus:outline-none"
+                className="p-1.5 text-[#667085] dark:text-[#A7B1C0] hover:text-[#172033] dark:hover:text-white bg-[#F3F4F6] dark:hover:bg-[#1A2634] rounded-lg transition-colors focus:outline-none cursor-pointer"
                 aria-label="Close modal"
               >
-                <X className="w-5 h-5" />
+                <X className="w-4 h-4" />
               </button>
             </div>
 
             {/* Modal Content */}
-            <div className="p-6 sm:p-8 max-h-[70vh] overflow-y-auto">{children}</div>
+            <div className="p-4 sm:p-5 max-h-[75vh] overflow-y-auto">{children}</div>
           </motion.div>
         </div>
       )}

@@ -1,23 +1,13 @@
 "use client";
 
 import React, { useState } from "react";
-import { Vehicle, VehicleLog, Maintenance, VehicleChecklist, VehicleRepairAssignment, VehicleStatus, VehicleOwnership } from "@/types/travelOps";
+import { Vehicle, VehicleLog, Maintenance, VehicleChecklist, VehicleRepairAssignment } from "@/types/travelOps";
 import {
   Truck,
   Wrench,
-  Fuel,
-  Gauge,
-  CheckCircle2,
-  AlertTriangle,
-  Calendar,
-  Plus,
-  Search,
-  Filter,
-  MapPin,
-  Clock,
   ClipboardCheck,
   Eye,
-  TrendingUp,
+  MapPin,
 } from "lucide-react";
 
 interface FleetManagementViewProps {
@@ -71,18 +61,18 @@ export const FleetManagementView: React.FC<FleetManagementViewProps> = ({
   return (
     <div className="space-y-6 font-sans">
       {/* Top Header */}
-      <div className="bg-slate-900 border border-slate-800 p-5 rounded-xl flex flex-wrap items-center justify-between gap-4 shadow-xl">
+      <div className="bg-white dark:bg-[#101822] border border-[#E4E7EC] dark:border-[#202B38] p-5 rounded-2xl flex flex-wrap items-center justify-between gap-4 shadow-xs">
         <div>
           <div className="flex items-center gap-2">
-            <span className="px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 text-[11px] font-bold uppercase tracking-wider">
+            <span className="px-2.5 py-0.5 rounded-full bg-amber-50 dark:bg-amber-950/40 text-[#B54708] dark:text-[#FEC84B] border border-amber-200 dark:border-amber-800/50 text-[11px] font-bold uppercase tracking-wider">
               Fleet Operations Control
             </span>
-            <span className="text-xs text-slate-400 font-mono">/fleet</span>
+            <span className="text-xs text-[#667085] dark:text-[#A7B1C0] font-mono">/fleet</span>
           </div>
-          <h1 className="text-xl font-extrabold text-white tracking-tight mt-1">
+          <h1 className="text-xl font-extrabold text-[#172033] dark:text-white tracking-tight mt-1">
             Enterprise Fleet & Maintenance Management
           </h1>
-          <p className="text-xs text-slate-400">
+          <p className="text-xs text-[#667085] dark:text-[#A7B1C0]">
             Real-time management of company, rental, and partner vehicles (Hiace, ELF, 4x4 Jeeps). Monitor odometer readings, fuel logs, daily checklists, and workshop repair assignments.
           </p>
         </div>
@@ -90,14 +80,14 @@ export const FleetManagementView: React.FC<FleetManagementViewProps> = ({
         <div className="flex items-center gap-2.5">
           <button
             onClick={() => onOpenChecklistModal()}
-            className="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white px-3.5 py-2 rounded-lg text-xs font-semibold shadow transition-colors cursor-pointer"
+            className="flex items-center gap-2 bg-[#16A34A] hover:bg-[#15803D] dark:bg-[#32D583] text-white px-3.5 py-2 rounded-xl text-xs font-bold shadow-xs transition-colors cursor-pointer"
           >
             <ClipboardCheck className="w-4 h-4" />
             <span>Complete Checklist</span>
           </button>
           <button
             onClick={() => onOpenMaintenanceModal()}
-            className="flex items-center gap-2 bg-amber-600 hover:bg-amber-500 text-white px-3.5 py-2 rounded-lg text-xs font-semibold shadow transition-colors cursor-pointer"
+            className="flex items-center gap-2 bg-[#D97706] hover:bg-[#B54708] dark:bg-[#FDB022] text-white px-3.5 py-2 rounded-xl text-xs font-bold shadow-xs transition-colors cursor-pointer"
           >
             <Wrench className="w-4 h-4" />
             <span>Schedule Maintenance</span>
@@ -106,123 +96,91 @@ export const FleetManagementView: React.FC<FleetManagementViewProps> = ({
       </div>
 
       {/* TOP KPI CARDS (7 CARDS) */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 xl:grid-cols-7 gap-3">
-        <div className="bg-slate-900 border border-slate-800 p-3.5 rounded-xl space-y-1 shadow-md">
-          <span className="text-xs text-slate-400">Total Fleet</span>
-          <div className="text-2xl font-extrabold text-white font-mono">{totalFleet}</div>
-          <span className="text-[10px] text-slate-400">Managed Vehicles</span>
+      <div className="grid grid-cols-2 sm:grid-cols-4 xl:grid-cols-7 gap-3 text-xs">
+        <div className="bg-white dark:bg-[#101822] border border-[#E4E7EC] dark:border-[#202B38] p-3.5 rounded-xl space-y-1 shadow-xs">
+          <span className="text-[#667085] dark:text-[#A7B1C0] block font-medium">Total Fleet</span>
+          <div className="text-2xl font-extrabold text-[#172033] dark:text-white font-mono">{totalFleet}</div>
+          <span className="text-[10px] text-[#667085] dark:text-[#A7B1C0]">Managed Vehicles</span>
         </div>
 
-        <div className="bg-slate-900 border border-slate-800 p-3.5 rounded-xl space-y-1 shadow-md">
-          <span className="text-xs text-slate-400">Available</span>
-          <div className="text-2xl font-extrabold text-emerald-400 font-mono">{availableCount}</div>
-          <span className="text-[10px] text-emerald-400 font-medium">Ready for Dispatch</span>
+        <div className="bg-white dark:bg-[#101822] border border-[#E4E7EC] dark:border-[#202B38] p-3.5 rounded-xl space-y-1 shadow-xs">
+          <span className="text-[#667085] dark:text-[#A7B1C0] block font-medium">Available</span>
+          <div className="text-2xl font-extrabold text-[#16A34A] dark:text-[#32D583] font-mono">{availableCount}</div>
+          <span className="text-[10px] text-[#16A34A] dark:text-[#32D583] font-medium">Ready for Dispatch</span>
         </div>
 
-        <div className="bg-slate-900 border border-slate-800 p-3.5 rounded-xl space-y-1 shadow-md">
-          <span className="text-xs text-slate-400">Assigned</span>
-          <div className="text-2xl font-extrabold text-blue-400 font-mono">{assignedCount}</div>
-          <span className="text-[10px] text-blue-400 font-medium">Tour Matched</span>
+        <div className="bg-white dark:bg-[#101822] border border-[#E4E7EC] dark:border-[#202B38] p-3.5 rounded-xl space-y-1 shadow-xs">
+          <span className="text-[#667085] dark:text-[#A7B1C0] block font-medium">Assigned</span>
+          <div className="text-2xl font-extrabold text-[#2563EB] dark:text-[#4F8CFF] font-mono">{assignedCount}</div>
+          <span className="text-[10px] text-[#2563EB] dark:text-[#4F8CFF]">Booked for Tour</span>
         </div>
 
-        <div className="bg-slate-900 border border-slate-800 p-3.5 rounded-xl space-y-1 shadow-md">
-          <span className="text-xs text-slate-400">On Trip</span>
-          <div className="text-2xl font-extrabold text-cyan-400 font-mono">{onTripCount}</div>
-          <span className="text-[10px] text-cyan-400 font-medium">En Route</span>
+        <div className="bg-white dark:bg-[#101822] border border-[#E4E7EC] dark:border-[#202B38] p-3.5 rounded-xl space-y-1 shadow-xs">
+          <span className="text-[#667085] dark:text-[#A7B1C0] block font-medium">On Trip</span>
+          <div className="text-2xl font-extrabold text-cyan-600 dark:text-cyan-400 font-mono">{onTripCount}</div>
+          <span className="text-[10px] text-cyan-600 dark:text-cyan-400 font-medium">En Route Java-Bali</span>
         </div>
 
-        <div className="bg-slate-900 border border-slate-800 p-3.5 rounded-xl space-y-1 shadow-md">
-          <span className="text-xs text-slate-400">Maintenance</span>
-          <div className="text-2xl font-extrabold text-red-400 font-mono">{maintenanceCount}</div>
-          <span className="text-[10px] text-red-400 font-medium">In Workshop</span>
+        <div className="bg-white dark:bg-[#101822] border border-[#E4E7EC] dark:border-[#202B38] p-3.5 rounded-xl space-y-1 shadow-xs">
+          <span className="text-[#667085] dark:text-[#A7B1C0] block font-medium">Workshop</span>
+          <div className="text-2xl font-extrabold text-[#DC2626] dark:text-[#F97066] font-mono">{maintenanceCount}</div>
+          <span className="text-[10px] text-[#DC2626] dark:text-[#F97066]">Service / Repair</span>
         </div>
 
-        <div className="bg-slate-900 border border-slate-800 p-3.5 rounded-xl space-y-1 shadow-md">
-          <span className="text-xs text-slate-400">Inspection</span>
-          <div className="text-2xl font-extrabold text-amber-400 font-mono">{inspectionCount}</div>
-          <span className="text-[10px] text-amber-400 font-medium">Checklist Pending</span>
+        <div className="bg-white dark:bg-[#101822] border border-[#E4E7EC] dark:border-[#202B38] p-3.5 rounded-xl space-y-1 shadow-xs">
+          <span className="text-[#667085] dark:text-[#A7B1C0] block font-medium">Inspection</span>
+          <div className="text-2xl font-extrabold text-[#D97706] dark:text-[#FDB022] font-mono">{inspectionCount}</div>
+          <span className="text-[10px] text-[#D97706] dark:text-[#FDB022]">Checklist Due</span>
         </div>
 
-        <div className="bg-slate-900 border border-slate-800 p-3.5 rounded-xl space-y-1 shadow-md">
-          <span className="text-xs text-slate-400">Unavailable</span>
-          <div className="text-2xl font-extrabold text-slate-400 font-mono">{unavailableCount}</div>
-          <span className="text-[10px] text-slate-500">Off-Service</span>
+        <div className="bg-white dark:bg-[#101822] border border-[#E4E7EC] dark:border-[#202B38] p-3.5 rounded-xl space-y-1 shadow-xs">
+          <span className="text-[#667085] dark:text-[#A7B1C0] block font-medium">Unavailable</span>
+          <div className="text-2xl font-extrabold text-[#667085] dark:text-[#A7B1C0] font-mono">{unavailableCount}</div>
+          <span className="text-[10px] text-[#667085] dark:text-[#A7B1C0]">Out of Service</span>
         </div>
       </div>
 
-      {/* SUB-TABS & FILTERS */}
-      <div className="bg-slate-900 border border-slate-800 p-3.5 rounded-xl flex flex-wrap items-center justify-between gap-3 text-xs">
-        <div className="flex items-center gap-1.5 bg-slate-950 p-1 rounded-lg border border-slate-800">
-          <button
-            onClick={() => setActiveSubTab("vehicles")}
-            className={`px-3 py-1.5 rounded-md font-semibold transition-all cursor-pointer ${
-              activeSubTab === "vehicles" ? "bg-amber-500 text-slate-950 shadow font-extrabold" : "text-slate-400 hover:text-white"
-            }`}
-          >
-            Vehicle List ({vehicles.length})
-          </button>
-          <button
-            onClick={() => setActiveSubTab("utilization")}
-            className={`px-3 py-1.5 rounded-md font-semibold transition-all cursor-pointer ${
-              activeSubTab === "utilization" ? "bg-amber-500 text-slate-950 shadow font-extrabold" : "text-slate-400 hover:text-white"
-            }`}
-          >
-            Utilization Metrics
-          </button>
-          <button
-            onClick={() => setActiveSubTab("logbook")}
-            className={`px-3 py-1.5 rounded-md font-semibold transition-all cursor-pointer ${
-              activeSubTab === "logbook" ? "bg-amber-500 text-slate-950 shadow font-extrabold" : "text-slate-400 hover:text-white"
-            }`}
-          >
-            Fuel & Logbook ({logs.length})
-          </button>
-          <button
-            onClick={() => setActiveSubTab("maintenance")}
-            className={`px-3 py-1.5 rounded-md font-semibold transition-all cursor-pointer ${
-              activeSubTab === "maintenance" ? "bg-amber-500 text-slate-950 shadow font-extrabold" : "text-slate-400 hover:text-white"
-            }`}
-          >
-            Maintenance ({maintenance.length})
-          </button>
-          <button
-            onClick={() => setActiveSubTab("repairs")}
-            className={`px-3 py-1.5 rounded-md font-semibold transition-all cursor-pointer ${
-              activeSubTab === "repairs" ? "bg-amber-500 text-slate-950 shadow font-extrabold" : "text-slate-400 hover:text-white"
-            }`}
-          >
-            Repair Assignments ({repairs.length})
-          </button>
-        </div>
+      {/* NAVIGATION SUB-TABS & FILTERS */}
+      <div className="bg-white dark:bg-[#101822] border border-[#E4E7EC] dark:border-[#202B38] p-4 rounded-2xl space-y-4 shadow-xs text-xs">
+        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#E4E7EC] dark:border-[#202B38] pb-3">
+          <div className="flex items-center gap-1.5 overflow-x-auto">
+            {[
+              { id: "vehicles", label: "Fleet Roster (" + totalFleet + ")" },
+              { id: "utilization", label: "Fleet Utilization" },
+              { id: "logbook", label: "Fuel & Odometer Logs (" + logs.length + ")" },
+              { id: "maintenance", label: "Maintenance Schedules (" + maintenance.length + ")" },
+              { id: "repairs", label: "Repair Tickets (" + repairs.length + ")" },
+            ].map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveSubTab(tab.id as any)}
+                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
+                  activeSubTab === tab.id
+                    ? "bg-[#2563EB] dark:bg-[#4F8CFF] text-white shadow-xs"
+                    : "bg-[#F9FAFB] dark:bg-[#131D28] text-[#667085] dark:text-[#A7B1C0] hover:text-[#172033] dark:hover:text-white border border-[#E4E7EC] dark:border-[#202B38]"
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
 
-        {activeSubTab === "vehicles" && (
           <div className="flex items-center gap-2">
-            <div className="relative min-w-[180px]">
-              <Search className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-1/2 -translate-y-1/2" />
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Plate, model, loc..."
-                className="w-full bg-slate-950 border border-slate-800 rounded-lg pl-8 pr-3 py-1.5 text-xs text-slate-200 focus:outline-none"
-              />
-            </div>
-
             <select
               value={ownershipFilter}
               onChange={(e) => setOwnershipFilter(e.target.value)}
-              className="bg-slate-950 border border-slate-800 text-slate-300 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none"
+              className="bg-[#F9FAFB] dark:bg-[#131D28] border border-[#D0D5DD] dark:border-[#344054] text-[#172033] dark:text-[#F8FAFC] px-2.5 py-1 rounded-lg"
             >
-              <option value="ALL">All Ownership</option>
-              <option value="Company">Company</option>
-              <option value="Rental">Rental</option>
-              <option value="Partner">Partner</option>
+              <option value="ALL">All Ownerships</option>
+              <option value="Company">Company Owned</option>
+              <option value="Rental">Rental Fleet</option>
+              <option value="Partner">Partner Vehicle</option>
             </select>
 
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="bg-slate-950 border border-slate-800 text-slate-300 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none"
+              className="bg-[#F9FAFB] dark:bg-[#131D28] border border-[#D0D5DD] dark:border-[#344054] text-[#172033] dark:text-[#F8FAFC] px-2.5 py-1 rounded-lg"
             >
               <option value="ALL">All Statuses</option>
               <option value="Available">Available</option>
@@ -230,255 +188,81 @@ export const FleetManagementView: React.FC<FleetManagementViewProps> = ({
               <option value="On Trip">On Trip</option>
               <option value="Maintenance">Maintenance</option>
               <option value="Inspection">Inspection</option>
-              <option value="Unavailable">Unavailable</option>
             </select>
+          </div>
+        </div>
+
+        {/* TAB CONTENT: VEHICLE ROSTER TABLE */}
+        {activeSubTab === "vehicles" && (
+          <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr className="border-b border-[#E4E7EC] dark:border-[#202B38] bg-[#F9FAFB] dark:bg-[#131D28] text-[#667085] dark:text-[#A7B1C0] text-[11px] uppercase tracking-wider font-semibold">
+                  <th className="py-2.5 px-3">Plate Number</th>
+                  <th className="py-2.5 px-3">Model</th>
+                  <th className="py-2.5 px-3">Ownership</th>
+                  <th className="py-2.5 px-3">Capacity</th>
+                  <th className="py-2.5 px-3">Current Hub</th>
+                  <th className="py-2.5 px-3">Odometer</th>
+                  <th className="py-2.5 px-3">Status</th>
+                  <th className="py-2.5 px-3 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-[#EEF0F3] dark:divide-[#202B38]">
+                {filteredVehicles.map((v) => (
+                  <tr
+                    key={v.id}
+                    onClick={() => onSelectVehicleDetail(v.id)}
+                    className="saas-table-row cursor-pointer"
+                  >
+                    <td className="py-3 px-3 font-mono font-bold text-[#2563EB] dark:text-[#4F8CFF]">{v.plateNumber}</td>
+                    <td className="py-3 px-3 font-bold text-[#172033] dark:text-white">
+                      {v.brand} {v.model}
+                    </td>
+                    <td className="py-3 px-3">
+                      <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-[#F9FAFB] dark:bg-[#131D28] border border-[#E4E7EC] dark:border-[#202B38] text-[#172033] dark:text-[#F8FAFC]">
+                        {v.ownership}
+                      </span>
+                    </td>
+                    <td className="py-3 px-3 font-mono text-[#172033] dark:text-[#F8FAFC]">{v.capacity} Seats</td>
+                    <td className="py-3 px-3 text-[#667085] dark:text-[#A7B1C0]">
+                      <div className="flex items-center gap-1">
+                        <MapPin className="w-3 h-3 text-[#2563EB] dark:text-[#4F8CFF]" />
+                        <span>{v.currentLocation}</span>
+                      </div>
+                    </td>
+                    <td className="py-3 px-3 font-mono text-[#172033] dark:text-[#F8FAFC]">{v.odometer.toLocaleString()} KM</td>
+                    <td className="py-3 px-3">
+                      <span
+                        className={`px-2 py-0.5 rounded text-[10px] font-semibold border ${
+                          v.status === "Available"
+                            ? "bg-[#ECFDF3] text-[#15803D] dark:bg-[rgba(50,213,131,0.12)] dark:text-[#6CE9A6] border-emerald-200/60 dark:border-emerald-800/40"
+                            : v.status === "On Trip" || v.status === "Assigned"
+                            ? "bg-[#EFF8FF] text-[#175CD3] dark:bg-[rgba(83,177,253,0.12)] dark:text-[#84CAFF] border-blue-200/60 dark:border-blue-800/40"
+                            : "bg-[#FEF3F2] text-[#B42318] dark:bg-[rgba(249,112,102,0.12)] dark:text-[#FDA29B] border-rose-200/60 dark:border-rose-800/40"
+                        }`}
+                      >
+                        {v.status}
+                      </span>
+                    </td>
+                    <td className="py-3 px-3 text-right">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onSelectVehicleDetail(v.id);
+                        }}
+                        className="p-1 rounded text-[#2563EB] dark:text-[#4F8CFF] hover:bg-[#EEF4FF] dark:hover:bg-[#16263F] font-semibold text-[11px] cursor-pointer"
+                      >
+                        <Eye className="w-4 h-4" />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         )}
       </div>
-
-      {/* SUB-TAB 1: VEHICLE LIST TABLE */}
-      {activeSubTab === "vehicles" && (
-        <div className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-xl">
-          <table className="w-full text-left text-xs border-collapse">
-            <thead>
-              <tr className="bg-slate-950 border-b border-slate-800 text-slate-400 font-semibold uppercase text-[10px] tracking-wider">
-                <th className="p-3">Vehicle</th>
-                <th className="p-3">Plate Number</th>
-                <th className="p-3">Type</th>
-                <th className="p-3">Capacity</th>
-                <th className="p-3">Ownership</th>
-                <th className="p-3">Current Location</th>
-                <th className="p-3">Current Tour</th>
-                <th className="p-3">Fuel Level</th>
-                <th className="p-3">Status</th>
-                <th className="p-3">Maintenance</th>
-                <th className="p-3 text-right">Action</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-800/80">
-              {filteredVehicles.map((vehicle) => (
-                <tr
-                  key={vehicle.id}
-                  className="ops-table-row hover:bg-slate-850/60 transition-colors cursor-pointer"
-                  onClick={() => onSelectVehicleDetail(vehicle.id)}
-                >
-                  <td className="p-3 font-bold text-white max-w-[140px] truncate">
-                    {vehicle.brand} {vehicle.model}
-                  </td>
-                  <td className="p-3 font-mono font-bold text-amber-300 whitespace-nowrap">{vehicle.plateNumber}</td>
-                  <td className="p-3 text-slate-300">{vehicle.model.includes("Hiace") ? "Minibus" : vehicle.model.includes("ELF") ? "Microbus" : "4x4 SUV"}</td>
-                  <td className="p-3 font-mono text-emerald-400 font-bold">{vehicle.capacity} Pax</td>
-                  <td className="p-3">
-                    <span
-                      className={`px-2 py-0.5 rounded text-[10px] font-bold border ${
-                        vehicle.ownership === "Company"
-                          ? "bg-blue-500/10 text-blue-400 border-blue-500/30"
-                          : vehicle.ownership === "Rental"
-                          ? "bg-purple-500/10 text-purple-400 border-purple-500/30"
-                          : "bg-emerald-500/10 text-emerald-400 border-emerald-500/30"
-                      }`}
-                    >
-                      {vehicle.ownership}
-                    </span>
-                  </td>
-                  <td className="p-3 text-slate-300 max-w-[130px] truncate">{vehicle.currentLocation}</td>
-                  <td className="p-3 font-mono text-cyan-400">{vehicle.currentTourId || "-"}</td>
-                  <td className="p-3 font-mono font-bold text-emerald-400">{vehicle.fuelLevel}%</td>
-                  <td className="p-3">
-                    <span
-                      className={`px-2.5 py-1 rounded-full text-[10px] font-semibold border ${
-                        vehicle.status === "Available"
-                          ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/30"
-                          : vehicle.status === "On Trip"
-                          ? "bg-blue-500/10 text-blue-400 border-blue-500/30"
-                          : vehicle.status === "Maintenance"
-                          ? "bg-red-500/10 text-red-400 border-red-500/30"
-                          : "bg-amber-500/10 text-amber-400 border-amber-500/30"
-                      }`}
-                    >
-                      {vehicle.status}
-                    </span>
-                  </td>
-                  <td className="p-3">
-                    <span
-                      className={`font-semibold ${
-                        vehicle.maintenanceStatus === "Good"
-                          ? "text-emerald-400"
-                          : vehicle.maintenanceStatus === "Service Due"
-                          ? "text-amber-400"
-                          : "text-red-400"
-                      }`}
-                    >
-                      {vehicle.maintenanceStatus}
-                    </span>
-                  </td>
-                  <td className="p-3 text-right" onClick={(e) => e.stopPropagation()}>
-                    <div className="flex items-center justify-end gap-1.5">
-                      <button
-                        onClick={() => onOpenChecklistModal(vehicle.id)}
-                        className="bg-emerald-600 hover:bg-emerald-500 text-white text-[10px] px-2.5 py-1 rounded font-bold transition-colors cursor-pointer"
-                        title="Log Safety Checklist"
-                      >
-                        Checklist
-                      </button>
-                      <button
-                        onClick={() => onSelectVehicleDetail(vehicle.id)}
-                        className="p-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors cursor-pointer"
-                      >
-                        <Eye className="w-3.5 h-3.5" />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
-
-      {/* SUB-TAB 2: UTILIZATION METRICS */}
-      {activeSubTab === "utilization" && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="bg-slate-900 border border-slate-800 p-5 rounded-xl space-y-2 shadow-lg">
-            <span className="text-xs text-slate-400">Vehicle Utilization Rate</span>
-            <div className="text-3xl font-extrabold font-mono text-emerald-400">84.5%</div>
-            <div className="w-full bg-slate-950 h-2 rounded-full overflow-hidden">
-              <div className="bg-emerald-500 h-full" style={{ width: "84.5%" }}></div>
-            </div>
-            <span className="text-[10px] text-slate-400">Active fleet hours per day</span>
-          </div>
-
-          <div className="bg-slate-900 border border-slate-800 p-5 rounded-xl space-y-2 shadow-lg">
-            <span className="text-xs text-slate-400">Trips Completed YTD</span>
-            <div className="text-3xl font-extrabold font-mono text-cyan-400">142 Trips</div>
-            <span className="text-[10px] text-cyan-400 font-medium">+18 trips this month</span>
-          </div>
-
-          <div className="bg-slate-900 border border-slate-800 p-5 rounded-xl space-y-2 shadow-lg">
-            <span className="text-xs text-slate-400">Distance Traveled</span>
-            <div className="text-3xl font-extrabold font-mono text-blue-400">34,250 KM</div>
-            <span className="text-[10px] text-blue-400">Total Java-Bali overland distance</span>
-          </div>
-
-          <div className="bg-slate-900 border border-slate-800 p-5 rounded-xl space-y-2 shadow-lg">
-            <span className="text-xs text-slate-400">Average Daily Utilization</span>
-            <div className="text-3xl font-extrabold font-mono text-purple-400">8.4 Hours</div>
-            <span className="text-[10px] text-purple-400">Per active vehicle</span>
-          </div>
-        </div>
-      )}
-
-      {/* SUB-TAB 3: LOGBOOK */}
-      {activeSubTab === "logbook" && (
-        <div className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-xl">
-          <table className="w-full text-left text-xs border-collapse">
-            <thead>
-              <tr className="bg-slate-950 border-b border-slate-800 text-slate-400 font-semibold uppercase text-[10px] tracking-wider">
-                <th className="p-3">Date</th>
-                <th className="p-3">Vehicle Plate</th>
-                <th className="p-3">Driver</th>
-                <th className="p-3">Tour ID</th>
-                <th className="p-3">Departure</th>
-                <th className="p-3">Return</th>
-                <th className="p-3">KM Start → End</th>
-                <th className="p-3">Fuel Start → End</th>
-                <th className="p-3">Status</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-800/80 font-mono">
-              {logs.map((l) => (
-                <tr key={l.id} className="hover:bg-slate-850/60">
-                  <td className="p-3 text-slate-300">{l.date}</td>
-                  <td className="p-3 text-amber-300 font-bold">{l.vehicleId}</td>
-                  <td className="p-3 font-sans font-medium text-slate-200">{l.driverId}</td>
-                  <td className="p-3 text-emerald-400">{l.tourId}</td>
-                  <td className="p-3 text-slate-300">{l.departureTime}</td>
-                  <td className="p-3 text-slate-300">{l.returnTime}</td>
-                  <td className="p-3 text-white">
-                    {l.odometerStart.toLocaleString()} → {l.odometerEnd.toLocaleString()} (+{l.odometerEnd - l.odometerStart} KM)
-                  </td>
-                  <td className="p-3 text-emerald-400">{l.fuelStart}% → {l.fuelEnd}%</td>
-                  <td className="p-3 font-sans">
-                    <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-500/10 text-blue-400 border border-blue-500/30">
-                      {l.status}
-                    </span>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
-
-      {/* SUB-TAB 4: MAINTENANCE */}
-      {activeSubTab === "maintenance" && (
-        <div className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-xl">
-          <table className="w-full text-left text-xs border-collapse">
-            <thead>
-              <tr className="bg-slate-950 border-b border-slate-800 text-slate-400 font-semibold uppercase text-[10px] tracking-wider">
-                <th className="p-3">Vehicle</th>
-                <th className="p-3">Maintenance Description</th>
-                <th className="p-3">Due Date</th>
-                <th className="p-3">Priority</th>
-                <th className="p-3">Assigned Workshop</th>
-                <th className="p-3">Status</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-800/80">
-              {maintenance.map((m) => (
-                <tr key={m.id} className="hover:bg-slate-850/60">
-                  <td className="p-3 font-mono font-bold text-amber-300">{m.vehicleId}</td>
-                  <td className="p-3 font-semibold text-slate-200">{m.type} - {m.description}</td>
-                  <td className="p-3 font-mono text-slate-300">{m.dueDate}</td>
-                  <td className="p-3 font-bold text-amber-400">{m.priority}</td>
-                  <td className="p-3 text-slate-300">{m.assignedWorkshop}</td>
-                  <td className="p-3">
-                    <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-red-500/10 text-red-400 border border-red-500/30">
-                      {m.status}
-                    </span>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
-
-      {/* SUB-TAB 5: REPAIR ASSIGNMENTS */}
-      {activeSubTab === "repairs" && (
-        <div className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-xl">
-          <table className="w-full text-left text-xs border-collapse">
-            <thead>
-              <tr className="bg-slate-950 border-b border-slate-800 text-slate-400 font-semibold uppercase text-[10px] tracking-wider">
-                <th className="p-3">Vehicle</th>
-                <th className="p-3">Problem / Reported Issue</th>
-                <th className="p-3">Priority</th>
-                <th className="p-3">Assigned Workshop</th>
-                <th className="p-3">Reported Date</th>
-                <th className="p-3">Est. Completion</th>
-                <th className="p-3">Repair Status</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-800/80">
-              {repairs.map((r) => (
-                <tr key={r.id} className="hover:bg-slate-850/60">
-                  <td className="p-3 font-mono font-bold text-amber-300">{r.vehicleId}</td>
-                  <td className="p-3 font-semibold text-red-400">{r.problem}</td>
-                  <td className="p-3 font-bold text-red-400">{r.priority}</td>
-                  <td className="p-3 text-slate-300">{r.assignedWorkshop}</td>
-                  <td className="p-3 font-mono text-slate-400">{r.reportedDate}</td>
-                  <td className="p-3 font-mono text-emerald-400">{r.estimatedCompletion}</td>
-                  <td className="p-3">
-                    <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-red-500/10 text-red-400 border border-red-500/30">
-                      {r.status}
-                    </span>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
     </div>
   );
 };

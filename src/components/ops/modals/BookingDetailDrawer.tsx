@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Booking } from "@/types/travelOps";
-import { X, Calendar, MapPin, Phone, CreditCard, ShieldCheck, UserCheck, Layers, FileText } from "lucide-react";
+import { X, Layers } from "lucide-react";
 
 interface BookingDetailDrawerProps {
   booking: Booking | null;
@@ -18,137 +18,93 @@ export const BookingDetailDrawer: React.FC<BookingDetailDrawerProps> = ({
   if (!booking) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex justify-end bg-black/60 backdrop-blur-xs animate-fade-in">
-      <div className="w-full max-w-lg bg-slate-900 border-l border-slate-800 h-full overflow-y-auto p-6 space-y-6 flex flex-col justify-between shadow-2xl">
+    <div className="fixed inset-0 z-50 flex justify-end bg-slate-900/35 dark:bg-black/65 backdrop-blur-xs animate-fade-in">
+      <div className="w-full max-w-lg bg-white dark:bg-[#172230] border-l border-[#E4E7EC] dark:border-[#202B38] h-full overflow-y-auto p-6 space-y-6 flex flex-col justify-between shadow-2xl">
         <div className="space-y-6">
           {/* Drawer Header */}
-          <div className="flex items-center justify-between border-b border-slate-800 pb-4">
+          <div className="flex items-center justify-between border-b border-[#E4E7EC] dark:border-[#202B38] pb-4">
             <div>
-              <span className="font-mono text-xs font-bold text-emerald-400 bg-emerald-500/10 px-2.5 py-0.5 rounded border border-emerald-500/20">
+              <span className="font-mono text-xs font-bold text-[#2563EB] dark:text-[#4F8CFF] bg-[#EFF8FF] dark:bg-[rgba(83,177,253,0.12)] px-2.5 py-0.5 rounded border border-blue-200/60 dark:border-blue-800/40">
                 {booking.id}
               </span>
-              <h3 className="text-lg font-bold text-white mt-1">Booking Detail Record</h3>
+              <h3 className="text-lg font-bold text-[#172033] dark:text-white mt-1">Booking Detail Record</h3>
             </div>
             <button
               onClick={onClose}
-              className="p-2 rounded-lg bg-slate-800 text-slate-400 hover:text-white hover:bg-slate-700 transition-colors"
+              className="p-2 rounded-lg bg-[#F9FAFB] dark:bg-[#131D28] text-[#667085] dark:text-[#A7B1C0] hover:text-[#172033] dark:hover:text-white border border-[#E4E7EC] dark:border-[#202B38] cursor-pointer"
             >
               <X className="w-5 h-5" />
             </button>
           </div>
 
           {/* Guest Information Card */}
-          <div className="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-3">
-            <div className="text-xs font-bold text-slate-400 uppercase tracking-wider">
+          <div className="bg-[#F9FAFB] dark:bg-[#131D28] p-4 rounded-xl border border-[#E4E7EC] dark:border-[#202B38] space-y-3">
+            <div className="text-xs font-bold text-[#667085] dark:text-[#A7B1C0] uppercase tracking-wider">
               Primary Guest & Identity
             </div>
             <div className="flex items-center justify-between">
-              <div className="font-bold text-base text-white">
+              <div className="font-bold text-base text-[#172033] dark:text-white">
                 {booking.greeting} {booking.guestName}
               </div>
               <span
-                className={`px-2.5 py-0.5 rounded text-xs font-semibold ${
+                className={`px-2.5 py-0.5 rounded text-xs font-semibold border ${
                   booking.passportStatus === "Verified"
-                    ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/30"
-                    : "bg-amber-500/10 text-amber-400 border border-amber-500/30"
+                    ? "bg-[#ECFDF3] text-[#15803D] dark:bg-[rgba(50,213,131,0.12)] dark:text-[#6CE9A6] border-emerald-200/60 dark:border-emerald-800/40"
+                    : "bg-[#FFFAEB] text-[#B54708] dark:bg-[rgba(253,176,34,0.12)] dark:text-[#FEC84B] border-amber-200/60 dark:border-amber-800/40"
                 }`}
               >
                 Passport: {booking.passportStatus}
               </span>
             </div>
 
-            <div className="grid grid-cols-2 gap-3 text-xs pt-2 border-t border-slate-900">
+            <div className="grid grid-cols-2 gap-3 text-xs pt-2 border-t border-[#E4E7EC] dark:border-[#202B38]">
               <div>
-                <span className="text-slate-500 block">Phone Number</span>
-                <span className="font-mono font-semibold text-slate-200">{booking.phone}</span>
+                <span className="text-[#667085] dark:text-[#A7B1C0] block">Phone / WhatsApp</span>
+                <span className="font-mono text-[#172033] dark:text-white font-medium">{booking.phone}</span>
               </div>
               <div>
-                <span className="text-slate-500 block">Pax Count & Type</span>
-                <span className="font-bold text-emerald-400">{booking.pax} Pax ({booking.tourType})</span>
+                <span className="text-[#667085] dark:text-[#A7B1C0] block">Channel</span>
+                <span className="text-[#172033] dark:text-white font-medium truncate block">{booking.source}</span>
               </div>
             </div>
           </div>
 
-          {/* Product & Route Info */}
-          <div className="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-3 text-xs">
-            <div className="text-xs font-bold text-slate-400 uppercase tracking-wider">
-              Product & Pickup Route
+          {/* Reservation Details */}
+          <div className="bg-[#F9FAFB] dark:bg-[#131D28] p-4 rounded-xl border border-[#E4E7EC] dark:border-[#202B38] space-y-3 text-xs">
+            <div className="text-xs font-bold text-[#667085] dark:text-[#A7B1C0] uppercase tracking-wider">
+              Excursion Product Info
             </div>
-            <div className="font-semibold text-sm text-slate-100">{booking.product}</div>
-
-            <div className="space-y-2 pt-2 border-t border-slate-900">
-              <div className="flex items-start gap-2 text-slate-300">
-                <MapPin className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" />
-                <div>
-                  <span className="text-slate-500 block">Pickup Location & Time:</span>
-                  <span className="font-medium">{booking.pickupLocation}</span> ({booking.pickupTime} WIB)
-                </div>
+            <div className="space-y-1.5">
+              <div className="font-bold text-sm text-[#172033] dark:text-white">{booking.product}</div>
+              <div className="flex items-center justify-between text-[#667085] dark:text-[#A7B1C0]">
+                <span>Pax Count:</span>
+                <span className="font-mono font-bold text-[#172033] dark:text-white">{booking.pax} Pax</span>
               </div>
-
-              <div className="flex items-start gap-2 text-slate-300">
-                <Calendar className="w-4 h-4 text-blue-400 flex-shrink-0 mt-0.5" />
-                <div>
-                  <span className="text-slate-500 block">Tour Date & Route Corridor:</span>
-                  <span className="font-mono font-semibold text-white">{booking.tourDate}</span> ({booking.origin} → {booking.dropOff})
-                </div>
+              <div className="flex items-center justify-between text-[#667085] dark:text-[#A7B1C0]">
+                <span>Tour Date:</span>
+                <span className="font-mono font-bold text-[#172033] dark:text-white">{booking.tourDate}</span>
               </div>
-            </div>
-          </div>
-
-          {/* Financial & Platform Source */}
-          <div className="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-3 text-xs">
-            <div className="text-xs font-bold text-slate-400 uppercase tracking-wider">
-              Platform & Billing Status
-            </div>
-
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                <span className="text-slate-500 block">Source Channel</span>
-                <span className="font-bold text-amber-400">{booking.source}</span>
+              <div className="flex items-center justify-between text-[#667085] dark:text-[#A7B1C0]">
+                <span>OTA Channel:</span>
+                <span className="font-semibold text-[#2563EB] dark:text-[#4F8CFF]">{booking.source}</span>
               </div>
-              <div>
-                <span className="text-slate-500 block">Total Billing</span>
-                <span className="font-mono font-bold text-emerald-400 text-sm">
-                  Rp {booking.totalBilling.toLocaleString("id-ID")}
-                </span>
+              <div className="flex items-center justify-between text-[#667085] dark:text-[#A7B1C0]">
+                <span>Pickup Location:</span>
+                <span className="font-medium text-[#172033] dark:text-white">{booking.pickupLocation}</span>
               </div>
             </div>
-
-            <div className="pt-2 border-t border-slate-900 flex items-center justify-between">
-              <span className="text-slate-400">Payment Status:</span>
-              <span className="font-semibold text-emerald-400">{booking.billingStatus}</span>
-            </div>
-          </div>
-
-          {/* Operational Notes */}
-          <div className="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-2 text-xs">
-            <div className="text-xs font-bold text-slate-400 uppercase tracking-wider">
-              Operational Notes
-            </div>
-            <p className="text-slate-300 italic leading-relaxed">{booking.operationalNotes}</p>
           </div>
         </div>
 
-        {/* Drawer Footer Actions */}
-        <div className="pt-4 border-t border-slate-800 flex items-center gap-3">
+        {/* Footer Actions */}
+        <div className="pt-4 border-t border-[#E4E7EC] dark:border-[#202B38] flex items-center gap-3">
           <button
-            onClick={onClose}
-            className="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-300 py-2 rounded-lg text-xs font-semibold transition-colors"
+            onClick={() => onGroupBooking(booking.id)}
+            className="w-full bg-[#2563EB] hover:bg-[#1D4ED8] dark:bg-[#4F8CFF] dark:hover:bg-[#6AA1FF] text-white py-2.5 rounded-xl font-bold text-xs flex items-center justify-center gap-2 cursor-pointer shadow-xs"
           >
-            Close
+            <Layers className="w-4 h-4" />
+            <span>Group Into Excursion Tour</span>
           </button>
-
-          {booking.status === "Pending Review" && (
-            <button
-              onClick={() => {
-                onGroupBooking(booking.id);
-                onClose();
-              }}
-              className="flex-1 bg-emerald-600 hover:bg-emerald-500 text-white py-2 rounded-lg text-xs font-bold transition-colors shadow-lg"
-            >
-              + Add to Grouped Tour
-            </button>
-          )}
         </div>
       </div>
     </div>

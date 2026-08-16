@@ -21,14 +21,14 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
         {label && (
           <label
             htmlFor={inputId}
-            className="text-xs font-semibold uppercase tracking-wider text-slate-300"
+            className="text-xs font-semibold text-[#172033] dark:text-[#A7B1C0]"
           >
             {label}
           </label>
         )}
         <div className="relative flex items-center">
           {leftIcon && (
-            <div className="absolute left-4 pointer-events-none text-slate-400">
+            <div className="absolute left-3.5 pointer-events-none text-[#98A2B3] dark:text-[#667085]">
               {leftIcon}
             </div>
           )}
@@ -36,23 +36,23 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             id={inputId}
             ref={ref}
             className={cn(
-              "w-full bg-slate-900/90 border border-slate-800 text-slate-100 placeholder:text-slate-500 rounded-2xl py-3 text-sm transition-all duration-200 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 disabled:opacity-50 disabled:cursor-not-allowed",
-              leftIcon ? "pl-11" : "pl-4",
-              rightIcon ? "pr-11" : "pr-4",
-              error && "border-rose-500 focus:border-rose-500 focus:ring-rose-500/20",
+              "w-full bg-white dark:bg-[#101822] border border-[#E4E7EC] dark:border-[#202B38] text-[#172033] dark:text-[#F8FAFC] placeholder:text-[#98A2B3] dark:placeholder:text-[#667085] rounded-xl py-2 text-xs font-medium transition-colors duration-150 focus:outline-none focus:border-[#2563EB] dark:focus:border-[#4F8CFF] focus:ring-1 focus:ring-[#2563EB] disabled:opacity-50 disabled:cursor-not-allowed",
+              leftIcon ? "pl-10" : "pl-3.5",
+              rightIcon ? "pr-10" : "pr-3.5",
+              error && "border-[#DC2626] dark:border-[#F97066] focus:border-[#DC2626]",
               className
             )}
             {...props}
           />
           {rightIcon && (
-            <div className="absolute right-4 pointer-events-none text-slate-400">
+            <div className="absolute right-3.5 pointer-events-none text-[#98A2B3] dark:text-[#667085]">
               {rightIcon}
             </div>
           )}
         </div>
-        {error && <span className="text-xs text-rose-400 font-medium">{error}</span>}
+        {error && <span className="text-xs text-[#DC2626] dark:text-[#F97066] font-medium">{error}</span>}
         {helperText && !error && (
-          <span className="text-xs text-slate-400">{helperText}</span>
+          <span className="text-xs text-[#667085] dark:text-[#A7B1C0]">{helperText}</span>
         )}
       </div>
     );

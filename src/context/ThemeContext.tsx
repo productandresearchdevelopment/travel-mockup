@@ -14,37 +14,55 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [theme, setThemeState] = useState<Theme>("light");
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    const savedTheme = localStorage.getItem("qifess_theme") as Theme | null;
-    const initialTheme = savedTheme || "light";
-    setThemeState(initialTheme);
-    if (initialTheme === "dark") {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
+    setMounted(true);
+    const savedTheme = (localStorage.getItem("qifess-theme") || localStorage.getItem("qifess_theme")) as Theme | null;
+    
+    let initialTheme: Theme = "light";
+    if (savedTheme === "light" || savedTheme === "dark") {
+      initialTheme = savedTheme;
+    } else if (typeof window !== "undefined" && window.matchMedia("(prefers-color-scheme: dark)").matches) {
+      initialTheme = "dark";
     }
+
+    setThemeState(initialTheme);
+    applyThemeToDOM(initialTheme);
   }, []);
 
-  const setTheme = (newTheme: Theme) => {
-    setThemeState(newTheme);
-    localStorage.setItem("qifess_theme", newTheme);
+  const applyThemeToDOM = (newTheme: Theme) => {
+    if (typeof document === "undefined") return;
+    const root = document.documentElement;
+    const body = document.body;
+    
+    root.setAttribute("data-theme", newTheme);
+    body.setAttribute("data-theme", newTheme);
+
     if (newTheme === "dark") {
-      document.documentElement.classList.add("dark");
+      root.classList.add("dark");
+      body.classList.add("dark");
     } else {
-      document.documentElement.classList.remove("dark");
+      root.classList.remove("dark");
+      body.classList.remove("dark");
     }
   };
 
+  const setTheme = (newTheme: Theme) => {
+    setThemeState(newTheme);
+    localStorage.setItem("qifess-theme", newTheme);
+    localStorage.setItem("qifess_theme", newTheme);
+    applyThemeToDOM(newTheme);
+  };
+
   const toggleTheme = () => {
-    setTheme(theme === "dark" ? "light" : "dark");
+    const nextTheme = theme === "dark" ? "light" : "dark";
+    setTheme(nextTheme);
   };
 
   return (
     <ThemeContext.Provider value={{ theme, toggleTheme, setTheme }}>
-      <div className={theme === "dark" ? "dark bg-slate-950 text-slate-100" : "bg-slate-50 text-slate-900"}>
-        {children}
-      </div>
+      {children}
     </ThemeContext.Provider>
   );
 };

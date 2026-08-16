@@ -1,96 +1,151 @@
 @import "tailwindcss";
 
+@variant dark (&:where(.dark, .dark *));
+
 @theme {
-  --font-sans: var(--font-poppins), system-ui, -apple-system, sans-serif;
-  
-  /* QIFESS Brand Colors */
-  --color-qifess-50: #f0f9ff;
-  --color-qifess-100: #e0f2fe;
-  --color-qifess-500: #0284c7;
-  --color-qifess-600: #0369a1;
-  --color-qifess-700: #075985;
-
-  /* Custom Surface Palette */
-  --color-slate-950: #090d14;
-  --color-slate-900: #0b1018;
-  --color-slate-850: #111821;
-  --color-slate-800: #151e29;
-  --color-slate-750: #1a2533;
-  --color-slate-700: #202a36;
-  --color-slate-600: #334155;
-
-  /* Light Theme Surface Palette */
-  --color-light-bg: #f7f8fa;
-  --color-light-surface: #ffffff;
-  --color-light-elevated: #ffffff;
-  --color-light-border: #e6e8ec;
-  --color-light-text-primary: #171a1f;
-  --color-light-text-secondary: #667085;
-  --color-light-text-muted: #98a2b3;
+  --font-sans: var(--font-inter), system-ui, -apple-system, sans-serif;
 }
 
 :root {
-  --background: #f7f8fa;
-  --surface: #ffffff;
-  --surface-elevated: #ffffff;
-  --border-color: #e6e8ec;
-  --text-primary: #171a1f;
-  --text-secondary: #667085;
-  --text-muted: #98a2b3;
+  /* Modern Expensive SaaS Light Mode Palette */
+  --bg-page: #f8fafc;
+  --bg-sidebar: #ffffff;
+  --bg-navbar: #ffffff;
+  --bg-surface: #ffffff;
+  --bg-surface-nested: #f1f5f9;
+  --bg-surface-elevated: #ffffff;
+  --bg-surface-hover: #f8fafc;
+  --bg-surface-active: #eff6ff;
+
+  --border-primary: #e2e8f0;
+  --border-input: #cbd5e1;
+  --border-subtle: #f1f5f9;
+
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #94a3b8;
+
+  --action-primary: #2563eb;
+  --action-primary-hover: #1d4ed8;
+
+  --sidebar-active-bg: #eff6ff;
+  --sidebar-active-text: #2563eb;
+  --sidebar-hover-bg: #f8fafc;
+
+  --backdrop-bg: rgba(15, 23, 42, 0.4);
+
+  /* Badges Light */
+  --badge-success-bg: #f0fdf4;
+  --badge-success-text: #15803d;
+  --badge-warning-bg: #fffbeb;
+  --badge-warning-text: #b45309;
+  --badge-danger-bg: #fef2f2;
+  --badge-danger-text: #b91c1c;
+  --badge-info-bg: #eff6ff;
+  --badge-info-text: #1d4ed8;
+
+  color-scheme: light;
 }
 
-.dark {
-  --background: #090d14;
-  --surface: #111821;
-  --surface-elevated: #151e29;
-  --border-color: #202a36;
-  --text-primary: #f5f7fa;
-  --text-secondary: #9aa6b2;
-  --text-muted: #667085;
+.dark,
+[data-theme="dark"] {
+  /* Modern Expensive SaaS Dark Mode Palette */
+  --bg-page: #090d16;
+  --bg-sidebar: #0f1726;
+  --bg-navbar: #0f1726;
+  --bg-surface: #101726;
+  --bg-surface-nested: #151e30;
+  --bg-surface-elevated: #1a263c;
+  --bg-surface-hover: #162034;
+  --bg-surface-active: #172a4a;
+
+  --border-primary: #1e293b;
+  --border-input: #334155;
+  --border-subtle: #172033;
+
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+
+  --action-primary: #3b82f6;
+  --action-primary-hover: #60a5fa;
+
+  --sidebar-active-bg: #172a4a;
+  --sidebar-active-text: #60a5fa;
+  --sidebar-hover-bg: #162034;
+
+  --backdrop-bg: rgba(0, 0, 0, 0.7);
+
+  /* Badges Dark */
+  --badge-success-bg: rgba(34, 197, 94, 0.14);
+  --badge-success-text: #4ade80;
+  --badge-warning-bg: rgba(245, 158, 11, 0.14);
+  --badge-warning-text: #fbbf24;
+  --badge-danger-bg: rgba(239, 68, 68, 0.14);
+  --badge-danger-text: #f87171;
+  --badge-info-bg: rgba(59, 130, 246, 0.14);
+  --badge-info-text: #60a5fa;
+
+  color-scheme: dark;
 }
 
-body {
-  background-color: var(--background);
+html, body {
+  background-color: var(--bg-page);
   color: var(--text-primary);
-  font-family: var(--font-poppins), system-ui, -apple-system, sans-serif;
+  font-family: var(--font-sans);
   overflow-x: hidden;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.011em;
   -webkit-font-smoothing: antialiased;
+  transition: background-color 0.18s ease, color 0.18s ease;
 }
 
-/* Linear / Stripe / Vercel Surface Cards */
+/* Global Theme Transition for Surface Elements */
+.saas-card,
+.saas-table-row,
+header,
+aside,
+nav,
+input,
+select,
+textarea,
+button {
+  transition: background-color 0.18s ease, border-color 0.18s ease, color 0.18s ease, box-shadow 0.18s ease;
+}
+
+/* Surface Utility Cards with Expensive SaaS Micro Shadows */
 .saas-card {
-  background-color: var(--surface);
-  border: 1px solid var(--border-color);
-  border-radius: 10px;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.03);
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-primary);
+  border-radius: 14px;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04), 0 1px 2px -1px rgba(0, 0, 0, 0.02);
 }
 
 .saas-card:hover {
-  border-color: rgba(2, 132, 199, 0.3);
+  border-color: rgba(37, 99, 235, 0.35);
+  box-shadow: 0 4px 12px -2px rgba(37, 99, 235, 0.08);
 }
 
-.dark .saas-card:hover {
-  border-color: rgba(2, 132, 199, 0.4);
+.dark .saas-card:hover,
+[data-theme="dark"] .saas-card:hover {
+  border-color: rgba(79, 140, 255, 0.4);
+  box-shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.4);
 }
 
 /* Compact Table Row Styling */
 .saas-table-row {
   transition: background-color 0.12s ease;
-  border-bottom: 1px solid var(--border-color);
-}
-.saas-table-row:hover {
-  background-color: rgba(2, 132, 199, 0.03);
-}
-.dark .saas-table-row:hover {
-  background-color: rgba(255, 255, 255, 0.02);
+  border-bottom: 1px solid var(--border-subtle);
+  background-color: var(--bg-surface);
 }
 
-/* Minimal Scrollbars */
+.saas-table-row:hover {
+  background-color: var(--bg-surface-hover);
+}
+
+/* Ultra Slim Elegant Scrollbars */
 ::-webkit-scrollbar {
-  width: 5px;
-  height: 5px;
+  width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-track {
@@ -98,12 +153,17 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--border-color);
+  background: #cbd5e1;
   border-radius: 9999px;
 }
 
+.dark ::-webkit-scrollbar-thumb,
+[data-theme="dark"] ::-webkit-scrollbar-thumb {
+  background: #334155;
+}
+
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--text-muted);
+  background: #94a3b8;
 }
 
 .scrollbar-none::-webkit-scrollbar {
@@ -114,14 +174,28 @@ body {
   scrollbar-width: none;
 }
 
-/* Low-intensity Semantic Badges */
-.badge-dot {
-  display: inline-flex;
-  items-center: center;
-  gap: 5px;
-  padding: 2px 8px;
-  border-radius: 6px;
-  font-size: 11px;
-  font-weight: 600;
-  line-height: 1.2;
+/* Application Shell Layout Classes */
+.app-fixed-sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  height: 100vh;
+  z-index: 30;
+  transition: width 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.app-fixed-navbar {
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 64px;
+  z-index: 20;
+  transition: left 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.app-main-content {
+  padding-top: 78px;
+  min-height: 100vh;
+  transition: margin-left 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }

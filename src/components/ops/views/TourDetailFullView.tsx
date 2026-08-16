@@ -7,15 +7,10 @@ import { canPerformAction } from "@/data/actionRules";
 import {
   ArrowLeft,
   CheckCircle2,
-  Calendar,
   MapPin,
   Clock,
   Truck,
-  User,
   Users,
-  DollarSign,
-  FileText,
-  AlertTriangle,
   Send,
   History,
   Anchor,
@@ -37,10 +32,7 @@ interface TourDetailFullViewProps {
 
 export const TourDetailFullView: React.FC<TourDetailFullViewProps> = ({
   tour: initialTour,
-  vehicle,
   driver,
-  guide,
-  tourManager,
   onBack,
 }) => {
   const { user } = useAuth();
@@ -100,131 +92,145 @@ export const TourDetailFullView: React.FC<TourDetailFullViewProps> = ({
     };
 
     setHistory([newActivity, ...history]);
-    showToast(`Success: Tour ${tour.id} updated to '${statusLabel}'`);
+    showToast(`Success: Tour ${tour.id} status updated to '${statusLabel}'`);
   };
 
-  const canConfirmDeparture = canPerformAction(user?.role, "tour.confirmDeparture");
-  const canConfirmArrival = canPerformAction(user?.role, "tour.confirmArrival");
   const canConfirmHandover = canPerformAction(user?.role, "tour.confirmHandover");
-  const canComplete = canPerformAction(user?.role, "tour.completeTour");
+  const canUpdateStatus = canPerformAction(user?.role, "tour.updateStatus");
 
   return (
-    <div className="space-y-6 max-w-6xl mx-auto font-sans relative">
-      {/* Toast Notification */}
+    <div className="space-y-6 font-sans">
+      {/* Toast Feedback */}
       {toastMsg && (
-        <div className="fixed bottom-5 right-5 z-50 bg-emerald-600 text-white font-bold text-xs px-4 py-3 rounded-xl shadow-2xl flex items-center gap-2 animate-bounce">
-          <CheckCircle2 className="w-4 h-4 text-white" />
+        <div className="fixed bottom-5 right-5 z-50 bg-[#16A34A] text-white font-bold text-xs px-4 py-3 rounded-xl shadow-xl flex items-center gap-2 animate-bounce">
+          <CheckCircle2 className="w-4 h-4" />
           <span>{toastMsg}</span>
         </div>
       )}
 
-      {/* Header Bar */}
-      <div className="bg-slate-900 border border-slate-800 p-5 rounded-xl space-y-4 shadow-xl">
-        <div className="flex flex-wrap items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
+      {/* Header */}
+      <div className="bg-white dark:bg-[#101822] border border-[#E4E7EC] dark:border-[#202B38] p-5 rounded-2xl flex flex-wrap items-center justify-between gap-4 shadow-xs">
+        <div className="flex items-center gap-3">
+          <button
+            onClick={onBack}
+            className="p-2 rounded-xl bg-[#F9FAFB] dark:bg-[#131D28] text-[#667085] dark:text-[#A7B1C0] hover:text-[#172033] dark:hover:text-white border border-[#E4E7EC] dark:border-[#202B38] transition-colors cursor-pointer"
+          >
+            <ArrowLeft className="w-5 h-5" />
+          </button>
+
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="font-mono text-xs font-bold text-[#2563EB] dark:text-[#4F8CFF] bg-[#EFF8FF] dark:bg-[rgba(83,177,253,0.12)] px-2.5 py-0.5 rounded border border-blue-200/60 dark:border-blue-800/40">
+                {tour.id}
+              </span>
+              <span className="text-xs text-[#667085] dark:text-[#A7B1C0] font-mono">/operations/{tour.id}</span>
+            </div>
+            <h1 className="text-xl font-extrabold text-[#172033] dark:text-white tracking-tight mt-1">
+              {tour.tourName}
+            </h1>
+          </div>
+        </div>
+
+        {/* Action Controls */}
+        <div className="flex items-center gap-2 text-xs">
+          {canConfirmHandover && tour.status === "Handover" && (
             <button
-              onClick={onBack}
-              className="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors cursor-pointer"
-              title="Back to Tour List"
+              onClick={() => handleUpdateTourStatus("On Trip", "Handover Confirmed", "Ferry Handover Confirmed")}
+              className="flex items-center gap-1.5 bg-[#2563EB] hover:bg-[#1D4ED8] dark:bg-[#4F8CFF] dark:hover:bg-[#6AA1FF] text-white px-3.5 py-2 rounded-xl font-bold shadow-xs cursor-pointer"
             >
-              <ArrowLeft className="w-5 h-5" />
+              <Anchor className="w-4 h-4" />
+              <span>Confirm Ketapang Handover</span>
             </button>
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="font-mono text-base font-bold text-cyan-400 bg-cyan-500/10 px-2.5 py-0.5 rounded border border-cyan-500/20">
-                  {tour.id}
-                </span>
-                <span className="px-2.5 py-0.5 rounded text-xs font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
-                  ● {tour.statusLabel || tour.status}
-                </span>
-              </div>
-              <h1 className="text-xl font-extrabold text-white mt-1">
-                {tour.tourName} ({tour.pax} Pax) — {tour.origin} → {tour.destination}
-              </h1>
-            </div>
-          </div>
+          )}
 
-          {/* Role Guarded Actions */}
-          <div className="flex items-center gap-2 text-xs">
-            {canConfirmDeparture && tour.status !== "Departed" && tour.status !== "On Trip" && (
-              <button
-                onClick={() => handleUpdateTourStatus("Departed", "Departed", "Departure Confirmed")}
-                className="bg-emerald-600 hover:bg-emerald-500 text-white px-3.5 py-2 rounded-lg font-bold shadow cursor-pointer transition-colors"
-              >
-                Confirm Departure
-              </button>
-            )}
-
-            {canConfirmHandover && (
-              <button
-                onClick={() => handleUpdateTourStatus("Handover", "Inter-Region Handover", "Handover Verified")}
-                className="bg-cyan-600 hover:bg-cyan-500 text-white px-3.5 py-2 rounded-lg font-bold shadow cursor-pointer transition-colors"
-              >
-                Confirm Ferry Handover
-              </button>
-            )}
-
-            {canConfirmArrival && tour.status !== "Arrived" && (
-              <button
-                onClick={() => handleUpdateTourStatus("Arrived", "Arrived at Destination", "Arrival Confirmed")}
-                className="bg-purple-600 hover:bg-purple-500 text-white px-3.5 py-2 rounded-lg font-bold shadow cursor-pointer transition-colors"
-              >
-                Confirm Arrival
-              </button>
-            )}
-
-            {canComplete && tour.status !== "Completed" && (
-              <button
-                onClick={() => handleUpdateTourStatus("Completed", "Tour Completed & Closed", "Tour Closed")}
-                className="bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 px-3.5 py-2 rounded-lg font-bold cursor-pointer transition-colors"
-              >
-                Complete Tour
-              </button>
-            )}
-          </div>
+          {canUpdateStatus && tour.status === "On Trip" && (
+            <button
+              onClick={() => handleUpdateTourStatus("Completed", "Arrived & Completed", "Tour Completed")}
+              className="flex items-center gap-1.5 bg-[#16A34A] hover:bg-[#15803D] dark:bg-[#32D583] text-white px-3.5 py-2 rounded-xl font-bold shadow-xs cursor-pointer"
+            >
+              <CheckCircle2 className="w-4 h-4" />
+              <span>Complete Tour</span>
+            </button>
+          )}
         </div>
       </div>
 
-      {/* RECOUPLING SUMMARY CARDS */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs font-sans">
-        <div className="bg-slate-900 border border-slate-800 p-4 rounded-xl space-y-1 shadow">
-          <span className="text-slate-400 block text-[10px]">Vehicle Assigned</span>
-          <span className="font-mono font-bold text-amber-300 text-sm">{vehicle ? `${vehicle.plateNumber} (${vehicle.brand})` : tour.vehicleId || "VH-001"}</span>
-          <span className="text-[10px] text-slate-400 block">Cap: {vehicle?.capacity || 14} Pax</span>
-        </div>
+      {/* CONTENT GRID */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 text-xs">
+        {/* LEFT COLUMN (8 cols): Tour Checkpoints & Assigned Resources */}
+        <div className="lg:col-span-8 space-y-6">
+          {/* Assigned Resources Summary */}
+          <div className="bg-white dark:bg-[#101822] border border-[#E4E7EC] dark:border-[#202B38] p-5 rounded-2xl space-y-4 shadow-xs">
+            <h3 className="font-bold text-sm text-[#172033] dark:text-white border-b border-[#E4E7EC] dark:border-[#202B38] pb-2 flex items-center gap-2">
+              <Truck className="w-4 h-4 text-[#D97706] dark:text-[#FDB022]" /> Assigned Fleet & Crew
+            </h3>
 
-        <div className="bg-slate-900 border border-slate-800 p-4 rounded-xl space-y-1 shadow">
-          <span className="text-slate-400 block">Crew Roster</span>
-          <span className="font-bold text-white text-sm block">Driver: {driver?.name || "Andi Pratama"}</span>
-          <span className="text-[10px] text-emerald-400 block">Guide: {guide?.name || "Bambang Sugeng"}</span>
-        </div>
-
-        <div className="bg-slate-900 border border-slate-800 p-4 rounded-xl space-y-1 shadow">
-          <span className="text-slate-400 block">Checkpoints Progress</span>
-          <span className="font-mono font-bold text-cyan-400 text-sm block">3 / 4 Checkpoints Passed</span>
-          <span className="text-[10px] text-slate-400 block">Last Check: Probolinggo Checkpoint</span>
-        </div>
-      </div>
-
-      {/* ACTIVITY TIMELINE SECTION */}
-      <div className="bg-slate-900 border border-slate-800 p-5 rounded-xl space-y-4 shadow-lg text-xs font-sans">
-        <h2 className="text-sm font-bold text-white uppercase tracking-wider text-slate-300 border-b border-slate-800 pb-2 flex items-center gap-2">
-          <History className="w-4 h-4 text-cyan-400" /> Tour Execution Audit Timeline & State History
-        </h2>
-
-        <div className="space-y-3 pl-2 border-l-2 border-slate-800 ml-2">
-          {history.map((act) => (
-            <div key={act.id} className="relative pl-6 space-y-1">
-              <div className="absolute -left-[31px] top-0 w-4 h-4 rounded-full bg-slate-950 border-2 border-emerald-400 flex items-center justify-center">
-                <div className="w-1.5 h-1.5 rounded-full bg-emerald-400"></div>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              <div className="bg-[#F9FAFB] dark:bg-[#131D28] p-3 rounded-xl border border-[#E4E7EC] dark:border-[#202B38]">
+                <span className="text-[#667085] dark:text-[#A7B1C0] block font-medium">Assigned Vehicle</span>
+                <span className="font-mono font-bold text-xs text-[#172033] dark:text-white">{tour.vehicleId || "Not Assigned"}</span>
               </div>
-              <div className="flex items-center justify-between">
-                <span className="font-bold text-slate-200">{act.title}</span>
-                <span className="font-mono text-slate-400 text-[10px]">{act.timestamp}</span>
+
+              <div className="bg-[#F9FAFB] dark:bg-[#131D28] p-3 rounded-xl border border-[#E4E7EC] dark:border-[#202B38]">
+                <span className="text-[#667085] dark:text-[#A7B1C0] block font-medium">Lead Driver</span>
+                <span className="font-bold text-xs text-[#172033] dark:text-white">{tour.driverId || "Not Assigned"}</span>
               </div>
-              <p className="text-slate-400 italic text-[11px]">{act.description}</p>
+
+              <div className="bg-[#F9FAFB] dark:bg-[#131D28] p-3 rounded-xl border border-[#E4E7EC] dark:border-[#202B38]">
+                <span className="text-[#667085] dark:text-[#A7B1C0] block font-medium">Local Guide</span>
+                <span className="font-bold text-xs text-[#172033] dark:text-white">{tour.guideId || "Not Assigned"}</span>
+              </div>
+
+              <div className="bg-[#F9FAFB] dark:bg-[#131D28] p-3 rounded-xl border border-[#E4E7EC] dark:border-[#202B38]">
+                <span className="text-[#667085] dark:text-[#A7B1C0] block font-medium">Passenger Pax</span>
+                <span className="font-mono font-extrabold text-xs text-[#2563EB] dark:text-[#4F8CFF]">{tour.pax} Pax</span>
+              </div>
             </div>
-          ))}
+          </div>
+
+          {/* Checkpoint Clearance Timeline */}
+          <div className="bg-white dark:bg-[#101822] border border-[#E4E7EC] dark:border-[#202B38] p-5 rounded-2xl space-y-4 shadow-xs">
+            <h3 className="font-bold text-sm text-[#172033] dark:text-white border-b border-[#E4E7EC] dark:border-[#202B38] pb-2 flex items-center gap-2">
+              <MapPin className="w-4 h-4 text-[#2563EB] dark:text-[#4F8CFF]" /> Route Checkpoint Clearances
+            </h3>
+
+            <div className="space-y-3">
+              {tour.checkpoints.map((cp, idx) => (
+                <div key={idx} className="bg-[#F9FAFB] dark:bg-[#131D28] p-3 rounded-xl border border-[#E4E7EC] dark:border-[#202B38] flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <CheckCircle2 className={`w-4 h-4 ${cp.status === "Passed" ? "text-[#16A34A] dark:text-[#32D583]" : "text-[#98A2B3] dark:text-[#667085]"}`} />
+                    <span className="font-bold text-xs text-[#172033] dark:text-white">{cp.location}</span>
+                  </div>
+                  <div className="flex items-center gap-3 font-mono text-[11px]">
+                    <span className="text-[#667085] dark:text-[#A7B1C0]">Sched: {cp.scheduledTime}</span>
+                    <span className={`font-bold ${cp.status === "Passed" ? "text-[#16A34A] dark:text-[#32D583]" : "text-[#D97706]"}`}>
+                      {cp.status}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* RIGHT COLUMN (4 cols): History Timeline */}
+        <div className="lg:col-span-4 space-y-6">
+          <div className="bg-white dark:bg-[#101822] border border-[#E4E7EC] dark:border-[#202B38] p-5 rounded-2xl space-y-4 shadow-xs">
+            <h3 className="font-bold text-sm text-[#172033] dark:text-white border-b border-[#E4E7EC] dark:border-[#202B38] pb-2 flex items-center gap-2">
+              <History className="w-4 h-4 text-[#2563EB] dark:text-[#4F8CFF]" /> Tour Execution Log
+            </h3>
+
+            <div className="space-y-3 relative pl-3 border-l-2 border-[#E4E7EC] dark:border-[#202B38] ml-2">
+              {history.map((act) => (
+                <div key={act.id} className="relative space-y-0.5">
+                  <div className="w-2.5 h-2.5 rounded-full bg-[#2563EB] dark:bg-[#4F8CFF] absolute -left-[17px] top-1"></div>
+                  <div className="font-bold text-xs text-[#172033] dark:text-white">{act.title}</div>
+                  <div className="text-[11px] text-[#667085] dark:text-[#A7B1C0]">{act.description}</div>
+                  <div className="text-[10px] text-[#98A2B3] dark:text-[#667085] font-mono">{act.timestamp}</div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </div>

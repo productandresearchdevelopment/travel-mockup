@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { Vehicle, MaintenanceType, MaintenancePriority } from "@/types/travelOps";
-import { X, Wrench, CheckCircle2 } from "lucide-react";
+import { X, Wrench } from "lucide-react";
 
 interface MaintenanceModalProps {
   isOpen: boolean;
@@ -52,25 +52,25 @@ export const MaintenanceModal: React.FC<MaintenanceModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-xs p-4">
-      <div className="bg-slate-900 border border-slate-800 rounded-xl w-full max-w-lg p-6 space-y-5 shadow-2xl animate-fade-in text-xs">
-        <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/35 dark:bg-black/65 backdrop-blur-xs p-4">
+      <div className="bg-white dark:bg-[#172230] border border-[#E4E7EC] dark:border-[#202B38] rounded-2xl w-full max-w-lg p-6 space-y-5 shadow-2xl animate-fade-in text-xs font-sans text-[#172033] dark:text-[#F8FAFC]">
+        <div className="flex items-center justify-between border-b border-[#E4E7EC] dark:border-[#202B38] pb-3">
           <div className="flex items-center gap-2">
-            <Wrench className="w-5 h-5 text-amber-400" />
-            <h3 className="font-bold text-base text-white">Log Vehicle Maintenance Ticket</h3>
+            <Wrench className="w-5 h-5 text-[#D97706] dark:text-[#FDB022]" />
+            <h3 className="font-bold text-base text-[#172033] dark:text-white">Log Vehicle Maintenance Ticket</h3>
           </div>
-          <button onClick={onClose} className="text-slate-400 hover:text-white">
+          <button onClick={onClose} className="text-[#667085] dark:text-[#A7B1C0] hover:text-[#172033] dark:hover:text-white cursor-pointer">
             <X className="w-5 h-5" />
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4 text-xs font-sans">
           <div>
-            <label className="block font-semibold text-slate-300 mb-1">Target Vehicle</label>
+            <label className="block text-[#172033] dark:text-[#A7B1C0] font-semibold mb-1">Target Vehicle</label>
             <select
               value={vehicleId}
               onChange={(e) => setVehicleId(e.target.value)}
-              className="w-full bg-slate-950 border border-slate-800 text-slate-200 rounded-lg p-2 focus:outline-none focus:border-amber-500 font-medium"
+              className="w-full bg-[#F9FAFB] dark:bg-[#131D28] border border-[#D0D5DD] dark:border-[#344054] rounded-xl p-2.5 text-[#172033] dark:text-[#F8FAFC] font-medium"
             >
               {vehicles.map((v) => (
                 <option key={v.id} value={v.id}>
@@ -82,26 +82,25 @@ export const MaintenanceModal: React.FC<MaintenanceModalProps> = ({
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block font-semibold text-slate-300 mb-1">Service Type</label>
+              <label className="block text-[#172033] dark:text-[#A7B1C0] font-semibold mb-1">Maintenance Type</label>
               <select
                 value={type}
                 onChange={(e) => setType(e.target.value as MaintenanceType)}
-                className="w-full bg-slate-950 border border-slate-800 text-slate-200 rounded-lg p-2 focus:outline-none"
+                className="w-full bg-[#F9FAFB] dark:bg-[#131D28] border border-[#D0D5DD] dark:border-[#344054] rounded-xl p-2.5 text-[#172033] dark:text-[#F8FAFC] font-medium"
               >
                 <option value="Scheduled Service">Scheduled Service</option>
-                <option value="Emergency Repair">Emergency Repair</option>
+                <option value="Unscheduled Repair">Unscheduled Repair</option>
                 <option value="Tire Replacement">Tire Replacement</option>
-                <option value="Brake Inspection">Brake Inspection</option>
-                <option value="AC Maintenance">AC Maintenance</option>
+                <option value="Inspection">Safety Inspection</option>
               </select>
             </div>
 
             <div>
-              <label className="block font-semibold text-slate-300 mb-1">Priority</label>
+              <label className="block text-[#172033] dark:text-[#A7B1C0] font-semibold mb-1">Priority</label>
               <select
                 value={priority}
                 onChange={(e) => setPriority(e.target.value as MaintenancePriority)}
-                className="w-full bg-slate-950 border border-slate-800 text-slate-200 rounded-lg p-2 focus:outline-none"
+                className="w-full bg-[#F9FAFB] dark:bg-[#131D28] border border-[#D0D5DD] dark:border-[#344054] rounded-xl p-2.5 text-[#172033] dark:text-[#F8FAFC] font-medium"
               >
                 <option value="Low">Low</option>
                 <option value="Medium">Medium</option>
@@ -112,61 +111,38 @@ export const MaintenanceModal: React.FC<MaintenanceModalProps> = ({
           </div>
 
           <div>
-            <label className="block font-semibold text-slate-300 mb-1">Service Description</label>
-            <textarea
-              required
-              rows={3}
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              className="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-slate-200 focus:outline-none"
-            />
-          </div>
-
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label className="block font-semibold text-slate-300 mb-1">Target Due Date</label>
-              <input
-                type="date"
-                required
-                value={dueDate}
-                onChange={(e) => setDueDate(e.target.value)}
-                className="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-slate-200 focus:outline-none"
-              />
-            </div>
-            <div>
-              <label className="block font-semibold text-slate-300 mb-1">Est. Cost (IDR)</label>
-              <input
-                type="number"
-                required
-                value={estimatedCost}
-                onChange={(e) => setEstimatedCost(Number(e.target.value))}
-                className="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-slate-200 font-mono focus:outline-none"
-              />
-            </div>
-          </div>
-
-          <div>
-            <label className="block font-semibold text-slate-300 mb-1">Assigned Workshop</label>
+            <label className="block text-[#172033] dark:text-[#A7B1C0] font-semibold mb-1">Assigned Workshop / Location</label>
             <input
               type="text"
               required
               value={assignedWorkshop}
               onChange={(e) => setAssignedWorkshop(e.target.value)}
-              className="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-slate-200 focus:outline-none"
+              className="w-full bg-[#F9FAFB] dark:bg-[#131D28] border border-[#D0D5DD] dark:border-[#344054] rounded-xl p-2.5 text-[#172033] dark:text-[#F8FAFC] font-medium"
             />
           </div>
 
-          <div className="pt-4 border-t border-slate-800 flex justify-end gap-3">
+          <div>
+            <label className="block text-[#172033] dark:text-[#A7B1C0] font-semibold mb-1">Estimated Cost (IDR)</label>
+            <input
+              type="number"
+              required
+              value={estimatedCost}
+              onChange={(e) => setEstimatedCost(Number(e.target.value))}
+              className="w-full bg-[#F9FAFB] dark:bg-[#131D28] border border-[#D0D5DD] dark:border-[#344054] rounded-xl p-2.5 text-[#172033] dark:text-[#F8FAFC] font-mono font-bold"
+            />
+          </div>
+
+          <div className="pt-3 border-t border-[#E4E7EC] dark:border-[#202B38] flex items-center justify-end gap-2">
             <button
               type="button"
               onClick={onClose}
-              className="bg-slate-800 hover:bg-slate-700 text-slate-300 px-4 py-2 rounded-lg font-semibold"
+              className="px-4 py-2 rounded-xl bg-[#F9FAFB] dark:bg-[#131D28] text-[#667085] dark:text-[#A7B1C0] hover:text-[#172033] dark:hover:text-white border border-[#E4E7EC] dark:border-[#202B38] cursor-pointer"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="bg-amber-600 hover:bg-amber-500 text-white px-5 py-2 rounded-lg font-bold shadow"
+              className="px-4 py-2 rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] dark:bg-[#4F8CFF] dark:hover:bg-[#6AA1FF] text-white font-bold cursor-pointer shadow-xs"
             >
               Submit Ticket
             </button>

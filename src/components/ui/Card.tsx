@@ -9,17 +9,16 @@ export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
 export function Card({
   className,
   hoverEffect = true,
-  glass = true,
+  glass = false,
   children,
   ...props
 }: CardProps) {
   return (
     <div
       className={cn(
-        "rounded-3xl border border-slate-800/80 overflow-hidden transition-all duration-300",
-        glass ? "bg-slate-900/60 backdrop-blur-xl" : "bg-slate-900",
+        "rounded-xl border border-[#E4E7EC] dark:border-[#202B38] bg-white dark:bg-[#101822] text-[#172033] dark:text-[#F8FAFC] shadow-xs transition-all duration-150 overflow-hidden",
         hoverEffect &&
-          "hover:border-emerald-500/40 hover:shadow-2xl hover:shadow-emerald-500/10 hover:-translate-y-1",
+          "hover:border-[#2563EB]/40 dark:hover:border-[#4F8CFF]/40 hover:shadow-sm",
         className
       )}
       {...props}
@@ -35,7 +34,7 @@ export function CardHeader({
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) {
   return (
-    <div className={cn("p-6 sm:p-8 flex flex-col space-y-1.5", className)} {...props}>
+    <div className={cn("p-4 sm:p-5 flex flex-col space-y-1", className)} {...props}>
       {children}
     </div>
   );
@@ -48,7 +47,7 @@ export function CardTitle({
 }: React.HTMLAttributes<HTMLHeadingElement>) {
   return (
     <h3
-      className={cn("text-xl sm:text-2xl font-bold tracking-tight text-white", className)}
+      className={cn("text-base sm:text-lg font-bold tracking-tight text-[#172033] dark:text-white", className)}
       {...props}
     >
       {children}
@@ -62,7 +61,7 @@ export function CardDescription({
   ...props
 }: React.HTMLAttributes<HTMLParagraphElement>) {
   return (
-    <p className={cn("text-sm text-slate-400 leading-relaxed", className)} {...props}>
+    <p className={cn("text-xs sm:text-sm text-[#667085] dark:text-[#A7B1C0] leading-relaxed", className)} {...props}>
       {children}
     </p>
   );
@@ -74,7 +73,7 @@ export function CardContent({
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) {
   return (
-    <div className={cn("px-6 sm:px-8 pb-6 sm:pb-8 pt-0", className)} {...props}>
+    <div className={cn("px-4 sm:px-5 pb-4 sm:pb-5 pt-0", className)} {...props}>
       {children}
     </div>
   );
@@ -88,7 +87,7 @@ export function CardFooter({
   return (
     <div
       className={cn(
-        "px-6 sm:px-8 py-4 sm:py-6 bg-slate-950/40 border-t border-slate-800/60 flex items-center justify-between",
+        "px-4 sm:px-5 py-3 bg-[#F9FAFB] dark:bg-[#131D28] border-t border-[#E4E7EC] dark:border-[#202B38] flex items-center justify-between text-xs text-[#667085] dark:text-[#A7B1C0]",
         className
       )}
       {...props}

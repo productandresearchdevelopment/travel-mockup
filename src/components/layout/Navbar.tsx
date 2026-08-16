@@ -29,7 +29,7 @@ export function Navbar({ onOpenBooking }: NavbarProps) {
     <header
       className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
         scrolled
-          ? "bg-slate-950/80 backdrop-blur-xl border-b border-slate-800/80 py-3 shadow-xl shadow-slate-950/50"
+          ? "bg-white/80 dark:bg-[#0B111A]/80 backdrop-blur-xl border-b border-[#E4E7EC] dark:border-[#202B38] py-3 shadow-xs"
           : "bg-transparent py-5"
       }`}
     >
@@ -40,32 +40,30 @@ export function Navbar({ onOpenBooking }: NavbarProps) {
             href="/"
             className="flex items-center gap-2.5 group focus:outline-none"
           >
-            <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-emerald-500 via-teal-500 to-cyan-500 p-0.5 shadow-lg shadow-emerald-500/20 group-hover:scale-105 transition-transform duration-300">
-              <div className="w-full h-full bg-slate-950 rounded-[14px] flex items-center justify-center">
-                <Compass className="w-5 h-5 text-emerald-400 group-hover:rotate-45 transition-transform duration-500" />
-              </div>
+            <div className="w-10 h-10 rounded-2xl bg-[#2563EB] dark:bg-[#4F8CFF] text-white flex items-center justify-center shadow-xs font-bold group-hover:scale-105 transition-transform">
+              <Compass className="w-5 h-5 group-hover:rotate-45 transition-transform duration-500" />
             </div>
             <div className="flex flex-col">
-              <span className="text-xl font-black tracking-tight text-white flex items-center gap-1">
-                Wander<span className="text-emerald-400">Luxe</span>
+              <span className="text-xl font-extrabold tracking-tight text-[#172033] dark:text-white flex items-center gap-1">
+                Wander<span className="text-[#2563EB] dark:text-[#4F8CFF]">Luxe</span>
               </span>
-              <span className="text-[9px] uppercase tracking-widest text-slate-400 font-semibold -mt-1">
+              <span className="text-[9px] uppercase tracking-widest text-[#667085] dark:text-[#A7B1C0] font-semibold -mt-1">
                 Travel AI
               </span>
             </div>
           </Link>
 
           {/* Desktop Nav Links */}
-          <div className="hidden md:flex items-center gap-1 px-4 py-1.5 rounded-full bg-slate-900/60 border border-slate-800/80 backdrop-blur-md">
+          <div className="hidden md:flex items-center gap-1 px-4 py-1.5 rounded-full bg-[#F9FAFB] dark:bg-[#101822] border border-[#E4E7EC] dark:border-[#202B38]">
             {mainNav.map((item) => (
               <Link
                 key={item.title}
                 href={item.href}
-                className="px-4 py-2 text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800/50 rounded-full transition-colors relative flex items-center gap-1.5"
+                className="px-4 py-2 text-xs font-semibold text-[#667085] dark:text-[#A7B1C0] hover:text-[#172033] dark:hover:text-white hover:bg-white dark:hover:bg-[#1A2634] rounded-full transition-colors relative flex items-center gap-1.5"
               >
                 <span>{item.title}</span>
                 {item.badge && (
-                  <span className="px-1.5 py-0.2 rounded-full text-[9px] bg-emerald-500/20 text-emerald-400 font-bold border border-emerald-500/30">
+                  <span className="px-1.5 py-0.2 rounded-full text-[9px] bg-[#EFF8FF] text-[#175CD3] dark:bg-[rgba(83,177,253,0.12)] dark:text-[#84CAFF] font-bold border border-blue-200/60 dark:border-blue-800/40">
                     {item.badge}
                   </span>
                 )}
@@ -76,7 +74,7 @@ export function Navbar({ onOpenBooking }: NavbarProps) {
           {/* Right Action */}
           <div className="hidden md:flex items-center gap-3">
             <Button
-              variant="glow"
+              variant="primary"
               size="sm"
               leftIcon={<Sparkles className="w-3.5 h-3.5" />}
               onClick={onOpenBooking}
@@ -88,7 +86,7 @@ export function Navbar({ onOpenBooking }: NavbarProps) {
           {/* Mobile Hamburger Toggle */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden p-2.5 rounded-2xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white focus:outline-none"
+            className="md:hidden p-2.5 rounded-2xl bg-[#F9FAFB] dark:bg-[#101822] border border-[#E4E7EC] dark:border-[#202B38] text-[#667085] dark:text-[#A7B1C0] hover:text-[#172033] dark:hover:text-white focus:outline-none"
             aria-label="Toggle menu"
           >
             {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -104,7 +102,7 @@ export function Navbar({ onOpenBooking }: NavbarProps) {
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.2 }}
-            className="md:hidden bg-slate-950/95 backdrop-blur-2xl border-b border-slate-800 px-4 py-6 overflow-hidden"
+            className="md:hidden bg-white/95 dark:bg-[#0B111A]/95 backdrop-blur-2xl border-b border-[#E4E7EC] dark:border-[#202B38] px-4 py-6 overflow-hidden"
           >
             <div className="flex flex-col space-y-3">
               {mainNav.map((item) => (
@@ -112,20 +110,20 @@ export function Navbar({ onOpenBooking }: NavbarProps) {
                   key={item.title}
                   href={item.href}
                   onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center justify-between p-3 rounded-2xl bg-slate-900/50 border border-slate-800/60 text-slate-200 hover:text-emerald-400 transition-colors"
+                  className="flex items-center justify-between p-3 rounded-2xl bg-[#F9FAFB] dark:bg-[#101822] border border-[#E4E7EC] dark:border-[#202B38] text-[#172033] dark:text-white hover:text-[#2563EB] dark:hover:text-[#4F8CFF] transition-colors"
                 >
                   <div className="flex flex-col">
                     <span className="text-sm font-semibold">{item.title}</span>
                     {item.description && (
-                      <span className="text-xs text-slate-400">{item.description}</span>
+                      <span className="text-xs text-[#667085] dark:text-[#A7B1C0]">{item.description}</span>
                     )}
                   </div>
                   {item.badge ? (
-                    <span className="px-2 py-0.5 text-[10px] rounded-full bg-emerald-500/20 text-emerald-400 font-bold">
+                    <span className="px-2 py-0.5 text-[10px] rounded-full bg-[#EFF8FF] text-[#175CD3] dark:bg-[rgba(83,177,253,0.12)] dark:text-[#84CAFF] font-bold">
                       {item.badge}
                     </span>
                   ) : (
-                    <ArrowRight className="w-4 h-4 text-slate-500" />
+                    <ArrowRight className="w-4 h-4 text-[#98A2B3] dark:text-[#667085]" />
                   )}
                 </Link>
               ))}

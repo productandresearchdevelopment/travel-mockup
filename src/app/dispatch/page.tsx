@@ -1,58 +1,34 @@
 "use client";
 
 import React, { useState } from "react";
-import { useRouter } from "next/navigation";
 import {
-  OperationalRole,
   Booking,
   Tour,
   Vehicle,
   Crew,
-  Manifest,
-  VehicleLog,
-  Maintenance,
-  FinanceExpense,
-  TourStatus,
 } from "@/types/travelOps";
 import {
   initialBookings,
   initialTours,
   initialVehicles,
   initialCrews,
-  initialManifests,
-  initialVehicleLogs,
-  initialMaintenance,
-  initialExpenses,
-  initialNotifications,
 } from "@/data/mockData";
 
-import { RoleSelector } from "@/components/ops/RoleSelector";
-import { HeaderNav } from "@/components/ops/HeaderNav";
-import { SidebarNav } from "@/components/ops/SidebarNav";
+import { AppLayout } from "@/components/ops/AppLayout";
 import { DispatchDeploymentView } from "@/components/ops/views/DispatchDeploymentView";
 import { GroupTourModal } from "@/components/ops/modals/GroupTourModal";
 import { AssignCrewVehicleModal } from "@/components/ops/modals/AssignCrewVehicleModal";
-import { NotificationDrawer } from "@/components/ops/modals/NotificationDrawer";
 
 export default function DispatchControlCenterPage() {
-  const router = useRouter();
-  const [currentRole, setCurrentRole] = useState<OperationalRole>("Dispatcher");
-  const [searchQuery, setSearchQuery] = useState<string>("");
-
   const [bookings, setBookings] = useState<Booking[]>(initialBookings);
   const [tours, setTours] = useState<Tour[]>(initialTours);
   const [vehicles, setVehicles] = useState<Vehicle[]>(initialVehicles);
-  const [crews, setCrews] = useState<Crew[]>(initialCrews);
-  const [notifications, setNotifications] = useState(initialNotifications);
+  const [crews] = useState<Crew[]>(initialCrews);
 
   const [isGroupModalOpen, setIsGroupModalOpen] = useState(false);
   const [selectedGroupBookingIds, setSelectedGroupBookingIds] = useState<string[]>([]);
   const [isAssignModalOpen, setIsAssignModalOpen] = useState(false);
   const [selectedAssignTourId, setSelectedAssignTourId] = useState<string | null>(null);
-  const [isNotificationDrawerOpen, setIsNotificationDrawerOpen] = useState(false);
-
-  const pendingBookingsCount = bookings.filter((b) => b.status === "Pending Review").length;
-  const activeToursCount = tours.filter((t) => ["Departed", "On Trip", "Handover"].includes(t.status)).length;
 
   const handleOpenGroupModal = (bookingIds: string[]) => {
     setSelectedGroupBookingIds(bookingIds);
@@ -145,46 +121,18 @@ export default function DispatchControlCenterPage() {
   const selectedAssignTour = tours.find((t) => t.id === selectedAssignTourId) || null;
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 font-sans flex flex-col selection:bg-emerald-500 selection:text-slate-950">
-      <RoleSelector currentRole={currentRole} onSelectRole={setCurrentRole} />
-
-      <HeaderNav
-        notifications={notifications}
-        onOpenNotifications={() => setIsNotificationDrawerOpen(true)}
-        searchQuery={searchQuery}
-        onSearchChange={setSearchQuery}
+    <AppLayout>
+      <DispatchDeploymentView
+        bookings={bookings}
+        tours={tours}
+        vehicles={vehicles}
+        crews={crews}
+        onOpenAssignModal={handleOpenAssignModal}
+        onOpenGroupModal={handleOpenGroupModal}
+        onUpdateTourStatus={(tourId, status) =>
+          setTours((prev) => prev.map((t) => (t.id === tourId ? { ...t, status } : t)))
+        }
       />
-
-      <div className="flex-1 flex overflow-hidden">
-        <SidebarNav
-          activeTab="dispatch_execution"
-          onSelectTab={(tab) => {
-            if (tab === "control_room") router.push("/dashboard");
-            else if (tab === "booking_grouping") router.push("/bookings");
-            else router.push("/dashboard");
-          }}
-          counts={{
-            pendingBookings: pendingBookingsCount,
-            activeTours: activeToursCount,
-            maintenanceDue: initialMaintenance.filter((m) => m.status === "Due").length,
-            pendingBop: initialExpenses.filter((e) => e.status === "Submitted").length,
-          }}
-        />
-
-        <main className="flex-1 p-5 overflow-y-auto max-w-full space-y-6">
-          <DispatchDeploymentView
-            bookings={bookings}
-            tours={tours}
-            vehicles={vehicles}
-            crews={crews}
-            onOpenAssignModal={handleOpenAssignModal}
-            onOpenGroupModal={handleOpenGroupModal}
-            onUpdateTourStatus={(tourId, status) =>
-              setTours((prev) => prev.map((t) => (t.id === tourId ? { ...t, status } : t)))
-            }
-          />
-        </main>
-      </div>
 
       <GroupTourModal
         isOpen={isGroupModalOpen}
@@ -204,13 +152,6 @@ export default function DispatchControlCenterPage() {
         onClose={() => setIsAssignModalOpen(false)}
         onSubmitAssignment={handleSubmitAssignment}
       />
-
-      <NotificationDrawer
-        isOpen={isNotificationDrawerOpen}
-        notifications={notifications}
-        onClose={() => setIsNotificationDrawerOpen(false)}
-        onMarkAllAsRead={() => setNotifications((prev) => prev.map((n) => ({ ...n, read: true })))}
-      />
-    </div>
+    </AppLayout>
   );
 }

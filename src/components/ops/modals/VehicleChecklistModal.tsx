@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { Vehicle, ChecklistItemResult } from "@/types/travelOps";
-import { X, ClipboardCheck, CheckCircle2, AlertTriangle, XCircle, Truck } from "lucide-react";
+import { X, ClipboardCheck } from "lucide-react";
 
 interface VehicleChecklistModalProps {
   isOpen: boolean;
@@ -57,7 +57,6 @@ export const VehicleChecklistModal: React.FC<VehicleChecklistModalProps> = ({
     { label: "Cabin Cleanliness & Sanitization", state: cleanlinessStatus, setState: setCleanlinessStatus },
   ];
 
-  // Calculate overall result
   const hasFailed = items.some((i) => i.state === "Failed");
   const hasWarning = items.some((i) => i.state === "Warning");
   const overallResult: "Passed" | "Warning" | "Failed" = hasFailed ? "Failed" : hasWarning ? "Warning" : "Passed";
@@ -82,26 +81,26 @@ export const VehicleChecklistModal: React.FC<VehicleChecklistModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-xs p-4 overflow-y-auto">
-      <div className="bg-slate-900 border border-slate-700 rounded-xl w-full max-w-lg p-6 space-y-5 shadow-2xl animate-fade-in text-xs font-sans">
-        <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/35 dark:bg-black/65 backdrop-blur-xs p-4 overflow-y-auto">
+      <div className="bg-white dark:bg-[#172230] border border-[#E4E7EC] dark:border-[#202B38] rounded-2xl w-full max-w-xl p-6 space-y-5 shadow-2xl animate-fade-in text-xs font-sans text-[#172033] dark:text-[#F8FAFC]">
+        <div className="flex items-center justify-between border-b border-[#E4E7EC] dark:border-[#202B38] pb-3">
           <div className="flex items-center gap-2">
-            <ClipboardCheck className="w-5 h-5 text-emerald-400" />
-            <h3 className="font-bold text-base text-white">Log Vehicle Operational Checklist</h3>
+            <ClipboardCheck className="w-5 h-5 text-[#16A34A] dark:text-[#32D583]" />
+            <h3 className="font-bold text-base text-[#172033] dark:text-white">Daily Vehicle Inspection Checklist</h3>
           </div>
-          <button onClick={onClose} className="text-slate-400 hover:text-white cursor-pointer">
+          <button onClick={onClose} className="text-[#667085] dark:text-[#A7B1C0] hover:text-[#172033] dark:hover:text-white cursor-pointer">
             <X className="w-5 h-5" />
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4 text-xs font-sans">
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block font-semibold text-slate-300 mb-1">Target Vehicle</label>
+              <label className="block text-[#172033] dark:text-[#A7B1C0] font-semibold mb-1">Target Vehicle</label>
               <select
                 value={selectedVehicleId}
                 onChange={(e) => setSelectedVehicleId(e.target.value)}
-                className="w-full bg-slate-950 border border-slate-800 text-slate-200 rounded-lg p-2 focus:outline-none font-medium"
+                className="w-full bg-[#F9FAFB] dark:bg-[#131D28] border border-[#D0D5DD] dark:border-[#344054] rounded-xl p-2 text-[#172033] dark:text-[#F8FAFC]"
               >
                 {vehicles.map((v) => (
                   <option key={v.id} value={v.id}>
@@ -111,105 +110,59 @@ export const VehicleChecklistModal: React.FC<VehicleChecklistModalProps> = ({
               </select>
             </div>
             <div>
-              <label className="block font-semibold text-slate-300 mb-1">Inspector / Driver Name</label>
+              <label className="block text-[#172033] dark:text-[#A7B1C0] font-semibold mb-1">Inspector Name</label>
               <input
                 type="text"
                 required
                 value={inspectorName}
                 onChange={(e) => setInspectorName(e.target.value)}
-                className="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-slate-200 focus:outline-none"
+                className="w-full bg-[#F9FAFB] dark:bg-[#131D28] border border-[#D0D5DD] dark:border-[#344054] rounded-xl p-2 text-[#172033] dark:text-[#F8FAFC]"
               />
             </div>
           </div>
 
-          {/* Checklist Items Table */}
-          <div className="space-y-2 pt-2 border-t border-slate-800">
-            <span className="font-bold text-slate-300 uppercase tracking-wider text-[10px]">
-              Pre-Trip Operational Safety Inspection Items
-            </span>
-
-            <div className="space-y-2 bg-slate-950 p-3 rounded-lg border border-slate-850">
+          <div className="space-y-2">
+            <span className="font-bold text-[#172033] dark:text-white block">Inspection Items</span>
+            <div className="space-y-1.5 max-h-[260px] overflow-y-auto pr-1 scrollbar-none">
               {items.map((item, idx) => (
-                <div key={idx} className="flex items-center justify-between py-1 border-b border-slate-900 last:border-none">
-                  <span className="font-medium text-slate-200">{item.label}</span>
+                <div key={idx} className="bg-[#F9FAFB] dark:bg-[#131D28] p-2.5 rounded-xl border border-[#E4E7EC] dark:border-[#202B38] flex items-center justify-between">
+                  <span className="font-semibold text-[#172033] dark:text-[#F8FAFC]">{item.label}</span>
                   <div className="flex items-center gap-1">
-                    <button
-                      type="button"
-                      onClick={() => item.setState("Passed")}
-                      className={`px-2 py-0.5 rounded text-[10px] font-bold transition-all ${
-                        item.state === "Passed"
-                          ? "bg-emerald-500 text-slate-950"
-                          : "bg-slate-900 text-slate-400 hover:text-white"
-                      }`}
-                    >
-                      Passed
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => item.setState("Warning")}
-                      className={`px-2 py-0.5 rounded text-[10px] font-bold transition-all ${
-                        item.state === "Warning"
-                          ? "bg-amber-500 text-slate-950"
-                          : "bg-slate-900 text-slate-400 hover:text-white"
-                      }`}
-                    >
-                      Warning
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => item.setState("Failed")}
-                      className={`px-2 py-0.5 rounded text-[10px] font-bold transition-all ${
-                        item.state === "Failed"
-                          ? "bg-red-500 text-white"
-                          : "bg-slate-900 text-slate-400 hover:text-white"
-                      }`}
-                    >
-                      Failed
-                    </button>
+                    {(["Passed", "Warning", "Failed"] as ChecklistItemResult[]).map((val) => (
+                      <button
+                        key={val}
+                        type="button"
+                        onClick={() => item.setState(val)}
+                        className={`px-2 py-0.5 rounded text-[10px] font-bold border transition-colors cursor-pointer ${
+                          item.state === val
+                            ? val === "Passed"
+                              ? "bg-[#ECFDF3] text-[#15803D] dark:bg-[rgba(50,213,131,0.12)] dark:text-[#6CE9A6] border-emerald-200"
+                              : val === "Warning"
+                              ? "bg-[#FFFAEB] text-[#B54708] dark:bg-[rgba(253,176,34,0.12)] dark:text-[#FEC84B] border-amber-200"
+                              : "bg-[#FEF3F2] text-[#B42318] dark:bg-[rgba(249,112,102,0.12)] dark:text-[#FDA29B] border-rose-200"
+                            : "bg-white dark:bg-[#101822] text-[#667085] dark:text-[#A7B1C0] border-[#E4E7EC] dark:border-[#202B38]"
+                        }`}
+                      >
+                        {val}
+                      </button>
+                    ))}
                   </div>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* Overall computed status */}
-          <div className="bg-slate-950 p-3 rounded-lg border border-slate-800 flex items-center justify-between">
-            <span className="font-semibold text-slate-300">Overall Calculated Result:</span>
-            <span
-              className={`font-mono text-xs font-bold px-2.5 py-0.5 rounded border ${
-                overallResult === "Passed"
-                  ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/30"
-                  : overallResult === "Warning"
-                  ? "bg-amber-500/10 text-amber-400 border-amber-500/30"
-                  : "bg-red-500/10 text-red-400 border-red-500/30 animate-pulse"
-              }`}
-            >
-              RESULT: {overallResult.toUpperCase()}
-            </span>
-          </div>
-
-          <div>
-            <label className="block font-semibold text-slate-300 mb-1">Inspector Notes</label>
-            <textarea
-              rows={2}
-              value={notes}
-              onChange={(e) => setNotes(e.target.value)}
-              placeholder="e.g. Brake fluid topped up, tires checked."
-              className="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-slate-200 focus:outline-none"
-            />
-          </div>
-
-          <div className="pt-4 border-t border-slate-800 flex justify-end gap-3">
+          <div className="pt-3 border-t border-[#E4E7EC] dark:border-[#202B38] flex items-center justify-end gap-2">
             <button
               type="button"
               onClick={onClose}
-              className="bg-slate-800 hover:bg-slate-700 text-slate-300 px-4 py-2 rounded-lg font-semibold cursor-pointer"
+              className="px-4 py-2 rounded-xl bg-[#F9FAFB] dark:bg-[#131D28] text-[#667085] dark:text-[#A7B1C0] hover:text-[#172033] dark:hover:text-white border border-[#E4E7EC] dark:border-[#202B38] cursor-pointer"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="bg-emerald-600 hover:bg-emerald-500 text-white px-5 py-2 rounded-lg font-bold shadow cursor-pointer"
+              className="px-4 py-2 rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] dark:bg-[#4F8CFF] dark:hover:bg-[#6AA1FF] text-white font-bold cursor-pointer shadow-xs"
             >
               Submit Checklist
             </button>

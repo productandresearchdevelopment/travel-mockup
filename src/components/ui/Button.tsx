@@ -29,28 +29,28 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     ref
   ) => {
     const baseStyles =
-      "inline-flex items-center justify-center font-medium rounded-full transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 disabled:opacity-50 disabled:pointer-events-none active:scale-[0.98]";
+      "inline-flex items-center justify-center font-medium rounded-lg transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2563EB] disabled:opacity-50 disabled:pointer-events-none cursor-pointer active:scale-[0.99]";
 
     const variants = {
       primary:
-        "bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 text-slate-950 font-semibold shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/35 hover:brightness-110 border border-emerald-400/30",
+        "bg-[#2563EB] hover:bg-[#1D4ED8] dark:bg-[#4F8CFF] dark:hover:bg-[#6AA1FF] text-white font-semibold shadow-xs border border-transparent",
       secondary:
-        "bg-slate-800/90 text-slate-100 border border-slate-700 hover:bg-slate-700 hover:border-slate-600 shadow-md",
+        "bg-[#F9FAFB] dark:bg-[#131D28] text-[#172033] dark:text-[#F8FAFC] border border-[#E4E7EC] dark:border-[#202B38] hover:bg-[#F3F4F6] dark:hover:bg-[#1A2634]",
       outline:
-        "border border-emerald-500/40 text-emerald-400 hover:bg-emerald-500/10 hover:border-emerald-400",
+        "border border-[#E4E7EC] dark:border-[#202B38] text-[#172033] dark:text-[#F8FAFC] hover:bg-[#F3F4F6] dark:hover:bg-[#1A2634]",
       ghost:
-        "text-slate-300 hover:text-white hover:bg-slate-800/60",
+        "text-[#667085] dark:text-[#A7B1C0] hover:text-[#172033] dark:hover:text-white hover:bg-[#F3F4F6] dark:hover:bg-[#1A2634]",
       glow:
-        "relative bg-slate-950 text-emerald-400 font-semibold border border-emerald-500/50 shadow-[0_0_25px_rgba(16,185,129,0.3)] hover:shadow-[0_0_35px_rgba(16,185,129,0.5)] hover:border-emerald-400 hover:bg-slate-900",
+        "bg-[#2563EB] dark:bg-[#4F8CFF] text-white font-semibold shadow-sm hover:brightness-105 border border-transparent",
       danger:
-        "bg-rose-600 text-white hover:bg-rose-500 shadow-lg shadow-rose-600/20",
+        "bg-[#DC2626] dark:bg-[#F97066] text-white hover:bg-[#B91C1C] dark:hover:bg-[#E55347] font-semibold shadow-xs",
     };
 
     const sizes = {
-      sm: "text-xs px-4 py-2 gap-1.5",
-      md: "text-sm px-6 py-3 gap-2",
-      lg: "text-base px-8 py-4 gap-2.5",
-      icon: "h-10 w-10 p-0 rounded-full",
+      sm: "text-xs px-3 py-1.5 gap-1.5",
+      md: "text-xs px-4 py-2 gap-2 font-semibold",
+      lg: "text-sm px-5 py-2.5 gap-2 font-semibold",
+      icon: "h-8 w-8 p-0 rounded-lg",
     };
 
     return (
@@ -61,9 +61,9 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         disabled={disabled || isLoading}
         {...props}
       >
-        {isLoading && <Loader2 className="w-4 h-4 animate-spin text-current mr-1" />}
+        {isLoading && <Loader2 className="w-3.5 h-3.5 animate-spin text-current" />}
         {!isLoading && leftIcon && <span className="inline-flex shrink-0">{leftIcon}</span>}
-        <span>{children}</span>
+        {children && <span>{children}</span>}
         {!isLoading && rightIcon && <span className="inline-flex shrink-0">{rightIcon}</span>}
       </button>
     );

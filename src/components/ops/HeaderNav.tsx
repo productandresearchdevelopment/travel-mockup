@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { useTheme } from "@/context/ThemeContext";
+import { useSidebar } from "@/context/SidebarContext";
 import { OperationalNotification } from "@/types/travelOps";
 import { CommandSearchModal } from "@/components/ops/modals/CommandSearchModal";
 import {
@@ -19,6 +20,7 @@ import {
   ChevronDown,
   Clock,
   Command,
+  Menu,
 } from "lucide-react";
 
 interface HeaderNavProps {
@@ -31,12 +33,11 @@ interface HeaderNavProps {
 export const HeaderNav: React.FC<HeaderNavProps> = ({
   notifications,
   onOpenNotifications,
-  searchQuery,
-  onSearchChange,
 }) => {
   const router = useRouter();
   const { user, logout } = useAuth();
   const { theme, toggleTheme } = useTheme();
+  const { isCollapsed, toggleMobileMenu } = useSidebar();
 
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
@@ -50,42 +51,61 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
 
   return (
     <>
-      <header className="h-16 dark:bg-slate-900 bg-white border-b dark:border-slate-800 border-slate-200 px-5 flex items-center justify-between select-none z-30 font-sans transition-colors sticky top-0">
-        {/* LEFT: BRAND & BREADCRUMB */}
-        <div className="flex items-center gap-4">
-          <Link href="/dashboard" className="flex items-center gap-2.5 group">
-            <div className="w-8 h-8 rounded-lg bg-cyan-600 dark:bg-cyan-500 text-white flex items-center justify-center shadow-sm font-bold">
+      <header
+        className={`fixed top-0 right-0 h-[64px] bg-white/90 dark:bg-[#0F1726]/90 backdrop-blur-md border-b border-[#E2E8F0] dark:border-[#1E293B] px-4 md:px-6 flex items-center justify-between select-none z-20 font-sans transition-all duration-200 ease-in-out shadow-2xs ${
+          isCollapsed ? "left-0 md:left-[72px]" : "left-0 md:left-[260px]"
+        }`}
+      >
+        {/* LEFT: MOBILE TOGGLE & BREADCRUMB PILL */}
+        <div className="flex items-center gap-3">
+          <button
+            onClick={toggleMobileMenu}
+            className="md:hidden p-2 rounded-xl border border-[#E2E8F0] dark:border-[#1E293B] text-[#475569] dark:text-[#94A3B8] hover:text-[#0F172A] dark:hover:text-white cursor-pointer"
+            aria-label="Toggle Navigation"
+          >
+            <Menu className="w-5 h-5" />
+          </button>
+
+          {/* Desktop Clean Breadcrumb Badge */}
+          <div className="hidden md:flex items-center gap-2">
+            <span className="font-mono text-[11px] font-bold text-[#2563EB] dark:text-[#60A5FA] bg-[#EFF6FF] dark:bg-[#172A4A] px-2.5 py-1 rounded-lg border border-blue-200/60 dark:border-blue-900/40">
+              QIFESS Workspace
+            </span>
+            <span className="text-xs text-[#94A3B8] dark:text-[#64748B]">/</span>
+            <span className="text-xs font-semibold text-[#0F172A] dark:text-[#F8FAFC]">
+              Enterprise Control Hub
+            </span>
+          </div>
+
+          {/* Mobile Logo */}
+          <Link href="/dashboard" className="flex items-center gap-2 md:hidden">
+            <div className="w-8 h-8 rounded-lg bg-[#2563EB] dark:bg-[#3B82F6] text-white flex items-center justify-center font-bold shadow-xs">
               <Compass className="w-4.5 h-4.5" />
             </div>
-            <div>
-              <div className="font-extrabold text-sm dark:text-white text-slate-900 tracking-tight leading-none group-hover:text-cyan-600 dark:group-hover:text-cyan-400 transition-colors">
-                QIFESS <span className="text-cyan-600 dark:text-cyan-400 font-semibold text-[10px] uppercase tracking-wider">Travel Ops</span>
-              </div>
-              <div className="text-[10px] dark:text-slate-400 text-slate-500 font-mono mt-0.5">Enterprise Control Hub</div>
-            </div>
+            <span className="font-extrabold text-sm text-[#0F172A] dark:text-white">QIFESS Ops</span>
           </Link>
         </div>
 
         {/* CENTER: COMMAND SEARCH BAR (⌘K) */}
-        <div className="flex-1 max-w-md mx-6">
+        <div className="flex-1 max-w-md mx-4 hidden sm:block">
           <button
             onClick={() => setIsSearchModalOpen(true)}
-            className="w-full flex items-center justify-between dark:bg-slate-950 bg-slate-100 dark:border-slate-800 border-slate-200 border rounded-xl px-3.5 py-1.5 text-xs dark:text-slate-300 text-slate-600 hover:border-cyan-500 transition-colors cursor-pointer"
+            className="w-full flex items-center justify-between bg-[#F8FAFC] dark:bg-[#101726] border border-[#CBD5E1] dark:border-[#334155] rounded-xl px-3.5 py-1.5 text-xs text-[#475569] dark:text-[#94A3B8] hover:border-[#2563EB] dark:hover:border-[#3B82F6] transition-colors cursor-pointer shadow-2xs"
           >
-            <div className="flex items-center gap-2 text-slate-400">
-              <Search className="w-4 h-4" />
-              <span className="font-medium text-slate-500 dark:text-slate-400">Search tours, bookings, vehicles, crew...</span>
+            <div className="flex items-center gap-2">
+              <Search className="w-4 h-4 text-[#94A3B8] dark:text-[#64748B]" />
+              <span className="font-medium text-[#475569] dark:text-[#94A3B8]">Search tours, bookings, vehicles, crew...</span>
             </div>
-            <kbd className="hidden sm:inline-flex items-center gap-0.5 font-mono text-[10px] dark:bg-slate-900 bg-white dark:border-slate-800 border-slate-300 border px-1.5 py-0.5 rounded text-slate-400">
+            <kbd className="hidden sm:inline-flex items-center gap-0.5 font-mono text-[10px] bg-white dark:bg-[#1A263C] border border-[#E2E8F0] dark:border-[#1E293B] px-1.5 py-0.5 rounded text-[#94A3B8] dark:text-[#64748B]">
               <Command className="w-2.5 h-2.5" /> K
             </kbd>
           </button>
         </div>
 
-        {/* RIGHT: USER CONTROLS & PROFILE (NO ROLE SWITCHER) */}
-        <div className="flex items-center gap-3 text-xs">
+        {/* RIGHT: USER CONTROLS & PROFILE */}
+        <div className="flex items-center gap-2.5 text-xs">
           {/* Time Indicator */}
-          <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-lg dark:bg-slate-950 bg-slate-100 dark:border-slate-800 border-slate-200 dark:text-slate-300 text-slate-700 font-mono text-[11px]">
+          <div className="hidden lg:flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-[#F8FAFC] dark:bg-[#101726] border border-[#E2E8F0] dark:border-[#1E293B] text-[#0F172A] dark:text-[#94A3B8] font-mono text-[11px]">
             <Clock className="w-3.5 h-3.5 text-emerald-500" />
             <span>15:45 WIB</span>
           </div>
@@ -93,18 +113,18 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
           {/* Light/Dark Theme Switcher */}
           <button
             onClick={toggleTheme}
-            className="p-2 rounded-lg dark:bg-slate-800 bg-slate-100 hover:bg-slate-200 dark:hover:bg-slate-700 dark:text-slate-300 text-slate-700 transition-colors cursor-pointer flex items-center gap-1.5 font-semibold"
+            className="p-2 rounded-xl bg-[#F8FAFC] dark:bg-[#101726] border border-[#E2E8F0] dark:border-[#1E293B] hover:bg-[#F1F5F9] dark:hover:bg-[#162034] text-[#0F172A] dark:text-[#94A3B8] transition-colors cursor-pointer flex items-center gap-1.5 font-bold"
             title={`Switch to ${theme === "dark" ? "Light" : "Dark"} Mode`}
           >
             {theme === "dark" ? (
               <>
                 <Sun className="w-4 h-4 text-amber-400" />
-                <span className="hidden md:inline text-[11px]">Light Mode</span>
+                <span className="hidden xl:inline text-[11px]">Light Mode</span>
               </>
             ) : (
               <>
-                <Moon className="w-4 h-4 text-cyan-600" />
-                <span className="hidden md:inline text-[11px]">Dark Mode</span>
+                <Moon className="w-4 h-4 text-[#2563EB]" />
+                <span className="hidden xl:inline text-[11px]">Dark Mode</span>
               </>
             )}
           </button>
@@ -112,7 +132,7 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
           {/* Notifications Drawer Trigger */}
           <button
             onClick={onOpenNotifications}
-            className="relative p-2 rounded-lg dark:bg-slate-800 bg-slate-100 hover:bg-slate-200 dark:hover:bg-slate-700 dark:text-slate-300 text-slate-700 transition-colors cursor-pointer"
+            className="relative p-2 rounded-xl bg-[#F8FAFC] dark:bg-[#101726] border border-[#E2E8F0] dark:border-[#1E293B] hover:bg-[#F1F5F9] dark:hover:bg-[#162034] text-[#0F172A] dark:text-[#94A3B8] transition-colors cursor-pointer"
             title="Operational Notifications"
           >
             <Bell className="w-4 h-4" />
@@ -123,56 +143,56 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
             )}
           </button>
 
-          {/* USER PROFILE DROPDOWN (STRICT NO ROLE SWITCHING) */}
+          {/* USER PROFILE DROPDOWN */}
           {user && (
             <div className="relative">
               <button
                 onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
-                className="flex items-center gap-2 p-1.5 rounded-xl dark:bg-slate-950 bg-slate-100 dark:border-slate-800 border-slate-200 hover:border-slate-300 dark:hover:border-slate-700 transition-all cursor-pointer"
+                className="flex items-center gap-2 p-1.5 rounded-xl bg-[#F8FAFC] dark:bg-[#101726] border border-[#E2E8F0] dark:border-[#1E293B] hover:border-[#2563EB] dark:hover:border-[#3B82F6] transition-all cursor-pointer"
               >
-                <div className="w-7 h-7 rounded-lg bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 font-bold font-mono text-xs flex items-center justify-center border border-cyan-500/20">
+                <div className="w-7 h-7 rounded-lg bg-[#2563EB]/10 text-[#2563EB] dark:text-[#60A5FA] font-bold font-mono text-xs flex items-center justify-center border border-[#2563EB]/20">
                   {user.avatar}
                 </div>
                 <div className="text-left hidden sm:block">
-                  <div className="font-bold text-xs dark:text-slate-100 text-slate-800 leading-tight">{user.name}</div>
-                  <div className="text-[10px] dark:text-slate-400 text-slate-500">{user.roleLabel} • {user.region}</div>
+                  <div className="font-bold text-xs text-[#0F172A] dark:text-white leading-tight">{user.name}</div>
+                  <div className="text-[10px] text-[#475569] dark:text-[#94A3B8]">{user.roleLabel} • {user.region}</div>
                 </div>
-                <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
+                <ChevronDown className="w-3.5 h-3.5 text-[#94A3B8] dark:text-[#64748B]" />
               </button>
 
               {/* Profile Dropdown Menu */}
               {isProfileMenuOpen && (
-                <div className="absolute right-0 mt-2 w-56 dark:bg-slate-900 bg-white border dark:border-slate-800 border-slate-200 rounded-xl shadow-2xl p-2 space-y-1 z-50 animate-fade-in">
-                  <div className="p-2 border-b dark:border-slate-800 border-slate-100">
-                    <div className="font-bold text-xs dark:text-white text-slate-900">{user.name}</div>
-                    <div className="text-[10px] dark:text-slate-400 text-slate-500">{user.email}</div>
-                    <div className="text-[10px] text-cyan-600 dark:text-cyan-400 font-semibold mt-1">
+                <div className="absolute right-0 mt-2 w-56 bg-white dark:bg-[#101726] border border-[#E2E8F0] dark:border-[#1E293B] rounded-2xl shadow-xl p-2 space-y-1 z-50 animate-in fade-in zoom-in-95">
+                  <div className="p-2 border-b border-[#E2E8F0] dark:border-[#1E293B]">
+                    <div className="font-bold text-xs text-[#0F172A] dark:text-white">{user.name}</div>
+                    <div className="text-[10px] text-[#475569] dark:text-[#94A3B8]">{user.email}</div>
+                    <div className="text-[10px] text-[#2563EB] dark:text-[#60A5FA] font-semibold mt-1">
                       Workspace: {user.roleLabel} ({user.region})
                     </div>
                   </div>
 
                   <button
                     onClick={() => setIsProfileMenuOpen(false)}
-                    className="w-full flex items-center gap-2 p-2 rounded-lg dark:text-slate-300 text-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-xs text-left cursor-pointer"
+                    className="w-full flex items-center gap-2 p-2 rounded-xl text-[#0F172A] dark:text-[#94A3B8] hover:bg-[#F1F5F9] dark:hover:bg-[#162034] text-xs text-left cursor-pointer font-medium"
                   >
-                    <UserIcon className="w-3.5 h-3.5 text-slate-400" />
+                    <UserIcon className="w-3.5 h-3.5 text-[#94A3B8]" />
                     <span>My Profile</span>
                   </button>
 
                   <button
                     onClick={() => setIsProfileMenuOpen(false)}
-                    className="w-full flex items-center gap-2 p-2 rounded-lg dark:text-slate-300 text-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-xs text-left cursor-pointer"
+                    className="w-full flex items-center gap-2 p-2 rounded-xl text-[#0F172A] dark:text-[#94A3B8] hover:bg-[#F1F5F9] dark:hover:bg-[#162034] text-xs text-left cursor-pointer font-medium"
                   >
-                    <Settings className="w-3.5 h-3.5 text-slate-400" />
+                    <Settings className="w-3.5 h-3.5 text-[#94A3B8]" />
                     <span>Preferences</span>
                   </button>
 
-                  <div className="pt-1 border-t dark:border-slate-800 border-slate-100">
+                  <div className="pt-1 border-t border-[#E2E8F0] dark:border-[#1E293B]">
                     <button
                       onClick={handleSignOut}
-                      className="w-full flex items-center gap-2 p-2 rounded-lg text-rose-500 hover:bg-rose-500/10 text-xs text-left font-bold cursor-pointer"
+                      className="w-full flex items-center gap-2 p-2 rounded-xl text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/30 text-xs text-left font-bold cursor-pointer"
                     >
-                      <LogOut className="w-3.5 h-3.5 text-rose-500" />
+                      <LogOut className="w-3.5 h-3.5 text-rose-600" />
                       <span>Sign Out</span>
                     </button>
                   </div>

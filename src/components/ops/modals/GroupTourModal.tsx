@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { Booking, Vehicle, Crew } from "@/types/travelOps";
-import { X, Layers, Plus, CheckCircle2 } from "lucide-react";
+import { X, Layers } from "lucide-react";
 
 interface GroupTourModalProps {
   isOpen: boolean;
@@ -64,163 +64,107 @@ export const GroupTourModal: React.FC<GroupTourModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-xs p-4">
-      <div className="bg-slate-900 border border-slate-800 rounded-xl w-full max-w-xl p-6 space-y-5 shadow-2xl animate-fade-in">
-        <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/35 dark:bg-black/65 backdrop-blur-xs p-4">
+      <div className="bg-white dark:bg-[#172230] border border-[#E4E7EC] dark:border-[#202B38] rounded-2xl w-full max-w-xl p-6 space-y-5 shadow-2xl animate-fade-in font-sans text-[#172033] dark:text-[#F8FAFC]">
+        <div className="flex items-center justify-between border-b border-[#E4E7EC] dark:border-[#202B38] pb-3">
           <div className="flex items-center gap-2">
-            <Layers className="w-5 h-5 text-emerald-400" />
-            <h3 className="font-bold text-base text-white">Create Grouped Tour Departure</h3>
+            <Layers className="w-5 h-5 text-[#2563EB] dark:text-[#4F8CFF]" />
+            <h3 className="font-bold text-base text-[#172033] dark:text-white">Create Consolidated Excursion Tour</h3>
           </div>
-          <button onClick={onClose} className="text-slate-400 hover:text-white">
+          <button onClick={onClose} className="text-[#667085] dark:text-[#A7B1C0] hover:text-[#172033] dark:hover:text-white cursor-pointer">
             <X className="w-5 h-5" />
           </button>
         </div>
 
-        {/* Target Bookings Summary Pill */}
-        <div className="bg-slate-950 p-3 rounded-lg border border-slate-800 text-xs space-y-1">
-          <div className="flex items-center justify-between font-semibold text-slate-300">
-            <span>Grouping {selectedBookingIds.length} Booking Records:</span>
-            <span className="font-mono text-emerald-400 font-bold">{totalPax} Total Pax</span>
+        <div className="bg-[#F9FAFB] dark:bg-[#131D28] p-3.5 rounded-xl border border-[#E4E7EC] dark:border-[#202B38] text-xs space-y-1">
+          <span className="font-semibold text-[#667085] dark:text-[#A7B1C0]">Selected Bookings ({targetBookings.length}):</span>
+          <div className="flex flex-wrap gap-1.5 pt-1">
+            {targetBookings.map((b) => (
+              <span key={b.id} className="bg-white dark:bg-[#101822] border border-[#E4E7EC] dark:border-[#202B38] px-2 py-0.5 rounded font-mono text-[11px]">
+                {b.id} ({b.pax} Pax)
+              </span>
+            ))}
           </div>
-          <div className="text-slate-400 truncate">
-            IDs: {selectedBookingIds.join(", ")}
-          </div>
+          <div className="pt-2 font-bold text-[#2563EB] dark:text-[#4F8CFF]">Total Group Size: {totalPax} Pax</div>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4 text-xs">
+        <form onSubmit={handleSubmit} className="space-y-3 text-xs font-sans">
           <div>
-            <label className="block font-semibold text-slate-300 mb-1">Operational Tour Name</label>
+            <label className="block text-[#172033] dark:text-[#A7B1C0] font-semibold mb-1">Excursion Tour Name</label>
             <input
               type="text"
               required
               value={tourName}
               onChange={(e) => setTourName(e.target.value)}
-              className="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-slate-200 focus:outline-none focus:border-emerald-500 font-medium"
+              className="w-full bg-[#F9FAFB] dark:bg-[#131D28] border border-[#D0D5DD] dark:border-[#344054] rounded-xl p-2.5 text-[#172033] dark:text-[#F8FAFC] font-medium"
             />
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block font-semibold text-slate-300 mb-1">Tour Date</label>
+              <label className="block text-[#172033] dark:text-[#A7B1C0] font-semibold mb-1">Tour Date</label>
               <input
                 type="date"
                 required
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
-                className="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-slate-200 focus:outline-none focus:border-emerald-500"
+                className="w-full bg-[#F9FAFB] dark:bg-[#131D28] border border-[#D0D5DD] dark:border-[#344054] rounded-xl p-2.5 text-[#172033] dark:text-[#F8FAFC] font-medium"
               />
             </div>
             <div>
-              <label className="block font-semibold text-slate-300 mb-1">Origin City</label>
+              <label className="block text-[#172033] dark:text-[#A7B1C0] font-semibold mb-1">Origin City</label>
               <input
                 type="text"
                 required
                 value={origin}
                 onChange={(e) => setOrigin(e.target.value)}
-                className="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-slate-200 focus:outline-none"
+                className="w-full bg-[#F9FAFB] dark:bg-[#131D28] border border-[#D0D5DD] dark:border-[#344054] rounded-xl p-2.5 text-[#172033] dark:text-[#F8FAFC] font-medium"
               />
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block font-semibold text-slate-300 mb-1">Destination Route</label>
-              <input
-                type="text"
-                required
-                value={destination}
-                onChange={(e) => setDestination(e.target.value)}
-                className="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-slate-200 focus:outline-none"
-              />
+              <label className="block text-[#172033] dark:text-[#A7B1C0] font-semibold mb-1">Assigned Vehicle</label>
+              <select
+                value={vehicleId}
+                onChange={(e) => setVehicleId(e.target.value)}
+                className="w-full bg-[#F9FAFB] dark:bg-[#131D28] border border-[#D0D5DD] dark:border-[#344054] rounded-xl p-2 text-[#172033] dark:text-[#F8FAFC]"
+              >
+                <option value="">-- Assign Later --</option>
+                {vehicles.map((v) => (
+                  <option key={v.id} value={v.id}>{v.plateNumber} ({v.brand})</option>
+                ))}
+              </select>
             </div>
             <div>
-              <label className="block font-semibold text-slate-300 mb-1">Final Drop-Off Location</label>
-              <input
-                type="text"
-                required
-                value={dropOff}
-                onChange={(e) => setDropOff(e.target.value)}
-                className="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-slate-200 focus:outline-none"
-              />
+              <label className="block text-[#172033] dark:text-[#A7B1C0] font-semibold mb-1">Assigned Driver</label>
+              <select
+                value={driverId}
+                onChange={(e) => setDriverId(e.target.value)}
+                className="w-full bg-[#F9FAFB] dark:bg-[#131D28] border border-[#D0D5DD] dark:border-[#344054] rounded-xl p-2 text-[#172033] dark:text-[#F8FAFC]"
+              >
+                <option value="">-- Assign Later --</option>
+                {crews.filter((c) => c.role === "Driver").map((c) => (
+                  <option key={c.id} value={c.id}>{c.name}</option>
+                ))}
+              </select>
             </div>
           </div>
 
-          {/* Initial Vehicle & Driver Selection */}
-          <div className="pt-2 border-t border-slate-800 space-y-3">
-            <span className="font-bold text-slate-300 uppercase tracking-wider text-[11px] block">
-              Initial Vehicle & Crew Matching (Optional)
-            </span>
-
-            <div className="grid grid-cols-3 gap-2">
-              <div>
-                <label className="block text-slate-400 mb-1">Vehicle</label>
-                <select
-                  value={vehicleId}
-                  onChange={(e) => setVehicleId(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-800 text-slate-200 rounded p-1.5 focus:outline-none"
-                >
-                  <option value="">-- Assign Later --</option>
-                  {vehicles
-                    .filter((v) => v.status === "Available")
-                    .map((v) => (
-                      <option key={v.id} value={v.id}>
-                        {v.plateNumber} ({v.model} - {v.capacity} Pax)
-                      </option>
-                    ))}
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-slate-400 mb-1">Driver</label>
-                <select
-                  value={driverId}
-                  onChange={(e) => setDriverId(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-800 text-slate-200 rounded p-1.5 focus:outline-none"
-                >
-                  <option value="">-- Assign Later --</option>
-                  {crews
-                    .filter((c) => c.role === "Driver" && c.status === "Available")
-                    .map((c) => (
-                      <option key={c.id} value={c.id}>
-                        {c.name} ({c.homeBase})
-                      </option>
-                    ))}
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-slate-400 mb-1">Local Guide</label>
-                <select
-                  value={guideId}
-                  onChange={(e) => setGuideId(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-800 text-slate-200 rounded p-1.5 focus:outline-none"
-                >
-                  <option value="">-- Assign Later --</option>
-                  {crews
-                    .filter((c) => c.role === "Local Guide" && c.status === "Available")
-                    .map((c) => (
-                      <option key={c.id} value={c.id}>
-                        {c.name} ({c.homeBase})
-                      </option>
-                    ))}
-                </select>
-              </div>
-            </div>
-          </div>
-
-          <div className="pt-4 border-t border-slate-800 flex justify-end gap-3">
+          <div className="pt-3 border-t border-[#E4E7EC] dark:border-[#202B38] flex items-center justify-end gap-2">
             <button
               type="button"
               onClick={onClose}
-              className="bg-slate-800 hover:bg-slate-700 text-slate-300 px-4 py-2 rounded-lg font-semibold transition-colors"
+              className="px-4 py-2 rounded-xl bg-[#F9FAFB] dark:bg-[#131D28] text-[#667085] dark:text-[#A7B1C0] hover:text-[#172033] dark:hover:text-white border border-[#E4E7EC] dark:border-[#202B38] cursor-pointer"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="bg-emerald-600 hover:bg-emerald-500 text-white px-5 py-2 rounded-lg font-bold shadow transition-colors"
+              className="px-4 py-2 rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] dark:bg-[#4F8CFF] dark:hover:bg-[#6AA1FF] text-white font-bold cursor-pointer shadow-xs"
             >
-              Confirm Grouped Tour
+              Confirm Grouping
             </button>
           </div>
         </form>

@@ -8,7 +8,6 @@ import {
   Crew,
   FinanceExpense,
   OperationalNotification,
-  TourStatus,
 } from "@/types/travelOps";
 import {
   Compass,
@@ -26,10 +25,7 @@ import {
   ShieldAlert,
   ArrowRight,
   UserCheck,
-  Calendar,
   Eye,
-  RefreshCw,
-  Anchor,
 } from "lucide-react";
 
 interface ControlRoomViewProps {
@@ -83,7 +79,6 @@ export const ControlRoomView: React.FC<ControlRoomViewProps> = ({
   const fleetAssigned = vehicles.filter((v) => v.status === "Assigned").length;
   const fleetOnTrip = vehicles.filter((v) => v.status === "On Trip").length;
   const fleetMaintenance = vehicles.filter((v) => v.status === "Maintenance").length;
-  const fleetInspection = vehicles.filter((v) => v.status === "Inspection").length;
 
   // Crew Availability Breakdown
   const driversTotal = crews.filter((c) => c.role === "Driver").length;
@@ -163,18 +158,18 @@ export const ControlRoomView: React.FC<ControlRoomViewProps> = ({
   return (
     <div className="space-y-6">
       {/* Dashboard Page Header */}
-      <div className="dark:bg-slate-900 bg-white p-5 rounded-xl border dark:border-slate-800 border-slate-200 flex flex-wrap items-center justify-between gap-4 shadow-lg transition-colors">
+      <div className="bg-white dark:bg-[#101822] p-5 rounded-2xl border border-[#E4E7EC] dark:border-[#202B38] flex flex-wrap items-center justify-between gap-4 shadow-xs transition-colors">
         <div>
           <div className="flex items-center gap-2">
-            <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 text-[11px] font-bold uppercase tracking-wider flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 dark:bg-emerald-400 animate-pulse"></span> Live Operational Feed
+            <span className="px-2.5 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/40 text-[#15803D] dark:text-[#6CE9A6] border border-emerald-200/60 dark:border-emerald-800/40 text-[11px] font-bold uppercase tracking-wider flex items-center gap-1.5">
+              <span className="w-2 h-2 rounded-full bg-[#16A34A] dark:bg-[#32D583] animate-pulse"></span> Live Operational Feed
             </span>
-            <span className="text-xs dark:text-slate-400 text-slate-500 font-mono">/dashboard</span>
+            <span className="text-xs text-[#667085] dark:text-[#A7B1C0] font-mono">/dashboard</span>
           </div>
-          <h1 className="text-2xl font-extrabold dark:text-white text-slate-900 tracking-tight mt-1">
+          <h1 className="text-2xl font-extrabold text-[#172033] dark:text-white tracking-tight mt-1">
             Operation Control Center
           </h1>
-          <p className="text-xs dark:text-slate-400 text-slate-600">
+          <p className="text-xs text-[#667085] dark:text-[#A7B1C0]">
             Real-time overview of today's travel operations across Yogyakarta, Bromo, Ijen, Banyuwangi, and Bali.
           </p>
         </div>
@@ -182,14 +177,14 @@ export const ControlRoomView: React.FC<ControlRoomViewProps> = ({
         <div className="flex items-center gap-2.5">
           <button
             onClick={onOpenGroupModal}
-            className="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white px-3.5 py-2 rounded-lg text-xs font-semibold shadow transition-all cursor-pointer"
+            className="flex items-center gap-2 bg-[#2563EB] hover:bg-[#1D4ED8] dark:bg-[#4F8CFF] dark:hover:bg-[#6AA1FF] text-white px-3.5 py-2 rounded-xl text-xs font-bold shadow-xs transition-all cursor-pointer"
           >
             <Layers className="w-4 h-4" />
             <span>Group Bookings</span>
           </button>
           <button
             onClick={() => onNavigateTab("dispatch_execution")}
-            className="flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white px-3.5 py-2 rounded-lg text-xs font-semibold shadow transition-all cursor-pointer"
+            className="flex items-center gap-2 bg-[#172033] dark:bg-[#172230] hover:bg-slate-800 text-white px-3.5 py-2 rounded-xl text-xs font-bold shadow-xs transition-all cursor-pointer border border-[#E4E7EC] dark:border-[#202B38]"
           >
             <Send className="w-4 h-4" />
             <span>Live Dispatch Monitor</span>
@@ -202,14 +197,14 @@ export const ControlRoomView: React.FC<ControlRoomViewProps> = ({
         {/* KPI 1: Today's Tours */}
         <div
           onClick={() => onNavigateTab("dispatch_execution")}
-          className="dark:bg-slate-900 bg-white border dark:border-slate-800 border-slate-200 p-4 rounded-xl cursor-pointer hover:border-emerald-500/40 transition-all group shadow"
+          className="bg-white dark:bg-[#101822] border border-[#E4E7EC] dark:border-[#202B38] p-4 rounded-xl cursor-pointer hover:border-[#2563EB] dark:hover:border-[#4F8CFF] transition-all group shadow-xs"
         >
-          <div className="flex items-center justify-between dark:text-slate-400 text-slate-500 mb-2">
-            <span className="text-xs font-medium dark:text-slate-400 text-slate-500">Today's Tours</span>
-            <Compass className="w-4 h-4 text-emerald-500 dark:text-emerald-400 group-hover:scale-110 transition-transform" />
+          <div className="flex items-center justify-between text-[#667085] dark:text-[#A7B1C0] mb-2">
+            <span className="text-xs font-medium">Today's Tours</span>
+            <Compass className="w-4 h-4 text-[#2563EB] dark:text-[#4F8CFF] group-hover:scale-110 transition-transform" />
           </div>
-          <div className="text-2xl font-extrabold dark:text-white text-slate-900 font-mono">{todayToursCount}</div>
-          <div className="text-[10px] text-emerald-600 dark:text-emerald-400 mt-1 flex items-center gap-1 font-medium">
+          <div className="text-2xl font-extrabold text-[#172033] dark:text-white font-mono">{todayToursCount}</div>
+          <div className="text-[10px] text-[#16A34A] dark:text-[#32D583] mt-1 flex items-center gap-1 font-medium">
             <TrendingUp className="w-3 h-3" /> +12% vs Yest Avg
           </div>
         </div>
@@ -217,14 +212,14 @@ export const ControlRoomView: React.FC<ControlRoomViewProps> = ({
         {/* KPI 2: Departure Today */}
         <div
           onClick={() => onNavigateTab("dispatch_execution")}
-          className="dark:bg-slate-900 bg-white border dark:border-slate-800 border-slate-200 p-4 rounded-xl cursor-pointer hover:border-blue-500/40 transition-all group shadow"
+          className="bg-white dark:bg-[#101822] border border-[#E4E7EC] dark:border-[#202B38] p-4 rounded-xl cursor-pointer hover:border-[#2563EB] dark:hover:border-[#4F8CFF] transition-all group shadow-xs"
         >
-          <div className="flex items-center justify-between dark:text-slate-400 text-slate-500 mb-2">
-            <span className="text-xs font-medium dark:text-slate-400 text-slate-500">Departure Today</span>
-            <Send className="w-4 h-4 text-blue-500 dark:text-blue-400 group-hover:scale-110 transition-transform" />
+          <div className="flex items-center justify-between text-[#667085] dark:text-[#A7B1C0] mb-2">
+            <span className="text-xs font-medium">Departure Today</span>
+            <Send className="w-4 h-4 text-[#2563EB] dark:text-[#4F8CFF] group-hover:scale-110 transition-transform" />
           </div>
-          <div className="text-2xl font-extrabold dark:text-white text-slate-900 font-mono">{departuresTodayCount}</div>
-          <div className="text-[10px] text-blue-600 dark:text-blue-400 mt-1 font-medium">
+          <div className="text-2xl font-extrabold text-[#172033] dark:text-white font-mono">{departuresTodayCount}</div>
+          <div className="text-[10px] text-[#2563EB] dark:text-[#4F8CFF] mt-1 font-medium">
             100% On Schedule
           </div>
         </div>
@@ -232,13 +227,13 @@ export const ControlRoomView: React.FC<ControlRoomViewProps> = ({
         {/* KPI 3: Tour In Progress */}
         <div
           onClick={() => onNavigateTab("dispatch_execution")}
-          className="dark:bg-slate-900 bg-white border dark:border-slate-800 border-slate-200 p-4 rounded-xl cursor-pointer hover:border-cyan-500/40 transition-all group shadow"
+          className="bg-white dark:bg-[#101822] border border-[#E4E7EC] dark:border-[#202B38] p-4 rounded-xl cursor-pointer hover:border-cyan-500 transition-all group shadow-xs"
         >
-          <div className="flex items-center justify-between dark:text-slate-400 text-slate-500 mb-2">
-            <span className="text-xs font-medium dark:text-slate-400 text-slate-500">Tour In Progress</span>
-            <Clock className="w-4 h-4 text-cyan-500 dark:text-cyan-400 group-hover:scale-110 transition-transform" />
+          <div className="flex items-center justify-between text-[#667085] dark:text-[#A7B1C0] mb-2">
+            <span className="text-xs font-medium">Tour In Progress</span>
+            <Clock className="w-4 h-4 text-cyan-600 dark:text-cyan-400 group-hover:scale-110 transition-transform" />
           </div>
-          <div className="text-2xl font-extrabold dark:text-white text-slate-900 font-mono">{inProgressCount}</div>
+          <div className="text-2xl font-extrabold text-[#172033] dark:text-white font-mono">{inProgressCount}</div>
           <div className="text-[10px] text-cyan-600 dark:text-cyan-400 mt-1 font-medium">
             Active On Trip
           </div>
@@ -247,503 +242,300 @@ export const ControlRoomView: React.FC<ControlRoomViewProps> = ({
         {/* KPI 4: Arrival Today */}
         <div
           onClick={() => onNavigateTab("dispatch_execution")}
-          className="dark:bg-slate-900 bg-white border dark:border-slate-800 border-slate-200 p-4 rounded-xl cursor-pointer hover:border-teal-500/40 transition-all group shadow"
+          className="bg-white dark:bg-[#101822] border border-[#E4E7EC] dark:border-[#202B38] p-4 rounded-xl cursor-pointer hover:border-emerald-500 transition-all group shadow-xs"
         >
-          <div className="flex items-center justify-between text-slate-400 mb-2">
-            <span className="text-xs font-medium text-slate-400">Arrival Today</span>
-            <CheckCircle2 className="w-4 h-4 text-teal-400 group-hover:scale-110 transition-transform" />
+          <div className="flex items-center justify-between text-[#667085] dark:text-[#A7B1C0] mb-2">
+            <span className="text-xs font-medium">Arrival Today</span>
+            <CheckCircle2 className="w-4 h-4 text-[#16A34A] dark:text-[#32D583] group-hover:scale-110 transition-transform" />
           </div>
-          <div className="text-2xl font-extrabold text-white font-mono">{arrivalTodayCount}</div>
-          <div className="text-[10px] text-teal-400 mt-1 font-medium">
-            Target Met
+          <div className="text-2xl font-extrabold text-[#172033] dark:text-white font-mono">{arrivalTodayCount}</div>
+          <div className="text-[10px] text-[#16A34A] dark:text-[#32D583] mt-1 font-medium">
+            Ketapang & Bali Hub
           </div>
         </div>
 
         {/* KPI 5: Pending Deployment */}
         <div
-          onClick={() => onNavigateTab("booking_grouping")}
-          className="bg-slate-900 border border-slate-800 p-4 rounded-xl cursor-pointer hover:border-amber-500/40 transition-all group shadow-md"
+          onClick={() => onNavigateTab("dispatch_execution")}
+          className="bg-white dark:bg-[#101822] border border-[#E4E7EC] dark:border-[#202B38] p-4 rounded-xl cursor-pointer hover:border-amber-500 transition-all group shadow-xs"
         >
-          <div className="flex items-center justify-between text-slate-400 mb-2">
-            <span className="text-xs font-medium text-slate-400">Pending Deployment</span>
-            <Layers className="w-4 h-4 text-amber-400 group-hover:scale-110 transition-transform" />
+          <div className="flex items-center justify-between text-[#667085] dark:text-[#A7B1C0] mb-2">
+            <span className="text-xs font-medium">Pending Deploy</span>
+            <Layers className="w-4 h-4 text-[#D97706] dark:text-[#FDB022] group-hover:scale-110 transition-transform" />
           </div>
-          <div className="text-2xl font-extrabold text-white font-mono">{pendingDeploymentCount}</div>
-          <div className="text-[10px] text-amber-400 mt-1 font-medium">
-            Awaiting Match
+          <div className="text-2xl font-extrabold text-[#172033] dark:text-white font-mono">{pendingDeploymentCount}</div>
+          <div className="text-[10px] text-[#D97706] dark:text-[#FDB022] mt-1 font-medium">
+            Needs Vehicle / Driver
           </div>
         </div>
 
         {/* KPI 6: Operational Issues */}
         <div
           onClick={() => onNavigateTab("dispatch_execution")}
-          className="bg-slate-900 border border-slate-800 p-4 rounded-xl cursor-pointer hover:border-red-500/40 transition-all group shadow-md"
+          className="bg-white dark:bg-[#101822] border border-[#E4E7EC] dark:border-[#202B38] p-4 rounded-xl cursor-pointer hover:border-rose-500 transition-all group shadow-xs"
         >
-          <div className="flex items-center justify-between text-slate-400 mb-2">
-            <span className="text-xs font-medium text-slate-400">Operational Issues</span>
-            <ShieldAlert className="w-4 h-4 text-red-400 group-hover:scale-110 transition-transform" />
+          <div className="flex items-center justify-between text-[#667085] dark:text-[#A7B1C0] mb-2">
+            <span className="text-xs font-medium">Operational Issues</span>
+            <AlertTriangle className="w-4 h-4 text-[#DC2626] dark:text-[#F97066] group-hover:scale-110 transition-transform" />
           </div>
-          <div className="text-2xl font-extrabold text-red-400 font-mono">{operationalIssuesCount}</div>
-          <div className="text-[10px] text-red-400 mt-1 font-medium flex items-center gap-1">
-            <AlertTriangle className="w-3 h-3" /> Requires Action
+          <div className="text-2xl font-extrabold text-[#172033] dark:text-white font-mono">{operationalIssuesCount}</div>
+          <div className="text-[10px] text-[#DC2626] dark:text-[#F97066] mt-1 font-medium">
+            Action Required
           </div>
         </div>
       </div>
 
-      {/* MAIN SECTION 1: TODAY'S OPERATION (LARGEST TABLE) */}
-      <div className="bg-slate-900 border border-slate-800 rounded-xl p-5 space-y-4 shadow-xl">
-        <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-800 pb-3">
-          <div>
-            <h2 className="text-base font-bold text-white flex items-center gap-2">
-              <Compass className="w-5 h-5 text-emerald-400" /> Today's Operation Schedule
-            </h2>
-            <p className="text-xs text-slate-400">
-              Detailed operational tracking table answering "What tours are happening today?"
-            </p>
+      {/* MIDDLE SECTION: MAIN OPERATIONS TABLE & ACTIONABLE ALERTS */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 text-xs">
+        {/* LEFT COLUMN (8 cols): Today's Excursion Operations Table */}
+        <div className="lg:col-span-8 bg-white dark:bg-[#101822] border border-[#E4E7EC] dark:border-[#202B38] p-5 rounded-2xl space-y-4 shadow-xs">
+          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#E4E7EC] dark:border-[#202B38] pb-3">
+            <div>
+              <h3 className="font-bold text-sm text-[#172033] dark:text-white flex items-center gap-2">
+                <Compass className="w-4 h-4 text-[#2563EB] dark:text-[#4F8CFF]" /> Today's Tour Operations Status
+              </h3>
+              <span className="text-[11px] text-[#667085] dark:text-[#A7B1C0]">
+                Live tracking across Yogyakarta, Sukapura, Ketapang & Bali
+              </span>
+            </div>
+
+            {/* Filter Buttons */}
+            <div className="flex items-center gap-1.5">
+              {["ALL", "Departed", "On Trip", "Handover", "Completed"].map((st) => (
+                <button
+                  key={st}
+                  onClick={() => setTableStatusFilter(st)}
+                  className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold transition-all cursor-pointer ${
+                    tableStatusFilter === st
+                      ? "bg-[#2563EB] dark:bg-[#4F8CFF] text-white shadow-xs"
+                      : "bg-[#F9FAFB] dark:bg-[#131D28] text-[#667085] dark:text-[#A7B1C0] hover:text-[#172033] dark:hover:text-white border border-[#E4E7EC] dark:border-[#202B38]"
+                  }`}
+                >
+                  {st}
+                </button>
+              ))}
+            </div>
           </div>
 
-          {/* Status Filter Pill */}
-          <div className="flex items-center gap-2 text-xs">
-            <span className="text-slate-400">Status Filter:</span>
-            <select
-              value={tableStatusFilter}
-              onChange={(e) => setTableStatusFilter(e.target.value)}
-              className="bg-slate-950 border border-slate-800 text-slate-200 px-3 py-1.5 rounded-lg focus:outline-none focus:border-emerald-500 font-medium"
-            >
-              <option value="ALL">All Statuses ({tours.length})</option>
-              <option value="Ready">Ready</option>
-              <option value="Departed">Departed</option>
-              <option value="On Trip">On Trip</option>
-              <option value="Handover">Handover</option>
-              <option value="Completed">Completed</option>
-              <option value="Issue">Issue</option>
-            </select>
-          </div>
-        </div>
-
-        {/* Dense Operational Table */}
-        <div className="overflow-x-auto rounded-lg border border-slate-800">
-          <table className="w-full text-left text-xs border-collapse font-sans">
-            <thead>
-              <tr className="bg-slate-950 border-b border-slate-800 text-slate-400 font-semibold uppercase text-[10px] tracking-wider">
-                <th className="p-3">Time</th>
-                <th className="p-3">Tour Name & ID</th>
-                <th className="p-3">Pax</th>
-                <th className="p-3">Origin</th>
-                <th className="p-3">Destination</th>
-                <th className="p-3">Vehicle</th>
-                <th className="p-3">Driver</th>
-                <th className="p-3">Guide</th>
-                <th className="p-3">TM</th>
-                <th className="p-3">Status</th>
-                <th className="p-3 text-right">Action</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-800/80">
-              {filteredToursTable.map((tour) => {
-                const vehicle = vehicles.find((v) => v.id === tour.vehicleId);
-                const driver = crews.find((c) => c.id === tour.driverId);
-                const guide = crews.find((c) => c.id === tour.guideId);
-                const tm = crews.find((c) => c.id === tour.tourManagerId);
-                const pickupTime = tour.checkpoints[0]?.scheduledTime || "06:00";
-
-                return (
+          {/* Operations Table */}
+          <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr className="border-b border-[#E4E7EC] dark:border-[#202B38] bg-[#F9FAFB] dark:bg-[#131D28] text-[#667085] dark:text-[#A7B1C0] text-[11px] uppercase tracking-wider font-semibold">
+                  <th className="py-2.5 px-3">Tour ID</th>
+                  <th className="py-2.5 px-3">Excursion Name</th>
+                  <th className="py-2.5 px-3">Pax</th>
+                  <th className="py-2.5 px-3">Route Corridor</th>
+                  <th className="py-2.5 px-3">Vehicle</th>
+                  <th className="py-2.5 px-3">Crew</th>
+                  <th className="py-2.5 px-3">Status</th>
+                  <th className="py-2.5 px-3 text-right">Action</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-[#EEF0F3] dark:divide-[#202B38]">
+                {filteredToursTable.map((tour) => (
                   <tr
                     key={tour.id}
-                    className="ops-table-row hover:bg-slate-850/60 transition-colors cursor-pointer"
                     onClick={() => onSelectTour(tour.id)}
+                    className="saas-table-row cursor-pointer"
                   >
-                    {/* Time */}
-                    <td className="p-3 font-mono text-emerald-400 font-bold whitespace-nowrap">
-                      {pickupTime} WIB
-                    </td>
-
-                    {/* Tour Name & ID */}
-                    <td className="p-3 max-w-[220px]">
-                      <div className="font-mono text-[10px] font-bold text-slate-400">{tour.id}</div>
-                      <div className="font-bold text-slate-100 truncate" title={tour.tourName}>
-                        {tour.tourName}
+                    <td className="py-3 px-3 font-mono font-bold text-[#2563EB] dark:text-[#4F8CFF]">{tour.id}</td>
+                    <td className="py-3 px-3 font-bold text-[#172033] dark:text-white max-w-[180px] truncate">{tour.tourName}</td>
+                    <td className="py-3 px-3 font-mono font-semibold text-[#172033] dark:text-[#F8FAFC]">{tour.pax} Pax</td>
+                    <td className="py-3 px-3 text-[#667085] dark:text-[#A7B1C0]">
+                      <div className="flex items-center gap-1">
+                        <MapPin className="w-3 h-3 text-[#2563EB] dark:text-[#4F8CFF]" />
+                        <span>{tour.origin} → {tour.dropOff}</span>
                       </div>
                     </td>
-
-                    {/* Pax */}
-                    <td className="p-3">
-                      <span className="font-mono font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
-                        {tour.pax} Pax
-                      </span>
-                    </td>
-
-                    {/* Origin */}
-                    <td className="p-3 text-slate-300 font-medium whitespace-nowrap">{tour.origin}</td>
-
-                    {/* Destination */}
-                    <td className="p-3 max-w-[180px]">
-                      <div className="text-slate-200 truncate" title={tour.destination}>
-                        {tour.destination}
-                      </div>
-                      <div className="text-[10px] text-slate-500 truncate">Drop: {tour.dropOff}</div>
-                    </td>
-
-                    {/* Vehicle */}
-                    <td className="p-3">
-                      {vehicle ? (
-                        <div>
-                          <span className="font-mono font-bold text-amber-300 block">{vehicle.plateNumber}</span>
-                          <span className="text-[10px] text-slate-400">{vehicle.model}</span>
-                        </div>
+                    <td className="py-3 px-3 font-mono text-[11px]">
+                      {tour.vehicleId ? (
+                        <span className="text-[#172033] dark:text-white font-semibold">{tour.vehicleId}</span>
                       ) : (
-                        <span className="text-red-400 font-semibold text-[11px] bg-red-500/10 px-1.5 py-0.5 rounded">
-                          Unassigned
-                        </span>
+                        <span className="text-[#DC2626] dark:text-[#F97066] font-bold">Unassigned</span>
                       )}
                     </td>
-
-                    {/* Driver */}
-                    <td className="p-3">
-                      {driver ? (
-                        <span className="font-medium text-slate-200">{driver.name.split(" ")[0]}</span>
+                    <td className="py-3 px-3 text-[11px]">
+                      {tour.driverId ? (
+                        <span className="text-[#667085] dark:text-[#A7B1C0]">{tour.driverId}</span>
                       ) : (
-                        <span className="text-red-400 text-[11px]">Unassigned</span>
+                        <span className="text-[#DC2626] dark:text-[#F97066] font-bold">No Driver</span>
                       )}
                     </td>
-
-                    {/* Guide */}
-                    <td className="p-3">
-                      {guide ? (
-                        <span className="font-medium text-slate-200">{guide.name.split(" ")[0]}</span>
-                      ) : (
-                        <span className="text-amber-400 text-[11px]">Local Guide</span>
-                      )}
-                    </td>
-
-                    {/* TM */}
-                    <td className="p-3">
-                      {tm ? (
-                        <span className="font-medium text-slate-200">{tm.name.split(" ")[0]}</span>
-                      ) : (
-                        <span className="text-slate-500 text-[11px]">-</span>
-                      )}
-                    </td>
-
-                    {/* Status */}
-                    <td className="p-3">
+                    <td className="py-3 px-3">
                       <span
-                        className={`px-2.5 py-1 rounded-full text-[10px] font-semibold border ${
-                          tour.status === "Ready"
-                            ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/30"
-                            : tour.status === "Departed"
-                            ? "bg-cyan-500/10 text-cyan-400 border-cyan-500/30"
-                            : tour.status === "On Trip" || tour.status === "In Transit"
-                            ? "bg-blue-500/10 text-blue-400 border-blue-500/30"
+                        className={`px-2 py-0.5 rounded text-[10px] font-semibold border ${
+                          tour.status === "On Trip" || tour.status === "Departed"
+                            ? "bg-[#ECFDF3] text-[#15803D] dark:bg-[rgba(50,213,131,0.12)] dark:text-[#6CE9A6] border-emerald-200/60 dark:border-emerald-800/40"
                             : tour.status === "Handover"
-                            ? "bg-purple-500/10 text-purple-400 border-purple-500/30"
+                            ? "bg-[#EFF8FF] text-[#175CD3] dark:bg-[rgba(83,177,253,0.12)] dark:text-[#84CAFF] border-blue-200/60 dark:border-blue-800/40"
                             : tour.status === "Issue"
-                            ? "bg-red-500/10 text-red-400 border-red-500/30 animate-pulse"
-                            : "bg-teal-500/10 text-teal-400 border-teal-500/30"
+                            ? "bg-[#FEF3F2] text-[#B42318] dark:bg-[rgba(249,112,102,0.12)] dark:text-[#FDA29B] border-rose-200/60 dark:border-rose-800/40"
+                            : "bg-[#FFFAEB] text-[#B54708] dark:bg-[rgba(253,176,34,0.12)] dark:text-[#FEC84B] border-amber-200/60 dark:border-amber-800/40"
                         }`}
                       >
                         {tour.status}
                       </span>
                     </td>
-
-                    {/* Action */}
-                    <td className="p-3 text-right" onClick={(e) => e.stopPropagation()}>
+                    <td className="py-3 px-3 text-right">
                       <button
-                        onClick={() => onSelectTour(tour.id)}
-                        className="p-1.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors"
-                        title="View Tour Details"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onSelectTour(tour.id);
+                        }}
+                        className="p-1 rounded text-[#2563EB] dark:text-[#4F8CFF] hover:bg-[#EEF4FF] dark:hover:bg-[#16263F] font-semibold text-[11px] cursor-pointer"
                       >
-                        <Eye className="w-3.5 h-3.5" />
+                        <Eye className="w-4 h-4" />
                       </button>
                     </td>
                   </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      {/* MIDDLE SECTION 2: FLEET STATUS & CREW AVAILABILITY (2 COLS) */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* FLEET STATUS (Compact Visualization) */}
-        <div className="bg-slate-900 border border-slate-800 p-5 rounded-xl space-y-4 shadow-xl">
-          <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-            <div>
-              <h3 className="font-bold text-sm text-white flex items-center gap-2">
-                <Truck className="w-4 h-4 text-amber-400" /> Fleet Readiness & Deployment
-              </h3>
-              <p className="text-[11px] text-slate-400">Answers "Do we have enough vehicles?"</p>
-            </div>
-            <button
-              onClick={() => onNavigateTab("fleet_management")}
-              className="text-xs text-amber-400 hover:text-amber-300 font-semibold flex items-center gap-1"
-            >
-              Fleet Center <ChevronRight className="w-3.5 h-3.5" />
-            </button>
-          </div>
-
-          <div className="space-y-4">
-            {/* Main Fleet Breakdown Bar */}
-            <div className="flex items-center justify-between bg-slate-950 p-3 rounded-lg border border-slate-800">
-              <span className="text-xs font-semibold text-slate-300">Total Fleet Managed</span>
-              <span className="font-mono text-xl font-bold text-white">{totalFleet} Vehicles</span>
-            </div>
-
-            {/* Compact Badges Matrix */}
-            <div className="grid grid-cols-5 gap-2 text-center text-xs">
-              <div className="bg-emerald-500/10 border border-emerald-500/30 p-2 rounded-lg">
-                <span className="text-[10px] text-slate-400 block">Available</span>
-                <span className="font-mono font-bold text-emerald-400 text-sm">{fleetAvailable}</span>
-              </div>
-              <div className="bg-blue-500/10 border border-blue-500/30 p-2 rounded-lg">
-                <span className="text-[10px] text-slate-400 block">Assigned</span>
-                <span className="font-mono font-bold text-blue-400 text-sm">{fleetAssigned}</span>
-              </div>
-              <div className="bg-cyan-500/10 border border-cyan-500/30 p-2 rounded-lg">
-                <span className="text-[10px] text-slate-400 block">On Trip</span>
-                <span className="font-mono font-bold text-cyan-400 text-sm">{fleetOnTrip}</span>
-              </div>
-              <div className="bg-red-500/10 border border-red-500/30 p-2 rounded-lg">
-                <span className="text-[10px] text-slate-400 block">Maint.</span>
-                <span className="font-mono font-bold text-red-400 text-sm">{fleetMaintenance}</span>
-              </div>
-              <div className="bg-amber-500/10 border border-amber-500/30 p-2 rounded-lg">
-                <span className="text-[10px] text-slate-400 block">Inspect.</span>
-                <span className="font-mono font-bold text-amber-400 text-sm">{fleetInspection}</span>
-              </div>
-            </div>
-
-            {/* Visual Ratio Progress Bar */}
-            <div className="space-y-1 text-xs">
-              <div className="flex justify-between text-[11px] text-slate-400">
-                <span>Active Deployment Rate</span>
-                <span className="font-mono text-emerald-400 font-bold">
-                  {Math.round(((fleetAssigned + fleetOnTrip) / totalFleet) * 100)}% Deployed
-                </span>
-              </div>
-              <div className="w-full bg-slate-950 h-3 rounded-full overflow-hidden flex">
-                <div
-                  className="bg-emerald-500 h-full"
-                  style={{ width: `${(fleetAvailable / totalFleet) * 100}%` }}
-                  title="Available"
-                ></div>
-                <div
-                  className="bg-blue-500 h-full"
-                  style={{ width: `${(fleetAssigned / totalFleet) * 100}%` }}
-                  title="Assigned"
-                ></div>
-                <div
-                  className="bg-cyan-500 h-full"
-                  style={{ width: `${(fleetOnTrip / totalFleet) * 100}%` }}
-                  title="On Trip"
-                ></div>
-                <div
-                  className="bg-red-500 h-full"
-                  style={{ width: `${(fleetMaintenance / totalFleet) * 100}%` }}
-                  title="Maintenance"
-                ></div>
-              </div>
-            </div>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
 
-        {/* CREW AVAILABILITY */}
-        <div className="bg-slate-900 border border-slate-800 p-5 rounded-xl space-y-4 shadow-xl">
-          <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-            <div>
-              <h3 className="font-bold text-sm text-white flex items-center gap-2">
-                <Users className="w-4 h-4 text-indigo-400" /> Operational Crew Roster Availability
+        {/* RIGHT COLUMN (4 cols): Actionable Alerts & System Quick Actions */}
+        <div className="lg:col-span-4 space-y-6">
+          {/* Actionable Operations Alerts */}
+          <div className="bg-white dark:bg-[#101822] border border-[#E4E7EC] dark:border-[#202B38] p-5 rounded-2xl space-y-4 shadow-xs">
+            <div className="flex items-center justify-between border-b border-[#E4E7EC] dark:border-[#202B38] pb-3">
+              <h3 className="font-bold text-sm text-[#172033] dark:text-white flex items-center gap-2">
+                <ShieldAlert className="w-4 h-4 text-[#DC2626] dark:text-[#F97066]" /> Action Required Alerts
               </h3>
-              <p className="text-[11px] text-slate-400">Answers "Do we have enough crew?"</p>
-            </div>
-            <button
-              onClick={() => onNavigateTab("crew_sdm")}
-              className="text-xs text-indigo-400 hover:text-indigo-300 font-semibold flex items-center gap-1"
-            >
-              Crew Roster <ChevronRight className="w-3.5 h-3.5" />
-            </button>
-          </div>
-
-          <div className="space-y-3">
-            {/* Drivers */}
-            <div className="bg-slate-950 p-3 rounded-lg border border-slate-800 flex items-center justify-between text-xs">
-              <div className="flex items-center gap-2.5">
-                <div className="p-2 rounded bg-blue-500/10 text-blue-400 border border-blue-500/30">
-                  <UserCheck className="w-4 h-4" />
-                </div>
-                <div>
-                  <div className="font-bold text-slate-100">Drivers Roster</div>
-                  <div className="text-[10px] text-slate-400">SIM B1 & Overland Java-Bali Certified</div>
-                </div>
-              </div>
-              <div className="text-right">
-                <div className="font-mono text-sm font-extrabold text-emerald-400">
-                  {driversAvailable} Available <span className="text-slate-500 font-normal">/ {driversTotal} Total</span>
-                </div>
-                <span className="text-[10px] text-slate-400 font-mono">
-                  {driversTotal - driversAvailable} Currently On Trip
-                </span>
-              </div>
+              <span className="font-mono text-[10px] font-bold bg-[#FEF3F2] dark:bg-[rgba(249,112,102,0.12)] text-[#B42318] dark:text-[#FDA29B] px-1.5 py-0.5 rounded border border-rose-200 dark:border-rose-900/40">
+                {alertsList.length} Items
+              </span>
             </div>
 
-            {/* Local Guides */}
-            <div className="bg-slate-950 p-3 rounded-lg border border-slate-800 flex items-center justify-between text-xs">
-              <div className="flex items-center gap-2.5">
-                <div className="p-2 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
-                  <Users className="w-4 h-4" />
-                </div>
-                <div>
-                  <div className="font-bold text-slate-100">Local Tour Guides</div>
-                  <div className="text-[10px] text-slate-400">Bromo, Ijen & Waterfall Specialists</div>
-                </div>
-              </div>
-              <div className="text-right">
-                <div className="font-mono text-sm font-extrabold text-emerald-400">
-                  {guidesAvailable} Available <span className="text-slate-500 font-normal">/ {guidesTotal} Total</span>
-                </div>
-                <span className="text-[10px] text-slate-400 font-mono">
-                  {guidesTotal - guidesAvailable} Currently On Trip
-                </span>
-              </div>
-            </div>
-
-            {/* Tour Managers */}
-            <div className="bg-slate-950 p-3 rounded-lg border border-slate-800 flex items-center justify-between text-xs">
-              <div className="flex items-center gap-2.5">
-                <div className="p-2 rounded bg-purple-500/10 text-purple-400 border border-purple-500/30">
-                  <UserCheck className="w-4 h-4" />
-                </div>
-                <div>
-                  <div className="font-bold text-slate-100">Tour Managers (TM)</div>
-                  <div className="text-[10px] text-slate-400">Senior Expedition Leaders</div>
-                </div>
-              </div>
-              <div className="text-right">
-                <div className="font-mono text-sm font-extrabold text-emerald-400">
-                  {tmAvailable} Available <span className="text-slate-500 font-normal">/ {tmTotal} Total</span>
-                </div>
-                <span className="text-[10px] text-slate-400 font-mono">
-                  {tmTotal - tmAvailable} Currently On Trip
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* BOTTOM SECTION 3: OPERATION ALERTS & LIVE TOUR MONITORING (2 COLS) */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* ACTIONABLE OPERATION ALERTS */}
-        <div className="bg-slate-900 border border-slate-800 p-5 rounded-xl space-y-4 shadow-xl">
-          <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-            <div>
-              <h3 className="font-bold text-sm text-white flex items-center gap-2">
-                <AlertTriangle className="w-4 h-4 text-amber-400" /> Actionable Operational Alerts
-              </h3>
-              <p className="text-[11px] text-slate-400">Answers "Which tours & problems need attention?"</p>
-            </div>
-            <span className="px-2 py-0.5 rounded bg-amber-500/10 text-amber-400 font-mono font-bold text-xs border border-amber-500/30">
-              {alertsList.length} Active Alerts
-            </span>
-          </div>
-
-          <div className="space-y-2.5 max-h-[360px] overflow-y-auto pr-1">
-            {alertsList.length === 0 ? (
-              <div className="text-center py-8 text-emerald-400 text-xs flex flex-col items-center gap-2">
-                <CheckCircle2 className="w-8 h-8" />
-                <span>All departures fully assigned with zero operational alerts!</span>
-              </div>
-            ) : (
-              alertsList.map((alert) => (
+            <div className="space-y-3 max-h-[320px] overflow-y-auto pr-1 scrollbar-none">
+              {alertsList.map((alert) => (
                 <div
                   key={alert.id}
-                  className={`p-3 rounded-lg border text-xs flex flex-wrap items-center justify-between gap-2 ${
+                  className={`p-3 rounded-xl border space-y-2 transition-colors ${
                     alert.type === "urgent"
-                      ? "bg-red-500/10 border-red-500/30 text-red-200"
-                      : "bg-amber-500/10 border-amber-500/30 text-amber-200"
+                      ? "bg-rose-50 dark:bg-rose-950/30 border-rose-200 dark:border-rose-900/40 text-rose-900 dark:text-rose-200"
+                      : "bg-amber-50 dark:bg-amber-950/30 border-amber-200 dark:border-amber-900/40 text-amber-900 dark:text-amber-200"
                   }`}
                 >
-                  <div className="space-y-0.5 flex-1 min-w-[200px]">
-                    <div className="font-bold text-white flex items-center gap-1.5">
-                      <AlertTriangle className="w-3.5 h-3.5 text-amber-400" /> {alert.title}
-                    </div>
-                    <div className="text-[11px] text-slate-300 leading-relaxed">{alert.desc}</div>
+                  <div className="flex items-center justify-between font-bold text-xs">
+                    <span>{alert.title}</span>
+                    <AlertTriangle className="w-3.5 h-3.5 shrink-0 text-[#DC2626] dark:text-[#F97066]" />
                   </div>
-
+                  <p className="text-[11px] leading-relaxed text-[#667085] dark:text-[#A7B1C0]">{alert.desc}</p>
                   <button
                     onClick={alert.action}
-                    className="bg-slate-800 hover:bg-slate-700 text-white text-[11px] px-3 py-1.5 rounded-lg font-bold border border-slate-700 transition-colors shadow"
+                    className="w-full bg-[#2563EB] dark:bg-[#4F8CFF] hover:brightness-105 text-white py-1.5 rounded-lg font-bold text-[11px] flex items-center justify-center gap-1.5 cursor-pointer shadow-xs"
                   >
-                    {alert.actionLabel} →
+                    <span>{alert.actionLabel}</span>
+                    <ArrowRight className="w-3 h-3" />
                   </button>
                 </div>
-              ))
-            )}
+              ))}
+            </div>
+          </div>
+
+          {/* Quick Dispatch Shortcuts */}
+          <div className="bg-white dark:bg-[#101822] border border-[#E4E7EC] dark:border-[#202B38] p-5 rounded-2xl space-y-3 shadow-xs">
+            <h3 className="font-bold text-sm text-[#172033] dark:text-white border-b border-[#E4E7EC] dark:border-[#202B38] pb-2">
+              Dispatch Workspace Shortcuts
+            </h3>
+            <div className="grid grid-cols-2 gap-2">
+              <button
+                onClick={() => onNavigateTab("booking_grouping")}
+                className="p-3 bg-[#F9FAFB] dark:bg-[#131D28] hover:bg-[#F3F4F6] dark:hover:bg-[#1A2634] border border-[#E4E7EC] dark:border-[#202B38] rounded-xl text-left space-y-1 transition-all cursor-pointer"
+              >
+                <div className="font-bold text-xs text-[#172033] dark:text-white">Booking Inbox</div>
+                <div className="text-[10px] text-[#667085] dark:text-[#A7B1C0]">Batch GYG Reservations</div>
+              </button>
+
+              <button
+                onClick={() => onNavigateTab("dispatch_execution")}
+                className="p-3 bg-[#F9FAFB] dark:bg-[#131D28] hover:bg-[#F3F4F6] dark:hover:bg-[#1A2634] border border-[#E4E7EC] dark:border-[#202B38] rounded-xl text-left space-y-1 transition-all cursor-pointer"
+              >
+                <div className="font-bold text-xs text-[#172033] dark:text-white">Dispatch Board</div>
+                <div className="text-[10px] text-[#667085] dark:text-[#A7B1C0]">Assign Driver & Vehicle</div>
+              </button>
+
+              <button
+                onClick={() => onNavigateTab("fleet_management")}
+                className="p-3 bg-[#F9FAFB] dark:bg-[#131D28] hover:bg-[#F3F4F6] dark:hover:bg-[#1A2634] border border-[#E4E7EC] dark:border-[#202B38] rounded-xl text-left space-y-1 transition-all cursor-pointer"
+              >
+                <div className="font-bold text-xs text-[#172033] dark:text-white">Fleet Roster</div>
+                <div className="text-[10px] text-[#667085] dark:text-[#A7B1C0]">Hiace & 4x4 Readiness</div>
+              </button>
+
+              <button
+                onClick={() => onNavigateTab("crew_sdm")}
+                className="p-3 bg-[#F9FAFB] dark:bg-[#131D28] hover:bg-[#F3F4F6] dark:hover:bg-[#1A2634] border border-[#E4E7EC] dark:border-[#202B38] rounded-xl text-left space-y-1 transition-all cursor-pointer"
+              >
+                <div className="font-bold text-xs text-[#172033] dark:text-white">Crew Roster</div>
+                <div className="text-[10px] text-[#667085] dark:text-[#A7B1C0]">Local Guides & TMs</div>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* LOWER SECTION: FLEET STATUS & CREW AVAILABILITY MATRIX */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
+        {/* FLEET STATUS BREAKDOWN PANEL */}
+        <div className="bg-white dark:bg-[#101822] border border-[#E4E7EC] dark:border-[#202B38] p-5 rounded-2xl space-y-4 shadow-xs">
+          <div className="flex items-center justify-between border-b border-[#E4E7EC] dark:border-[#202B38] pb-3">
+            <h3 className="font-bold text-sm text-[#172033] dark:text-white flex items-center gap-2">
+              <Truck className="w-4 h-4 text-[#D97706] dark:text-[#FDB022]" /> Fleet Capacity & Status Breakdown
+            </h3>
+            <span className="font-mono text-xs text-[#667085] dark:text-[#A7B1C0]">Total: {totalFleet} Vehicles</span>
+          </div>
+
+          <div className="grid grid-cols-4 gap-3 text-center">
+            <div className="bg-[#F9FAFB] dark:bg-[#131D28] p-3 rounded-xl border border-[#E4E7EC] dark:border-[#202B38]">
+              <span className="text-[10px] text-[#667085] dark:text-[#A7B1C0] block font-semibold">Available</span>
+              <div className="text-xl font-extrabold text-[#16A34A] dark:text-[#32D583] font-mono mt-1">{fleetAvailable}</div>
+            </div>
+            <div className="bg-[#F9FAFB] dark:bg-[#131D28] p-3 rounded-xl border border-[#E4E7EC] dark:border-[#202B38]">
+              <span className="text-[10px] text-[#667085] dark:text-[#A7B1C0] block font-semibold">Assigned</span>
+              <div className="text-xl font-extrabold text-[#2563EB] dark:text-[#4F8CFF] font-mono mt-1">{fleetAssigned}</div>
+            </div>
+            <div className="bg-[#F9FAFB] dark:bg-[#131D28] p-3 rounded-xl border border-[#E4E7EC] dark:border-[#202B38]">
+              <span className="text-[10px] text-[#667085] dark:text-[#A7B1C0] block font-semibold">On Trip</span>
+              <div className="text-xl font-extrabold text-cyan-600 dark:text-cyan-400 font-mono mt-1">{fleetOnTrip}</div>
+            </div>
+            <div className="bg-[#F9FAFB] dark:bg-[#131D28] p-3 rounded-xl border border-[#E4E7EC] dark:border-[#202B38]">
+              <span className="text-[10px] text-[#667085] dark:text-[#A7B1C0] block font-semibold">Workshop</span>
+              <div className="text-xl font-extrabold text-[#DC2626] dark:text-[#F97066] font-mono mt-1">{fleetMaintenance}</div>
+            </div>
           </div>
         </div>
 
-        {/* LIVE TOUR MONITORING */}
-        <div className="bg-slate-900 border border-slate-800 p-5 rounded-xl space-y-4 shadow-xl">
-          <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-            <div>
-              <h3 className="font-bold text-sm text-white flex items-center gap-2">
-                <Send className="w-4 h-4 text-cyan-400" /> Live Tour Monitoring Feed
-              </h3>
-              <p className="text-[11px] text-slate-400">Answers "Which tours are currently running?"</p>
-            </div>
-            <button
-              onClick={() => onNavigateTab("dispatch_execution")}
-              className="text-xs text-cyan-400 hover:text-cyan-300 font-semibold flex items-center gap-1"
-            >
-              Full Pipeline <ChevronRight className="w-3.5 h-3.5" />
-            </button>
+        {/* CREW AVAILABILITY MATRIX PANEL */}
+        <div className="bg-white dark:bg-[#101822] border border-[#E4E7EC] dark:border-[#202B38] p-5 rounded-2xl space-y-4 shadow-xs">
+          <div className="flex items-center justify-between border-b border-[#E4E7EC] dark:border-[#202B38] pb-3">
+            <h3 className="font-bold text-sm text-[#172033] dark:text-white flex items-center gap-2">
+              <Users className="w-4 h-4 text-purple-600 dark:text-purple-400" /> Human Resources Availability Matrix
+            </h3>
+            <span className="font-mono text-xs text-[#667085] dark:text-[#A7B1C0]">Java & Bali Garages</span>
           </div>
 
-          <div className="space-y-3">
-            {tours
-              .filter((t) => ["On Trip", "In Transit", "Handover", "Departed"].includes(t.status))
-              .map((tour) => {
-                const vehicle = vehicles.find((v) => v.id === tour.vehicleId);
-                const driver = crews.find((c) => c.id === tour.driverId);
-
-                return (
-                  <div
-                    key={tour.id}
-                    onClick={() => onSelectTour(tour.id)}
-                    className="bg-slate-950 border border-slate-800 hover:border-cyan-500/40 p-3 rounded-lg flex items-center justify-between text-xs cursor-pointer transition-all"
-                  >
-                    <div className="space-y-0.5">
-                      <div className="flex items-center gap-2">
-                        <span className="font-mono text-[11px] font-bold text-cyan-400">{tour.id}</span>
-                        <span className="font-bold text-white">{tour.tourName}</span>
-                      </div>
-                      <div className="text-[11px] text-slate-400 flex items-center gap-2">
-                        <span className="flex items-center gap-1 text-slate-300">
-                          <MapPin className="w-3 h-3 text-slate-500" /> Loc: <strong className="text-white">{tour.origin}</strong>
-                        </span>
-                        <span>•</span>
-                        <span>Veh: <strong className="text-amber-300 font-mono">{vehicle?.plateNumber || "Hiace"}</strong></span>
-                        <span>•</span>
-                        <span>Drv: <strong className="text-slate-200">{driver?.name.split(" ")[0] || "Andi"}</strong></span>
-                      </div>
-                    </div>
-
-                    <div className="text-right">
-                      <span
-                        className={`px-2 py-0.5 rounded text-[10px] font-semibold border ${
-                          tour.status === "Handover"
-                            ? "bg-purple-500/10 text-purple-400 border-purple-500/30"
-                            : "bg-cyan-500/10 text-cyan-400 border-cyan-500/30"
-                        }`}
-                      >
-                        {tour.status}
-                      </span>
-                      <div className="text-[10px] text-slate-500 font-mono mt-1">Updated 2m ago</div>
-                    </div>
-                  </div>
-                );
-              })}
+          <div className="grid grid-cols-3 gap-3 text-center">
+            <div className="bg-[#F9FAFB] dark:bg-[#131D28] p-3 rounded-xl border border-[#E4E7EC] dark:border-[#202B38]">
+              <span className="text-[10px] text-[#667085] dark:text-[#A7B1C0] block font-semibold">Drivers</span>
+              <div className="text-xl font-extrabold text-[#2563EB] dark:text-[#4F8CFF] font-mono mt-1">
+                {driversAvailable} / {driversTotal}
+              </div>
+            </div>
+            <div className="bg-[#F9FAFB] dark:bg-[#131D28] p-3 rounded-xl border border-[#E4E7EC] dark:border-[#202B38]">
+              <span className="text-[10px] text-[#667085] dark:text-[#A7B1C0] block font-semibold">Local Guides</span>
+              <div className="text-xl font-extrabold text-[#16A34A] dark:text-[#32D583] font-mono mt-1">
+                {guidesAvailable} / {guidesTotal}
+              </div>
+            </div>
+            <div className="bg-[#F9FAFB] dark:bg-[#131D28] p-3 rounded-xl border border-[#E4E7EC] dark:border-[#202B38]">
+              <span className="text-[10px] text-[#667085] dark:text-[#A7B1C0] block font-semibold">Tour Managers</span>
+              <div className="text-xl font-extrabold text-purple-600 dark:text-purple-400 font-mono mt-1">
+                {tmAvailable} / {tmTotal}
+              </div>
+            </div>
           </div>
         </div>
       </div>

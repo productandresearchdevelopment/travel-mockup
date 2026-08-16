@@ -7,7 +7,6 @@ import { pricingTiers } from "@/config/pricing";
 import { Heading } from "@/components/ui/Heading";
 import { Button } from "@/components/ui/Button";
 import { Card, CardHeader, CardDescription, CardContent, CardFooter } from "@/components/ui/Card";
-import { Badge } from "@/components/ui/Badge";
 import { Section } from "@/components/ui/Section";
 import { formatCurrency } from "@/utils/formatters";
 import { fadeIn, staggerContainer } from "@/utils/animation";
@@ -20,7 +19,7 @@ export function PricingSection({ onSelectTier }: PricingSectionProps) {
   const [annualBilling, setAnnualBilling] = useState<boolean>(true);
 
   return (
-    <Section id="pricing" ambientGlow="emerald">
+    <Section id="pricing">
       <div className="flex flex-col items-center space-y-12 text-center">
         {/* Header */}
         <Heading
@@ -33,27 +32,27 @@ export function PricingSection({ onSelectTier }: PricingSectionProps) {
         </Heading>
 
         {/* Monthly / Annual Toggle Switch */}
-        <div className="flex items-center gap-4 bg-slate-900 p-2 rounded-full border border-slate-800 backdrop-blur-xl">
+        <div className="flex items-center gap-2 bg-[#F9FAFB] dark:bg-[#101822] p-1.5 rounded-xl border border-[#E4E7EC] dark:border-[#202B38]">
           <button
             onClick={() => setAnnualBilling(false)}
-            className={`px-5 py-2 rounded-full text-xs font-semibold transition-all ${
+            className={`px-4 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
               !annualBilling
-                ? "bg-slate-800 text-white shadow-md"
-                : "text-slate-400 hover:text-white"
+                ? "bg-white dark:bg-[#1A2634] text-[#172033] dark:text-white shadow-xs"
+                : "text-[#667085] dark:text-[#A7B1C0] hover:text-[#172033] dark:hover:text-white"
             }`}
           >
             Monthly Billing
           </button>
           <button
             onClick={() => setAnnualBilling(true)}
-            className={`flex items-center gap-2 px-5 py-2 rounded-full text-xs font-semibold transition-all ${
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
               annualBilling
-                ? "bg-gradient-to-r from-emerald-500 to-teal-500 text-slate-950 font-bold shadow-md shadow-emerald-500/20"
-                : "text-slate-400 hover:text-white"
+                ? "bg-[#2563EB] dark:bg-[#4F8CFF] text-white shadow-xs"
+                : "text-[#667085] dark:text-[#A7B1C0] hover:text-[#172033] dark:hover:text-white"
             }`}
           >
             <span>Annual Pass</span>
-            <span className="px-2 py-0.5 rounded-full text-[10px] bg-slate-950/30 font-extrabold uppercase">
+            <span className="px-1.5 py-0.5 rounded text-[10px] bg-white/20 text-white font-extrabold uppercase">
               Save 20%
             </span>
           </button>
@@ -65,7 +64,7 @@ export function PricingSection({ onSelectTier }: PricingSectionProps) {
           initial="hidden"
           whileInView="show"
           viewport={{ once: true, margin: "-50px" }}
-          className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full text-left"
+          className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full text-left font-sans"
         >
           {pricingTiers.map((tier) => {
             const price = annualBilling ? tier.priceAnnually : tier.priceMonthly;
@@ -75,59 +74,45 @@ export function PricingSection({ onSelectTier }: PricingSectionProps) {
                 <Card
                   className={`h-full flex flex-col justify-between relative overflow-hidden transition-all duration-300 ${
                     tier.popular
-                      ? "bg-slate-900 border-2 border-emerald-500 shadow-2xl shadow-emerald-500/15"
-                      : "bg-slate-900/50 border-slate-800 hover:border-slate-700"
+                      ? "bg-white dark:bg-[#101822] border-2 border-[#2563EB] dark:border-[#4F8CFF] shadow-lg"
+                      : "bg-white dark:bg-[#101822] border border-[#E4E7EC] dark:border-[#202B38]"
                   }`}
                 >
                   {tier.popular && (
-                    <div className="absolute top-0 right-0">
-                      <div className="bg-gradient-to-l from-emerald-500 to-teal-500 text-slate-950 text-[10px] font-black uppercase px-6 py-1.5 rounded-bl-2xl tracking-widest shadow-md">
-                        MOST POPULAR
-                      </div>
+                    <div className="absolute top-0 right-0 bg-[#2563EB] dark:bg-[#4F8CFF] text-white text-[10px] font-bold px-3 py-1 rounded-bl-xl uppercase tracking-wider">
+                      Most Popular
                     </div>
                   )}
 
-                  <div>
-                    <CardHeader className="p-8 space-y-3">
-                      <div className="flex items-center justify-between">
-                        <Badge variant={tier.popular ? "emerald" : "glass"}>
-                          {tier.name}
-                        </Badge>
-                      </div>
+                  <CardHeader>
+                    <CardDescription>{tier.tagline}</CardDescription>
+                    <div className="flex items-baseline gap-1 mt-4">
+                      <span className="text-3xl font-extrabold text-[#172033] dark:text-white font-mono">
+                        {formatCurrency(price)}
+                      </span>
+                      <span className="text-xs text-[#667085] dark:text-[#A7B1C0]">
+                        /{annualBilling ? "yr" : "mo"}
+                      </span>
+                    </div>
+                  </CardHeader>
 
-                      <div className="pt-2 flex items-baseline gap-1">
-                        <span className="text-4xl sm:text-5xl font-black text-white">
-                          {formatCurrency(price)}
-                        </span>
-                        <span className="text-xs text-slate-400 font-medium">/ month</span>
-                      </div>
-
-                      <CardDescription className="text-xs text-slate-400 leading-relaxed">
-                        {tier.tagline}
-                      </CardDescription>
-                    </CardHeader>
-
-                    {/* Features List */}
-                    <CardContent className="p-8 pt-0 space-y-3">
-                      <div className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-4">
-                        Pass Privileges Included:
-                      </div>
-                      {tier.features.map((feat) => (
-                        <div key={feat} className="flex items-start gap-3 text-xs sm:text-sm text-slate-300">
-                          <div className="w-5 h-5 rounded-full bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center shrink-0 mt-0.5">
-                            <Check className="w-3 h-3 text-emerald-400" />
-                          </div>
-                          <span className="leading-snug">{feat}</span>
-                        </div>
+                  <CardContent className="space-y-3 flex-1">
+                    <div className="text-xs font-bold text-[#172033] dark:text-white uppercase tracking-wider border-b border-[#E4E7EC] dark:border-[#202B38] pb-2">
+                      Included Privileges:
+                    </div>
+                    <ul className="space-y-2 text-xs">
+                      {tier.features.map((feature, idx) => (
+                        <li key={idx} className="flex items-start gap-2 text-[#667085] dark:text-[#A7B1C0]">
+                          <Check className="w-4 h-4 text-[#16A34A] dark:text-[#32D583] shrink-0 mt-0.5" />
+                          <span>{feature}</span>
+                        </li>
                       ))}
-                    </CardContent>
-                  </div>
+                    </ul>
+                  </CardContent>
 
-                  {/* Card CTA */}
-                  <CardFooter className="p-8 bg-slate-950/40 border-t border-slate-800/80">
+                  <CardFooter>
                     <Button
-                      variant={tier.popular ? "primary" : "secondary"}
-                      size="lg"
+                      variant={tier.popular ? "primary" : "outline"}
                       className="w-full"
                       rightIcon={<ArrowRight className="w-4 h-4" />}
                       onClick={() => {

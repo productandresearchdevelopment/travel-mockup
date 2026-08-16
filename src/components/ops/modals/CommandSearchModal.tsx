@@ -12,8 +12,6 @@ import {
   Users,
   DollarSign,
   BarChart3,
-  X,
-  ChevronRight,
   Command,
 } from "lucide-react";
 
@@ -60,173 +58,146 @@ export const CommandSearchModal: React.FC<CommandSearchModalProps> = ({ isOpen, 
   const filteredVehicles = initialVehicles.filter(
     (v) =>
       v.plateNumber.toLowerCase().includes(query.toLowerCase()) ||
-      v.brand.toLowerCase().includes(query.toLowerCase()) ||
       v.model.toLowerCase().includes(query.toLowerCase())
   );
 
   const filteredCrews = initialCrews.filter(
     (c) =>
       c.name.toLowerCase().includes(query.toLowerCase()) ||
-      c.role.toLowerCase().includes(query.toLowerCase()) ||
-      c.homeBase.toLowerCase().includes(query.toLowerCase())
+      c.role.toLowerCase().includes(query.toLowerCase())
   );
 
-  const pages = [
-    { label: "Operation Control Center", path: "/dashboard", icon: Compass },
-    { label: "Booking Inbox", path: "/bookings", icon: ShoppingBag },
-    { label: "Dispatch & Deployment Board", path: "/dispatch", icon: Send },
-    { label: "Fleet & Vehicles List", path: "/fleet", icon: Truck },
-    { label: "Crew & SDM Roster", path: "/crew", icon: Users },
-    { label: "Operational Finance & BOP", path: "/finance", icon: DollarSign },
-    { label: "Reports & Analytics", path: "/reports", icon: BarChart3 },
-  ].filter((p) => p.label.toLowerCase().includes(query.toLowerCase()));
-
-  const handleSelect = (path: string) => {
+  const handleNavigate = (path: string) => {
     router.push(path);
     onClose();
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center pt-16 bg-slate-950/60 backdrop-blur-sm p-4 font-sans select-none animate-fade-in">
-      <div className="w-full max-w-xl dark:bg-slate-900 bg-white border dark:border-slate-800 border-slate-200 rounded-xl shadow-2xl overflow-hidden flex flex-col max-h-[80vh]">
-        {/* Search Header */}
-        <div className="p-3.5 border-b dark:border-slate-800 border-slate-200 flex items-center gap-3">
-          <Search className="w-4 h-4 dark:text-slate-400 text-slate-500" />
+    <div
+      onClick={onClose}
+      className="fixed inset-0 z-50 flex items-start justify-center pt-20 bg-slate-900/35 dark:bg-black/65 backdrop-blur-xs animate-in fade-in p-4 text-xs font-sans"
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className="w-full max-w-2xl bg-white dark:bg-[#172230] border border-[#E4E7EC] dark:border-[#202B38] rounded-2xl shadow-2xl overflow-hidden text-[#172033] dark:text-[#F8FAFC]"
+      >
+        {/* Search Input Bar */}
+        <div className="p-4 border-b border-[#E4E7EC] dark:border-[#202B38] flex items-center gap-3 bg-[#F9FAFB] dark:bg-[#131D28]">
+          <Search className="w-5 h-5 text-[#98A2B3] dark:text-[#667085]" />
           <input
-            type="text"
             autoFocus
+            type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search tours, bookings, vehicles, crew, or jump to page... (esc to exit)"
-            className="w-full bg-transparent text-xs dark:text-slate-100 text-slate-900 focus:outline-none font-medium"
+            placeholder="Type a command, tour ref, guest name, vehicle plate, or crew..."
+            className="w-full bg-transparent text-sm font-medium text-[#172033] dark:text-white placeholder-[#98A2B3] dark:placeholder-[#667085] focus:outline-none"
           />
-          <kbd className="hidden sm:inline-block font-mono text-[10px] dark:bg-slate-950 bg-slate-100 dark:border-slate-800 border-slate-200 border px-1.5 py-0.5 rounded dark:text-slate-400 text-slate-500">
-            ESC
+          <kbd className="hidden sm:inline-flex items-center gap-1 font-mono text-[10px] text-[#667085] dark:text-[#A7B1C0] bg-white dark:bg-[#101822] border border-[#E4E7EC] dark:border-[#202B38] px-2 py-0.5 rounded">
+            <Command className="w-3 h-3" /> K
           </kbd>
         </div>
 
-        {/* Results List */}
-        <div className="flex-1 overflow-y-auto p-2 space-y-4 text-xs">
-          {/* Quick Pages */}
-          {pages.length > 0 && (
-            <div className="space-y-1">
-              <span className="text-[10px] font-bold dark:text-slate-400 text-slate-500 uppercase tracking-widest px-2 block">
-                Workspaces & Pages
+        {/* Search Results / Navigation Options */}
+        <div className="p-4 max-h-[420px] overflow-y-auto space-y-4 scrollbar-none">
+          {/* Quick Navigation Links */}
+          {!query && (
+            <div className="space-y-2">
+              <span className="text-[10px] font-bold text-[#667085] dark:text-[#A7B1C0] uppercase tracking-wider block">
+                Quick Navigation Shortcuts
               </span>
-              {pages.map((p, idx) => {
-                const Icon = p.icon;
-                return (
-                  <button
-                    key={idx}
-                    onClick={() => handleSelect(p.path)}
-                    className="w-full flex items-center justify-between p-2 rounded-lg dark:hover:bg-slate-800 hover:bg-slate-100 dark:text-slate-200 text-slate-800 transition-colors cursor-pointer text-left"
-                  >
-                    <div className="flex items-center gap-2.5">
-                      <Icon className="w-4 h-4 text-cyan-500" />
-                      <span className="font-semibold">{p.label}</span>
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                <button
+                  onClick={() => handleNavigate("/dashboard")}
+                  className="flex items-center gap-2 p-2.5 rounded-xl bg-[#F9FAFB] dark:bg-[#131D28] hover:bg-[#F3F4F6] dark:hover:bg-[#1A2634] border border-[#E4E7EC] dark:border-[#202B38] text-left cursor-pointer transition-colors"
+                >
+                  <Compass className="w-4 h-4 text-[#2563EB] dark:text-[#4F8CFF]" />
+                  <span className="font-semibold text-xs text-[#172033] dark:text-white">Dashboard</span>
+                </button>
+                <button
+                  onClick={() => handleNavigate("/bookings")}
+                  className="flex items-center gap-2 p-2.5 rounded-xl bg-[#F9FAFB] dark:bg-[#131D28] hover:bg-[#F3F4F6] dark:hover:bg-[#1A2634] border border-[#E4E7EC] dark:border-[#202B38] text-left cursor-pointer transition-colors"
+                >
+                  <ShoppingBag className="w-4 h-4 text-[#2563EB] dark:text-[#4F8CFF]" />
+                  <span className="font-semibold text-xs text-[#172033] dark:text-white">Bookings</span>
+                </button>
+                <button
+                  onClick={() => handleNavigate("/operations")}
+                  className="flex items-center gap-2 p-2.5 rounded-xl bg-[#F9FAFB] dark:bg-[#131D28] hover:bg-[#F3F4F6] dark:hover:bg-[#1A2634] border border-[#E4E7EC] dark:border-[#202B38] text-left cursor-pointer transition-colors"
+                >
+                  <Send className="w-4 h-4 text-[#16A34A] dark:text-[#32D583]" />
+                  <span className="font-semibold text-xs text-[#172033] dark:text-white">Operations</span>
+                </button>
+                <button
+                  onClick={() => handleNavigate("/fleet")}
+                  className="flex items-center gap-2 p-2.5 rounded-xl bg-[#F9FAFB] dark:bg-[#131D28] hover:bg-[#F3F4F6] dark:hover:bg-[#1A2634] border border-[#E4E7EC] dark:border-[#202B38] text-left cursor-pointer transition-colors"
+                >
+                  <Truck className="w-4 h-4 text-[#D97706] dark:text-[#FDB022]" />
+                  <span className="font-semibold text-xs text-[#172033] dark:text-white">Fleet</span>
+                </button>
+                <button
+                  onClick={() => handleNavigate("/crew")}
+                  className="flex items-center gap-2 p-2.5 rounded-xl bg-[#F9FAFB] dark:bg-[#131D28] hover:bg-[#F3F4F6] dark:hover:bg-[#1A2634] border border-[#E4E7EC] dark:border-[#202B38] text-left cursor-pointer transition-colors"
+                >
+                  <Users className="w-4 h-4 text-purple-600 dark:text-purple-400" />
+                  <span className="font-semibold text-xs text-[#172033] dark:text-white">Crew SDM</span>
+                </button>
+                <button
+                  onClick={() => handleNavigate("/finance")}
+                  className="flex items-center gap-2 p-2.5 rounded-xl bg-[#F9FAFB] dark:bg-[#131D28] hover:bg-[#F3F4F6] dark:hover:bg-[#1A2634] border border-[#E4E7EC] dark:border-[#202B38] text-left cursor-pointer transition-colors"
+                >
+                  <DollarSign className="w-4 h-4 text-[#16A34A] dark:text-[#32D583]" />
+                  <span className="font-semibold text-xs text-[#172033] dark:text-white">Finance</span>
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Search Query Results */}
+          {query && (
+            <>
+              {filteredTours.length > 0 && (
+                <div className="space-y-1.5">
+                  <span className="text-[10px] font-bold text-[#667085] dark:text-[#A7B1C0] uppercase tracking-wider block">
+                    Matching Tours ({filteredTours.length})
+                  </span>
+                  {filteredTours.slice(0, 3).map((t) => (
+                    <div
+                      key={t.id}
+                      onClick={() => handleNavigate(`/operations/${t.id}`)}
+                      className="p-2.5 rounded-xl bg-[#F9FAFB] dark:bg-[#131D28] hover:bg-[#F3F4F6] dark:hover:bg-[#1A2634] border border-[#E4E7EC] dark:border-[#202B38] flex items-center justify-between cursor-pointer"
+                    >
+                      <div>
+                        <span className="font-mono font-bold text-[#2563EB] dark:text-[#4F8CFF]">{t.id}</span>
+                        <div className="font-bold text-xs text-[#172033] dark:text-white">{t.tourName}</div>
+                      </div>
+                      <span className="text-[10px] font-semibold text-[#667085] dark:text-[#A7B1C0]">{t.status}</span>
                     </div>
-                    <span className="font-mono text-[10px] dark:text-slate-400 text-slate-500">{p.path}</span>
-                  </button>
-                );
-              })}
-            </div>
-          )}
+                  ))}
+                </div>
+              )}
 
-          {/* Bookings */}
-          {filteredBookings.length > 0 && (
-            <div className="space-y-1">
-              <span className="text-[10px] font-bold dark:text-slate-400 text-slate-500 uppercase tracking-widest px-2 block">
-                Bookings
-              </span>
-              {filteredBookings.slice(0, 3).map((b) => (
-                <button
-                  key={b.id}
-                  onClick={() => handleSelect(`/bookings/${b.id}`)}
-                  className="w-full flex items-center justify-between p-2 rounded-lg dark:hover:bg-slate-800 hover:bg-slate-100 dark:text-slate-200 text-slate-800 transition-colors cursor-pointer text-left"
-                >
-                  <div className="flex items-center gap-2">
-                    <span className="font-mono font-bold text-cyan-600 dark:text-cyan-400">{b.id}</span>
-                    <span>{b.guestName} ({b.product})</span>
-                  </div>
-                  <span className="text-[10px] dark:text-slate-400 text-slate-500 font-mono">{b.source}</span>
-                </button>
-              ))}
-            </div>
+              {filteredBookings.length > 0 && (
+                <div className="space-y-1.5">
+                  <span className="text-[10px] font-bold text-[#667085] dark:text-[#A7B1C0] uppercase tracking-wider block">
+                    Matching Bookings ({filteredBookings.length})
+                  </span>
+                  {filteredBookings.slice(0, 3).map((b) => (
+                    <div
+                      key={b.id}
+                      onClick={() => handleNavigate(`/bookings/${b.id}`)}
+                      className="p-2.5 rounded-xl bg-[#F9FAFB] dark:bg-[#131D28] hover:bg-[#F3F4F6] dark:hover:bg-[#1A2634] border border-[#E4E7EC] dark:border-[#202B38] flex items-center justify-between cursor-pointer"
+                    >
+                      <div>
+                        <span className="font-mono font-bold text-[#2563EB] dark:text-[#4F8CFF]">{b.id}</span>
+                        <div className="font-bold text-xs text-[#172033] dark:text-white">{b.guestName} ({b.pax} Pax)</div>
+                      </div>
+                      <span className="text-[10px] font-semibold text-[#667085] dark:text-[#A7B1C0]">{b.source}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </>
           )}
-
-          {/* Tours */}
-          {filteredTours.length > 0 && (
-            <div className="space-y-1">
-              <span className="text-[10px] font-bold dark:text-slate-400 text-slate-500 uppercase tracking-widest px-2 block">
-                Excursion Tours
-              </span>
-              {filteredTours.slice(0, 3).map((t) => (
-                <button
-                  key={t.id}
-                  onClick={() => handleSelect(`/operations/${t.id}`)}
-                  className="w-full flex items-center justify-between p-2 rounded-lg dark:hover:bg-slate-800 hover:bg-slate-100 dark:text-slate-200 text-slate-800 transition-colors cursor-pointer text-left"
-                >
-                  <div className="flex items-center gap-2">
-                    <span className="font-mono font-bold text-emerald-600 dark:text-emerald-400">{t.id}</span>
-                    <span>{t.tourName}</span>
-                  </div>
-                  <span className="text-[10px] dark:text-slate-400 text-slate-500 font-mono">{t.status}</span>
-                </button>
-              ))}
-            </div>
-          )}
-
-          {/* Vehicles */}
-          {filteredVehicles.length > 0 && (
-            <div className="space-y-1">
-              <span className="text-[10px] font-bold dark:text-slate-400 text-slate-500 uppercase tracking-widest px-2 block">
-                Fleet Vehicles
-              </span>
-              {filteredVehicles.slice(0, 3).map((v) => (
-                <button
-                  key={v.id}
-                  onClick={() => handleSelect(`/fleet/vehicles/${v.id}`)}
-                  className="w-full flex items-center justify-between p-2 rounded-lg dark:hover:bg-slate-800 hover:bg-slate-100 dark:text-slate-200 text-slate-800 transition-colors cursor-pointer text-left"
-                >
-                  <div className="flex items-center gap-2">
-                    <span className="font-mono font-bold text-amber-600 dark:text-amber-300">{v.plateNumber}</span>
-                    <span>{v.brand} {v.model}</span>
-                  </div>
-                  <span className="text-[10px] dark:text-slate-400 text-slate-500 font-mono">{v.status}</span>
-                </button>
-              ))}
-            </div>
-          )}
-
-          {/* Crew */}
-          {filteredCrews.length > 0 && (
-            <div className="space-y-1">
-              <span className="text-[10px] font-bold dark:text-slate-400 text-slate-500 uppercase tracking-widest px-2 block">
-                Crew & Roster
-              </span>
-              {filteredCrews.slice(0, 3).map((c) => (
-                <button
-                  key={c.id}
-                  onClick={() => handleSelect(`/crew/${c.id}`)}
-                  className="w-full flex items-center justify-between p-2 rounded-lg dark:hover:bg-slate-800 hover:bg-slate-100 dark:text-slate-200 text-slate-800 transition-colors cursor-pointer text-left"
-                >
-                  <div className="flex items-center gap-2">
-                    <span className="font-mono font-bold text-purple-600 dark:text-purple-400">{c.name}</span>
-                    <span>({c.role})</span>
-                  </div>
-                  <span className="text-[10px] dark:text-slate-400 text-slate-500 font-mono">{c.status}</span>
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* Footer info */}
-        <div className="p-2 border-t dark:border-slate-800 border-slate-200 dark:bg-slate-950/60 bg-slate-50 text-[10px] flex items-center justify-between dark:text-slate-400 text-slate-500">
-          <span>QIFESS Command Search</span>
-          <span className="flex items-center gap-1 font-mono">
-            <Command className="w-3 h-3 text-cyan-500" /> K to toggle
-          </span>
         </div>
       </div>
     </div>

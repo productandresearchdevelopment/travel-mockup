@@ -1,21 +1,14 @@
 "use client";
 
 import React, { useState } from "react";
-import { Booking, BookingPlatform, BookingStatus } from "@/types/travelOps";
+import { Booking } from "@/types/travelOps";
 import {
   Layers,
   Search,
-  Filter,
   CheckSquare,
   Square,
-  ChevronRight,
-  UserCheck,
-  CreditCard,
-  Plus,
   Eye,
-  Calendar,
   MapPin,
-  ExternalLink,
   Compass,
   CheckCircle2,
   AlertTriangle,
@@ -90,345 +83,299 @@ export const BookingGroupingView: React.FC<BookingGroupingViewProps> = ({
   return (
     <div className="space-y-6 font-sans">
       {/* Header Bar */}
-      <div className="bg-slate-900 border border-slate-800 p-5 rounded-xl flex flex-wrap items-center justify-between gap-4 shadow-xl">
+      <div className="bg-white dark:bg-[#101822] border border-[#E4E7EC] dark:border-[#202B38] p-5 rounded-2xl flex flex-wrap items-center justify-between gap-4 shadow-xs">
         <div>
           <div className="flex items-center gap-2">
-            <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[11px] font-bold uppercase tracking-wider">
+            <span className="px-2.5 py-0.5 rounded-full bg-blue-50 dark:bg-blue-950/40 text-[#2563EB] dark:text-[#4F8CFF] border border-blue-200 dark:border-blue-800/50 text-[11px] font-bold uppercase tracking-wider">
               Booking Management Inbox
             </span>
-            <span className="text-xs text-slate-400 font-mono">/bookings</span>
+            <span className="text-xs text-[#667085] dark:text-[#A7B1C0] font-mono">/bookings</span>
           </div>
-          <h1 className="text-xl font-extrabold text-white tracking-tight mt-1">
-            Booking Inbox & Route Grouping
+          <h1 className="text-2xl font-extrabold text-[#172033] dark:text-white tracking-tight mt-1">
+            Reservations & OTA Booking Grouping
           </h1>
-          <p className="text-xs text-slate-400">
-            Ingest customer reservations from GetYourGuide, Direct Online, and Offline. Convert bookings into operational tour departures.
+          <p className="text-xs text-[#667085] dark:text-[#A7B1C0]">
+            Batch single/double traveler reservations into consolidated 14-pax Hiace overland & 4x4 Jeep excursion tours.
           </p>
         </div>
 
-        {/* Batch Action Button */}
-        {selectedIds.length > 0 && (
-          <div className="flex items-center gap-3 bg-emerald-500/10 border border-emerald-500/30 px-3.5 py-2 rounded-xl animate-pulse">
-            <span className="text-xs font-bold text-emerald-400">
-              {selectedIds.length} Bookings Selected
-            </span>
-            <button
-              onClick={() => onGroupBookings(selectedIds)}
-              className="bg-emerald-600 hover:bg-emerald-500 text-white text-xs px-3.5 py-1.5 rounded-lg font-extrabold transition-all shadow cursor-pointer"
-            >
-              + Create / Assign to Operational Tour
-            </button>
-          </div>
-        )}
-      </div>
-
-      {/* CONCEPT HIGHLIGHT BANNER: BOOKING VS OPERATIONAL TOUR */}
-      <div className="bg-slate-900/90 border border-blue-500/30 p-4 rounded-xl text-xs space-y-2">
-        <div className="flex items-center gap-2 text-blue-400 font-bold">
-          <Compass className="w-4 h-4" />
-          <span>Workflow Concept: Booking vs Operational Tour</span>
-        </div>
-        <p className="text-slate-300 leading-relaxed">
-          <strong className="text-white">Booking:</strong> Customer reservation received from GetYourGuide, Direct Online, or Offline channel.<br />
-          <strong className="text-emerald-400">Operational Tour:</strong> The vehicle & crew deployment created by grouping one or more bookings onto a shared departure route.
-        </p>
-      </div>
-
-      {/* TOP SUMMARY KPI CARDS (6 CARDS) */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-6 gap-3">
-        {/* KPI 1: Total Bookings */}
-        <div className="bg-slate-900 border border-slate-800 p-4 rounded-xl space-y-1 shadow-md">
-          <span className="text-xs text-slate-400">Total Bookings</span>
-          <div className="text-2xl font-extrabold text-white font-mono">{totalBookingsCount}</div>
-          <span className="text-[10px] text-slate-400">All Platforms</span>
-        </div>
-
-        {/* KPI 2: Today */}
-        <div className="bg-slate-900 border border-slate-800 p-4 rounded-xl space-y-1 shadow-md">
-          <span className="text-xs text-slate-400">Today's Departures</span>
-          <div className="text-2xl font-extrabold text-emerald-400 font-mono">{todayBookingsCount}</div>
-          <span className="text-[10px] text-emerald-400 font-medium">Aug 14 Tour Date</span>
-        </div>
-
-        {/* KPI 3: Pending Dispatch */}
-        <div className="bg-slate-900 border border-slate-800 p-4 rounded-xl space-y-1 shadow-md">
-          <span className="text-xs text-slate-400">Pending Dispatch</span>
-          <div className="text-2xl font-extrabold text-amber-400 font-mono">{pendingDispatchCount}</div>
-          <span className="text-[10px] text-amber-400 font-medium">Needs Grouping</span>
-        </div>
-
-        {/* KPI 4: Paid */}
-        <div className="bg-slate-900 border border-slate-800 p-4 rounded-xl space-y-1 shadow-md">
-          <span className="text-xs text-slate-400">Paid in Full</span>
-          <div className="text-2xl font-extrabold text-cyan-400 font-mono">{paidCount}</div>
-          <span className="text-[10px] text-cyan-400 font-medium">Settled Revenue</span>
-        </div>
-
-        {/* KPI 5: Partially Paid */}
-        <div className="bg-slate-900 border border-slate-800 p-4 rounded-xl space-y-1 shadow-md">
-          <span className="text-xs text-slate-400">Partially Paid</span>
-          <div className="text-2xl font-extrabold text-purple-400 font-mono">{partiallyPaidCount}</div>
-          <span className="text-[10px] text-purple-400 font-medium">Deposit Collected</span>
-        </div>
-
-        {/* KPI 6: Unassigned */}
-        <div className="bg-slate-900 border border-slate-800 p-4 rounded-xl space-y-1 shadow-md">
-          <span className="text-xs text-slate-400">Unassigned</span>
-          <div className="text-2xl font-extrabold text-rose-400 font-mono">{unassignedCount}</div>
-          <span className="text-[10px] text-rose-400 font-medium">Requires Tour Match</span>
+        <div className="flex items-center gap-3">
+          <button
+            disabled={selectedIds.length === 0}
+            onClick={() => onGroupBookings(selectedIds)}
+            className="flex items-center gap-2 bg-[#2563EB] hover:bg-[#1D4ED8] dark:bg-[#4F8CFF] dark:hover:bg-[#6AA1FF] text-white px-4 py-2 rounded-xl text-xs font-bold shadow-xs disabled:opacity-50 disabled:cursor-not-allowed transition-all cursor-pointer"
+          >
+            <Layers className="w-4 h-4" />
+            <span>Create Grouped Excursion Tour ({selectedIds.length})</span>
+          </button>
         </div>
       </div>
 
-      {/* FILTER PANEL */}
-      <div className="bg-slate-900 border border-slate-800 p-3.5 rounded-xl flex flex-wrap items-center justify-between gap-3 text-xs">
-        <div className="flex flex-wrap items-center gap-2 flex-1">
-          {/* Search Box */}
-          <div className="relative min-w-[200px]">
-            <Search className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-1/2 -translate-y-1/2" />
+      {/* SUMMARY KPI METRICS */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-6 gap-3 text-xs">
+        <div className="bg-white dark:bg-[#101822] border border-[#E4E7EC] dark:border-[#202B38] p-4 rounded-xl shadow-xs space-y-1">
+          <span className="text-[#667085] dark:text-[#A7B1C0] block font-medium">Total Bookings</span>
+          <div className="text-2xl font-extrabold text-[#172033] dark:text-white font-mono">{totalBookingsCount}</div>
+          <span className="text-[10px] text-[#2563EB] dark:text-[#4F8CFF]">OTA & Direct Web</span>
+        </div>
+
+        <div className="bg-white dark:bg-[#101822] border border-[#E4E7EC] dark:border-[#202B38] p-4 rounded-xl shadow-xs space-y-1">
+          <span className="text-[#667085] dark:text-[#A7B1C0] block font-medium">Today's Ingested</span>
+          <div className="text-2xl font-extrabold text-[#16A34A] dark:text-[#32D583] font-mono">{todayBookingsCount}</div>
+          <span className="text-[10px] text-[#16A34A] dark:text-[#32D583]">Auto-synced</span>
+        </div>
+
+        <div className="bg-white dark:bg-[#101822] border border-[#E4E7EC] dark:border-[#202B38] p-4 rounded-xl shadow-xs space-y-1">
+          <span className="text-[#667085] dark:text-[#A7B1C0] block font-medium">Pending Review</span>
+          <div className="text-2xl font-extrabold text-[#D97706] dark:text-[#FDB022] font-mono">{pendingDispatchCount}</div>
+          <span className="text-[10px] text-[#D97706] dark:text-[#FDB022]">Needs Grouping</span>
+        </div>
+
+        <div className="bg-white dark:bg-[#101822] border border-[#E4E7EC] dark:border-[#202B38] p-4 rounded-xl shadow-xs space-y-1">
+          <span className="text-[#667085] dark:text-[#A7B1C0] block font-medium">Paid in Full</span>
+          <div className="text-2xl font-extrabold text-emerald-600 dark:text-emerald-400 font-mono">{paidCount}</div>
+          <span className="text-[10px] text-emerald-600 dark:text-emerald-400">Verified Payment</span>
+        </div>
+
+        <div className="bg-white dark:bg-[#101822] border border-[#E4E7EC] dark:border-[#202B38] p-4 rounded-xl shadow-xs space-y-1">
+          <span className="text-[#667085] dark:text-[#A7B1C0] block font-medium">Deposit / Partial</span>
+          <div className="text-2xl font-extrabold text-blue-600 dark:text-blue-400 font-mono">{partiallyPaidCount}</div>
+          <span className="text-[10px] text-blue-600 dark:text-blue-400">Balance Due On-Site</span>
+        </div>
+
+        <div className="bg-white dark:bg-[#101822] border border-[#E4E7EC] dark:border-[#202B38] p-4 rounded-xl shadow-xs space-y-1">
+          <span className="text-[#667085] dark:text-[#A7B1C0] block font-medium">Unassigned Pax</span>
+          <div className="text-2xl font-extrabold text-rose-600 dark:text-rose-400 font-mono">{unassignedCount}</div>
+          <span className="text-[10px] text-rose-600 dark:text-rose-400">Requires Dispatch</span>
+        </div>
+      </div>
+
+      {/* FILTER CONTROLS & SEARCH */}
+      <div className="bg-white dark:bg-[#101822] border border-[#E4E7EC] dark:border-[#202B38] p-4 rounded-2xl space-y-3 shadow-xs text-xs">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div className="relative flex-1 min-w-[240px]">
+            <Search className="w-4 h-4 text-[#98A2B3] dark:text-[#667085] absolute left-3 top-1/2 -translate-y-1/2" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search Guest, BK-ID, Product..."
-              className="w-full bg-slate-950 border border-slate-800 rounded-lg pl-8 pr-3 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-blue-500"
+              placeholder="Search by Booking ID, Guest Name, Product, or Contact..."
+              className="w-full bg-[#F9FAFB] dark:bg-[#131D28] border border-[#D0D5DD] dark:border-[#344054] rounded-xl pl-9 pr-3 py-2 text-[#172033] dark:text-[#F8FAFC] focus:outline-none focus:border-[#2563EB] dark:focus:border-[#4F8CFF] font-medium"
             />
           </div>
 
-          {/* Date Filter */}
-          <input
-            type="date"
-            value={dateFilter}
-            onChange={(e) => setDateFilter(e.target.value)}
-            className="bg-slate-950 border border-slate-800 text-slate-300 rounded-lg px-2.5 py-1.5 text-xs font-mono focus:outline-none"
-            title="Filter by Tour Date"
-          />
-
-          {/* Source Filter */}
-          <select
-            value={sourceFilter}
-            onChange={(e) => setSourceFilter(e.target.value)}
-            className="bg-slate-950 border border-slate-800 text-slate-300 rounded-lg px-2.5 py-1.5 text-xs font-medium focus:outline-none"
-          >
-            <option value="ALL">All Sources</option>
-            <option value="GetYourGuide">GetYourGuide (GYG)</option>
-            <option value="Direct Online">Direct Online</option>
-            <option value="Direct Offline">Direct Offline</option>
-          </select>
-
-          {/* Origin Filter */}
-          <select
-            value={originFilter}
-            onChange={(e) => setOriginFilter(e.target.value)}
-            className="bg-slate-950 border border-slate-800 text-slate-300 rounded-lg px-2.5 py-1.5 text-xs font-medium focus:outline-none"
-          >
-            <option value="ALL">All Origins</option>
-            <option value="Yogyakarta">Yogyakarta</option>
-            <option value="Malang">Malang</option>
-            <option value="Surabaya">Surabaya</option>
-            <option value="Banyuwangi">Banyuwangi</option>
-          </select>
-
-          {/* Product Filter */}
-          <select
-            value={productFilter}
-            onChange={(e) => setProductFilter(e.target.value)}
-            className="bg-slate-950 border border-slate-800 text-slate-300 rounded-lg px-2.5 py-1.5 text-xs font-medium focus:outline-none"
-          >
-            <option value="ALL">All Products</option>
-            <option value="Bromo">Bromo Packages</option>
-            <option value="Ijen">Ijen Expedition</option>
-            <option value="Bali">Bali Drop Off</option>
-            <option value="Waterfall">Tumpak Sewu Waterfall</option>
-          </select>
-
-          {/* Tour Type Filter */}
-          <select
-            value={tourTypeFilter}
-            onChange={(e) => setTourTypeFilter(e.target.value)}
-            className="bg-slate-950 border border-slate-800 text-slate-300 rounded-lg px-2.5 py-1.5 text-xs font-medium focus:outline-none"
-          >
-            <option value="ALL">All Tour Types</option>
-            <option value="Standard - Sharing">Standard - Sharing</option>
-            <option value="Private VIP">Private VIP</option>
-            <option value="Luxury Overland">Luxury Overland</option>
-            <option value="Custom Private">Custom Private</option>
-          </select>
-
-          {/* Payment Status Filter */}
-          <select
-            value={paymentFilter}
-            onChange={(e) => setPaymentFilter(e.target.value)}
-            className="bg-slate-950 border border-slate-800 text-slate-300 rounded-lg px-2.5 py-1.5 text-xs font-medium focus:outline-none"
-          >
-            <option value="ALL">All Payments</option>
-            <option value="Paid">Paid</option>
-            <option value="Pending">Pending</option>
-            <option value="Partial">Partial</option>
-          </select>
-
-          {/* Operational Status Filter */}
-          <select
-            value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
-            className="bg-slate-950 border border-slate-800 text-slate-300 rounded-lg px-2.5 py-1.5 text-xs font-medium focus:outline-none"
-          >
-            <option value="ALL">All Statuses</option>
-            <option value="Pending Review">Pending Review</option>
-            <option value="Grouped">Grouped</option>
-            <option value="Ready for Dispatch">Ready for Dispatch</option>
-            <option value="In Transit">In Transit</option>
-            <option value="Completed">Completed</option>
-          </select>
+          <div className="flex items-center gap-2">
+            <input
+              type="date"
+              value={dateFilter}
+              onChange={(e) => setDateFilter(e.target.value)}
+              className="bg-[#F9FAFB] dark:bg-[#131D28] border border-[#D0D5DD] dark:border-[#344054] text-[#172033] dark:text-[#F8FAFC] px-3 py-1.5 rounded-xl font-medium"
+            />
+            {dateFilter && (
+              <button
+                onClick={() => setDateFilter("")}
+                className="text-[10px] text-[#DC2626] font-bold hover:underline"
+              >
+                Clear Date
+              </button>
+            )}
+          </div>
         </div>
 
-        <div className="text-slate-400 font-mono text-[11px]">
-          Showing <span className="text-white font-bold">{filteredBookings.length}</span> of {bookings.length} Bookings
+        {/* Dropdown Filters */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 text-[11px]">
+          <div>
+            <label className="block text-[#667085] dark:text-[#A7B1C0] font-semibold mb-1">Source / Channel</label>
+            <select
+              value={sourceFilter}
+              onChange={(e) => setSourceFilter(e.target.value)}
+              className="w-full bg-[#F9FAFB] dark:bg-[#131D28] border border-[#D0D5DD] dark:border-[#344054] rounded-lg p-1.5 text-[#172033] dark:text-[#F8FAFC]"
+            >
+              <option value="ALL">All Sources</option>
+              <option value="GetYourGuide">GetYourGuide</option>
+              <option value="Viator">Viator</option>
+              <option value="Klook">Klook</option>
+              <option value="Direct Web">Direct Web</option>
+              <option value="WhatsApp Agent">WhatsApp Agent</option>
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-[#667085] dark:text-[#A7B1C0] font-semibold mb-1">Status</label>
+            <select
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+              className="w-full bg-[#F9FAFB] dark:bg-[#131D28] border border-[#D0D5DD] dark:border-[#344054] rounded-lg p-1.5 text-[#172033] dark:text-[#F8FAFC]"
+            >
+              <option value="ALL">All Statuses</option>
+              <option value="Pending Review">Pending Review</option>
+              <option value="Grouped">Grouped</option>
+              <option value="Ready for Dispatch">Ready for Dispatch</option>
+              <option value="Completed">Completed</option>
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-[#667085] dark:text-[#A7B1C0] font-semibold mb-1">Origin City</label>
+            <select
+              value={originFilter}
+              onChange={(e) => setOriginFilter(e.target.value)}
+              className="w-full bg-[#F9FAFB] dark:bg-[#131D28] border border-[#D0D5DD] dark:border-[#344054] rounded-lg p-1.5 text-[#172033] dark:text-[#F8FAFC]"
+            >
+              <option value="ALL">All Origins</option>
+              <option value="Yogyakarta">Yogyakarta</option>
+              <option value="Surabaya">Surabaya</option>
+              <option value="Malang">Malang</option>
+              <option value="Banyuwangi">Banyuwangi</option>
+              <option value="Bali">Bali</option>
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-[#667085] dark:text-[#A7B1C0] font-semibold mb-1">Product Package</label>
+            <select
+              value={productFilter}
+              onChange={(e) => setProductFilter(e.target.value)}
+              className="w-full bg-[#F9FAFB] dark:bg-[#131D28] border border-[#D0D5DD] dark:border-[#344054] rounded-lg p-1.5 text-[#172033] dark:text-[#F8FAFC]"
+            >
+              <option value="ALL">All Products</option>
+              <option value="Bromo">Mount Bromo Sunrise</option>
+              <option value="Ijen">Ijen Blue Flame</option>
+              <option value="Overland">Yogyakarta to Bali Overland</option>
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-[#667085] dark:text-[#A7B1C0] font-semibold mb-1">Tour Type</label>
+            <select
+              value={tourTypeFilter}
+              onChange={(e) => setTourTypeFilter(e.target.value)}
+              className="w-full bg-[#F9FAFB] dark:bg-[#131D28] border border-[#D0D5DD] dark:border-[#344054] rounded-lg p-1.5 text-[#172033] dark:text-[#F8FAFC]"
+            >
+              <option value="ALL">All Types</option>
+              <option value="Open Group">Open Group</option>
+              <option value="Private Excursion">Private Excursion</option>
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-[#667085] dark:text-[#A7B1C0] font-semibold mb-1">Payment Status</label>
+            <select
+              value={paymentFilter}
+              onChange={(e) => setPaymentFilter(e.target.value)}
+              className="w-full bg-[#F9FAFB] dark:bg-[#131D28] border border-[#D0D5DD] dark:border-[#344054] rounded-lg p-1.5 text-[#172033] dark:text-[#F8FAFC]"
+            >
+              <option value="ALL">All Payments</option>
+              <option value="Paid">Paid in Full</option>
+              <option value="Partial">Deposit / Partial</option>
+              <option value="Unpaid">Unpaid / On-Site</option>
+            </select>
+          </div>
         </div>
       </div>
 
-      {/* BOOKING MANAGEMENT TABLE */}
-      <div className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-xl">
+      {/* BOOKINGS TABLE */}
+      <div className="bg-white dark:bg-[#101822] border border-[#E4E7EC] dark:border-[#202B38] p-5 rounded-2xl space-y-4 shadow-xs text-xs">
+        <div className="flex items-center justify-between border-b border-[#E4E7EC] dark:border-[#202B38] pb-3">
+          <div className="flex items-center gap-2">
+            <button
+              onClick={toggleSelectAll}
+              className="p-1 rounded text-[#2563EB] dark:text-[#4F8CFF] hover:bg-[#F3F4F6] dark:hover:bg-[#1A2634]"
+            >
+              {selectedIds.length === filteredBookings.length && filteredBookings.length > 0 ? (
+                <CheckSquare className="w-4 h-4" />
+              ) : (
+                <Square className="w-4 h-4" />
+              )}
+            </button>
+            <span className="font-bold text-[#172033] dark:text-white">
+              Showing {filteredBookings.length} Reservations ({selectedIds.length} Selected)
+            </span>
+          </div>
+        </div>
+
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs border-collapse">
+          <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="bg-slate-950 border-b border-slate-800 text-slate-400 font-semibold uppercase text-[10px] tracking-wider">
-                <th className="p-3 w-10 text-center">
-                  <button onClick={toggleSelectAll} className="text-slate-400 hover:text-white cursor-pointer">
-                    {selectedIds.length === filteredBookings.length && filteredBookings.length > 0 ? (
-                      <CheckSquare className="w-4 h-4 text-emerald-400" />
-                    ) : (
-                      <Square className="w-4 h-4" />
-                    )}
-                  </button>
-                </th>
-                <th className="p-3">Booking ID</th>
-                <th className="p-3">Date</th>
-                <th className="p-3">Source</th>
-                <th className="p-3">Guest</th>
-                <th className="p-3">Pax</th>
-                <th className="p-3">Origin</th>
-                <th className="p-3">Product</th>
-                <th className="p-3">Drop-off</th>
-                <th className="p-3">Pickup</th>
-                <th className="p-3">Payment</th>
-                <th className="p-3">Operational Status</th>
-                <th className="p-3 text-right">Action</th>
+              <tr className="border-b border-[#E4E7EC] dark:border-[#202B38] bg-[#F9FAFB] dark:bg-[#131D28] text-[#667085] dark:text-[#A7B1C0] text-[11px] uppercase tracking-wider font-semibold">
+                <th className="py-2.5 px-3 w-8"></th>
+                <th className="py-2.5 px-3">Booking Ref</th>
+                <th className="py-2.5 px-3">Lead Guest</th>
+                <th className="py-2.5 px-3">Pax</th>
+                <th className="py-2.5 px-3">Product Package</th>
+                <th className="py-2.5 px-3">Channel</th>
+                <th className="py-2.5 px-3">Date</th>
+                <th className="py-2.5 px-3">Pickup Location</th>
+                <th className="py-2.5 px-3">Payment</th>
+                <th className="py-2.5 px-3">Status</th>
+                <th className="py-2.5 px-3 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-800/80 font-sans">
+            <tbody className="divide-y divide-[#EEF0F3] dark:divide-[#202B38]">
               {filteredBookings.map((b) => {
                 const isSelected = selectedIds.includes(b.id);
                 return (
                   <tr
                     key={b.id}
-                    className={`ops-table-row transition-colors cursor-pointer ${
-                      isSelected ? "bg-blue-950/40" : "hover:bg-slate-850/60"
+                    onClick={() => toggleSelectRow(b.id)}
+                    className={`saas-table-row cursor-pointer ${
+                      isSelected ? "bg-[#EEF4FF] dark:bg-[#16263F]" : ""
                     }`}
-                    onClick={() => onSelectBookingDetail(b)}
                   >
-                    {/* Checkbox */}
-                    <td className="p-3 text-center" onClick={(e) => e.stopPropagation()}>
-                      <button onClick={() => toggleSelectRow(b.id)} className="text-slate-400 hover:text-white cursor-pointer">
-                        {isSelected ? (
-                          <CheckSquare className="w-4 h-4 text-emerald-400" />
-                        ) : (
-                          <Square className="w-4 h-4" />
-                        )}
-                      </button>
+                    <td className="py-3 px-3">
+                      {isSelected ? (
+                        <CheckSquare className="w-4 h-4 text-[#2563EB] dark:text-[#4F8CFF]" />
+                      ) : (
+                        <Square className="w-4 h-4 text-[#98A2B3]" />
+                      )}
                     </td>
-
-                    {/* Booking ID */}
-                    <td className="p-3 font-mono font-bold text-white whitespace-nowrap">{b.id}</td>
-
-                    {/* Date */}
-                    <td className="p-3 font-mono text-slate-300 whitespace-nowrap">{b.tourDate}</td>
-
-                    {/* Source */}
-                    <td className="p-3 whitespace-nowrap">
-                      <span
-                        className={`px-2 py-0.5 rounded text-[10px] font-bold border inline-block ${
-                          b.source === "GetYourGuide"
-                            ? "bg-amber-500/10 text-amber-400 border-amber-500/30"
-                            : b.source === "Direct Online"
-                            ? "bg-blue-500/10 text-blue-400 border-blue-500/30"
-                            : "bg-purple-500/10 text-purple-400 border-purple-500/30"
-                        }`}
-                      >
+                    <td className="py-3 px-3 font-mono font-bold text-[#2563EB] dark:text-[#4F8CFF]">{b.id}</td>
+                    <td className="py-3 px-3 font-bold text-[#172033] dark:text-white">
+                      {b.greeting} {b.guestName}
+                    </td>
+                    <td className="py-3 px-3 font-mono font-semibold text-[#172033] dark:text-[#F8FAFC]">{b.pax} Pax</td>
+                    <td className="py-3 px-3 max-w-[180px] truncate text-[#172033] dark:text-[#F8FAFC]">{b.product}</td>
+                    <td className="py-3 px-3">
+                      <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-[#EFF8FF] text-[#175CD3] dark:bg-[rgba(83,177,253,0.12)] dark:text-[#84CAFF]">
                         {b.source}
                       </span>
                     </td>
-
-                    {/* Guest */}
-                    <td className="p-3 max-w-[150px]">
-                      <div className="font-semibold text-slate-100 truncate">
-                        {b.greeting} {b.guestName}
-                      </div>
-                      <div className="text-[10px] text-slate-400">{b.phone}</div>
-                    </td>
-
-                    {/* Pax */}
-                    <td className="p-3 font-mono font-bold text-emerald-400">{b.pax} Pax</td>
-
-                    {/* Origin */}
-                    <td className="p-3 text-slate-300 font-medium whitespace-nowrap">{b.origin}</td>
-
-                    {/* Product */}
-                    <td className="p-3 max-w-[180px]">
-                      <div className="font-medium text-slate-200 truncate" title={b.product}>
-                        {b.product}
-                      </div>
-                      <div className="text-[10px] text-slate-400">{b.tourType}</div>
-                    </td>
-
-                    {/* Drop-off */}
-                    <td className="p-3 text-slate-300 max-w-[120px] truncate">{b.dropOff}</td>
-
-                    {/* Pickup */}
-                    <td className="p-3 max-w-[150px]">
-                      <div className="text-slate-300 truncate" title={b.pickupLocation}>{b.pickupLocation}</div>
-                      <div className="text-[10px] text-slate-500 font-mono">{b.pickupTime} WIB</div>
-                    </td>
-
-                    {/* Payment */}
-                    <td className="p-3 whitespace-nowrap">
-                      <div className="font-mono font-semibold text-slate-200">
-                        Rp {b.totalBilling.toLocaleString("id-ID")}
-                      </div>
-                      <div className="text-[10px] text-emerald-400 font-medium">{b.billingStatus}</div>
-                    </td>
-
-                    {/* Operational Status */}
-                    <td className="p-3 whitespace-nowrap">
+                    <td className="py-3 px-3 font-mono text-[11px] text-[#667085] dark:text-[#A7B1C0]">{b.tourDate}</td>
+                    <td className="py-3 px-3 text-[#667085] dark:text-[#A7B1C0] max-w-[140px] truncate">{b.pickupLocation}</td>
+                    <td className="py-3 px-3">
                       <span
-                        className={`px-2.5 py-1 rounded-full text-[10px] font-semibold border ${
-                          b.status === "Pending Review"
-                            ? "bg-amber-500/10 text-amber-400 border-amber-500/30"
-                            : b.status === "Grouped"
-                            ? "bg-blue-500/10 text-blue-400 border-blue-500/30"
-                            : "bg-emerald-500/10 text-emerald-400 border-emerald-500/30"
+                        className={`px-2 py-0.5 rounded text-[10px] font-semibold border ${
+                          b.paymentStatus === "Paid"
+                            ? "bg-[#ECFDF3] text-[#15803D] dark:bg-[rgba(50,213,131,0.12)] dark:text-[#6CE9A6] border-emerald-200/60 dark:border-emerald-800/40"
+                            : "bg-[#FFFAEB] text-[#B54708] dark:bg-[rgba(253,176,34,0.12)] dark:text-[#FEC84B] border-amber-200/60 dark:border-amber-800/40"
+                        }`}
+                      >
+                        {b.paymentStatus}
+                      </span>
+                    </td>
+                    <td className="py-3 px-3">
+                      <span
+                        className={`px-2 py-0.5 rounded text-[10px] font-semibold border ${
+                          b.status === "Grouped"
+                            ? "bg-[#EFF8FF] text-[#175CD3] dark:bg-[rgba(83,177,253,0.12)] dark:text-[#84CAFF] border-blue-200/60 dark:border-blue-800/40"
+                            : b.status === "Pending Review"
+                            ? "bg-[#FFFAEB] text-[#B54708] dark:bg-[rgba(253,176,34,0.12)] dark:text-[#FEC84B] border-amber-200/60 dark:border-amber-800/40"
+                            : "bg-[#ECFDF3] text-[#15803D] dark:bg-[rgba(50,213,131,0.12)] dark:text-[#6CE9A6] border-emerald-200/60 dark:border-emerald-800/40"
                         }`}
                       >
                         {b.status}
                       </span>
                     </td>
-
-                    {/* Action */}
-                    <td className="p-3 text-right whitespace-nowrap" onClick={(e) => e.stopPropagation()}>
-                      <div className="flex items-center justify-end gap-1.5">
-                        <button
-                          onClick={() => onGroupBookings([b.id])}
-                          className="bg-emerald-600 hover:bg-emerald-500 text-white text-[10px] px-2.5 py-1 rounded font-bold transition-colors cursor-pointer"
-                        >
-                          + Assign to Tour
-                        </button>
-                        <button
-                          onClick={() => onSelectBookingDetail(b)}
-                          className="p-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors cursor-pointer"
-                          title="View Full Booking Detail"
-                        >
-                          <Eye className="w-3.5 h-3.5" />
-                        </button>
-                      </div>
+                    <td className="py-3 px-3 text-right">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onSelectBookingDetail(b);
+                        }}
+                        className="p-1 rounded text-[#2563EB] dark:text-[#4F8CFF] hover:bg-[#EEF4FF] dark:hover:bg-[#16263F] font-semibold text-[11px] cursor-pointer"
+                      >
+                        <Eye className="w-4 h-4" />
+                      </button>
                     </td>
                   </tr>
                 );
