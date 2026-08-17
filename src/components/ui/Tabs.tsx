@@ -1,61 +1,54 @@
-"use client";
-
 import React from "react";
-import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 export interface TabItem {
   id: string;
   label: string;
-  badge?: string;
-  icon?: React.ReactNode;
+  count?: number | string;
+  badge?: string | number;
 }
 
 export interface TabsProps {
-  tabs: TabItem[];
+  items?: TabItem[];
+  tabs?: TabItem[];
   activeTab: string;
-  onChange: (id: string) => void;
+  onChange: (tabId: string) => void;
   className?: string;
 }
 
-export function Tabs({ tabs, activeTab, onChange, className }: TabsProps) {
-  return (
-    <div
-      className={cn(
-        "inline-flex items-center gap-1.5 p-1.5 bg-[#F9FAFB] dark:bg-[#101822] border border-[#E4E7EC] dark:border-[#202B38] rounded-xl max-w-full overflow-x-auto scrollbar-none",
-        className
-      )}
-    >
-      {tabs.map((tab) => {
-        const isActive = activeTab === tab.id;
+export function Tabs({ items, tabs, activeTab, onChange, className }: TabsProps) {
+  const tabList = items || tabs || [];
 
+  return (
+    <div className={cn("flex items-center space-x-1 border-b border-slate-200 dark:border-slate-800 text-xs font-medium overflow-x-auto scrollbar-none", className)}>
+      {tabList.map((tab) => {
+        const isActive = tab.id === activeTab;
+        const displayBadge = tab.count !== undefined ? tab.count : tab.badge;
         return (
           <button
             key={tab.id}
+            type="button"
             onClick={() => onChange(tab.id)}
             className={cn(
-              "relative flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold transition-all duration-200 whitespace-nowrap focus:outline-none cursor-pointer",
+              "flex items-center gap-2 py-2.5 px-3 border-b-2 font-medium whitespace-nowrap transition-colors cursor-pointer",
               isActive
-                ? "bg-[#2563EB] dark:bg-[#4F8CFF] text-white shadow-xs"
-                : "text-[#667085] dark:text-[#A7B1C0] hover:text-[#172033] dark:hover:text-white"
+                ? "border-blue-600 text-blue-600 dark:text-blue-400 font-semibold"
+                : "border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200"
             )}
           >
-            <span className="relative z-10 flex items-center gap-2">
-              {tab.icon && <span className="shrink-0">{tab.icon}</span>}
-              <span>{tab.label}</span>
-              {tab.badge && (
-                <span
-                  className={cn(
-                    "px-2 py-0.5 rounded text-[10px] font-extrabold uppercase",
-                    isActive
-                      ? "bg-white/20 text-white"
-                      : "bg-[#EFF8FF] text-[#175CD3] dark:bg-[rgba(83,177,253,0.12)] dark:text-[#84CAFF]"
-                  )}
-                >
-                  {tab.badge}
-                </span>
-              )}
-            </span>
+            <span>{tab.label}</span>
+            {displayBadge !== undefined && (
+              <span
+                className={cn(
+                  "px-1.5 py-0.5 rounded-full text-[10px] font-bold",
+                  isActive
+                    ? "bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300"
+                    : "bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400"
+                )}
+              >
+                {displayBadge}
+              </span>
+            )}
           </button>
         );
       })}

@@ -1,29 +1,27 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Poppins } from "next/font/google";
 import { siteConfig } from "@/config/site";
 import { AuthProvider } from "@/context/AuthContext";
 import { ThemeProvider } from "@/context/ThemeContext";
 import "./globals.css";
 
-const inter = Inter({
+const poppins = Poppins({
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700", "800"],
+  weight: ["300", "400", "500", "600", "700"],
   display: "swap",
-  variable: "--font-inter",
+  variable: "--font-poppins",
 });
 
 export const metadata: Metadata = {
-  title: siteConfig.title,
-  description: siteConfig.description,
+  title: "Operational Resource Management | Enterprise SaaS",
+  description: "Manage core operational resources: Vehicles, Drivers, Guides, Tour Managers, Hotels, and Destinations.",
   keywords: siteConfig.keywords,
-  authors: [{ name: siteConfig.author.name, url: siteConfig.author.website }],
-  creator: siteConfig.author.name,
 };
 
 const themeInitScript = `
   (function() {
     try {
-      var saved = localStorage.getItem("qifess-theme") || localStorage.getItem("qifess_theme");
+      var saved = localStorage.getItem("ops-theme") || localStorage.getItem("qifess-theme");
       var isDark = saved === "dark" || (!saved && window.matchMedia("(prefers-color-scheme: dark)").matches);
       if (isDark) {
         document.documentElement.classList.add("dark");
@@ -42,11 +40,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${inter.variable} font-sans scroll-smooth`} suppressHydrationWarning>
+    <html lang="en" className={`${poppins.variable} font-sans scroll-smooth`} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
       </head>
-      <body className="min-h-screen bg-[#F7F8FA] text-[#172033] dark:bg-[#080D14] dark:text-[#F8FAFC] font-sans antialiased selection:bg-[#2563EB] selection:text-white flex flex-col transition-colors duration-200">
+      <body className="min-h-screen bg-[#F8FAFC] text-[#0F172A] dark:bg-[#090D16] dark:text-[#F8FAFC] font-sans antialiased selection:bg-[#2563EB] selection:text-white flex flex-col transition-colors duration-200">
         <AuthProvider>
           <ThemeProvider>
             {children}
