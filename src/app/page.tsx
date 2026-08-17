@@ -1,7 +1,17 @@
 "use client";
 
-import React from "react";
+import React, { useState, useMemo, useEffect } from "react";
+import dynamic from "next/dynamic";
 import Link from "next/link";
+import { AppShell } from "@/components/layout/AppShell";
+import { PageHeader } from "@/components/ui/PageHeader";
+import { Badge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
+import { Card } from "@/components/ui/Card";
+import { mockTripsData } from "@/data/mockTripsData";
+import { mockVehiclesData } from "@/data/mockVehicles";
+import { mockTrackingVehicles } from "@/data/mockTrackingData";
+import { mockNotificationsData } from "@/data/mockNotificationsData";
 import {
   Truck,
   UserCheck,
@@ -9,180 +19,559 @@ import {
   Briefcase,
   Building2,
   MapPin,
+  Clock,
+  ExternalLink,
+  AlertTriangle,
+  Radio,
+  CheckCircle2,
+  RefreshCw,
+  Calendar,
+  Layers,
   ArrowRight,
   ShieldCheck,
-  Layers,
-  Sparkles,
+  Plus,
+  Users,
+  Activity,
 } from "lucide-react";
-import { AppShell } from "@/components/layout/AppShell";
-import { PageHeader } from "@/components/ui/PageHeader";
-import { Badge } from "@/components/ui/Badge";
 
-const coreResources = [
-  {
-    title: "Vehicles",
-    count: 24,
-    href: "/vehicles",
-    icon: Truck,
-    description: "Transport fleet units including Toyota Hiace, Innova, and Isuzu Elf.",
-    statusSummary: "20 Available • 3 On Trip • 1 Maintenance",
-  },
-  {
-    title: "Drivers",
-    count: 18,
-    href: "/drivers",
-    icon: UserCheck,
-    description: "Licensed operational drivers with active commercial permits.",
-    statusSummary: "15 Available • 2 Assigned • 1 Standby",
-  },
-  {
-    title: "Guides",
-    count: 12,
-    href: "/guides",
-    icon: Compass,
-    description: "Certified tour guides specialized in East Java & Bali corridors.",
-    statusSummary: "9 Available • 2 On Trip • 1 Inactive",
-  },
-  {
-    title: "Tour Managers",
-    count: 8,
-    href: "/tour-managers",
-    icon: Briefcase,
-    description: "Operations managers overseeing field logistics and execution.",
-    statusSummary: "6 Available • 2 On Trip",
-  },
-  {
-    title: "Hotels",
-    count: 32,
-    href: "/hotels",
-    icon: Building2,
-    description: "Contracted hotel & resort accommodations in operating zones.",
-    statusSummary: "32 Active Partner Contracts",
-  },
-  {
-    title: "Destinations",
-    count: 46,
-    href: "/destinations",
-    icon: MapPin,
-    description: "Tour destinations, operational zones, and transit waypoints.",
-    statusSummary: "46 Operational Locations",
-  },
-];
+// Dynamically import Leaflet map snapshot component (no SSR)
+const MapTracking = dynamic(() => import("@/components/tracking/MapTracking"), {
+  ssr: false,
+  loading: () => (
+    <div className="w-full h-72 bg-slate-900 rounded-xl flex items-center justify-center text-white text-xs font-mono">
+      <span>Loading Telemetry Snapshot...</span>
+    </div>
+  ),
+});
 
-export default function OverviewPage() {
+export default function OperationalOverviewDashboard() {
+  const [regionFilter, setRegionFilter] = useState<string>("All");
+  const [selectedMapVehicleId, setSelectedMapVehicleId] = useState<string | null>("track-001");
+  const [isDarkMap, setIsDarkMap] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (typeof document !== "undefined") {
+      setIsDarkMap(document.documentElement.classList.contains("dark"));
+    }
+  }, []);
+
+  // Dynamically calculated mock data based on Region Filter
+  const kpiData = useMemo(() => {
+    if (regionFilter === "East Java") {
+      return { total: 18, active: 8, upcoming: 5, completed: 4, delayed: 1, pax: 210 };
+    }
+    if (regionFilter === "Banyuwangi") {
+      return { total: 6, active: 2, upcoming: 2, completed: 2, delayed: 0, pax: 72 };
+    }
+    if (regionFilter === "Bali") {
+      return { total: 10, active: 4, upcoming: 3, completed: 3, delayed: 0, pax: 132 };
+    }
+    return { total: 28, active: 12, upcoming: 8, completed: 7, delayed: 1, pax: 342 };
+  }, [regionFilter]);
+
   return (
     <AppShell>
-      {/* Page Header */}
+      {/* PAGE HEADER */}
       <PageHeader
-        title="Operational Resource Management"
-        description="Manage the core resources used for operational planning and deployment."
-        statusBadge={<Badge variant="info">Phase 1 Foundation</Badge>}
+        title="Overview"
+        description="Monitor today's operations, resources, trips, and fleet status."
+        breadcrumbItems={[{ label: "Operational Hub", href: "/" }, { label: "Overview" }]}
+        actions={
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-mono font-bold text-slate-500 hidden sm:inline flex items-center gap-1">
+              <Calendar className="w-3.5 h-3.5 text-blue-600" /> Tuesday, 18 August 2026
+            </span>
+            <Button variant="outline" size="sm" leftIcon={<RefreshCw className="w-3.5 h-3.5" />}>
+              Refresh
+            </Button>
+          </div>
+        }
       />
 
-      {/* Core Resources Grid */}
-      <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <h2 className="text-sm font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider">
-            6 Core Resources
-          </h2>
-          <span className="text-xs text-slate-500 font-medium">
-            Foundation of Operational Planning
-          </span>
+      {/* REGIONAL FILTER PILLS BAR */}
+      <div className="p-3 rounded-xl bg-white dark:bg-[#101726] border border-slate-200 dark:border-slate-800 flex items-center justify-between gap-3 shadow-xs">
+        <div className="flex items-center gap-1.5 overflow-x-auto">
+          <span className="text-xs font-bold text-slate-400 font-mono uppercase mr-1">REGION:</span>
+          {["All Regions", "East Java", "Banyuwangi", "Bali"].map((r) => (
+            <button
+              key={r}
+              onClick={() => setRegionFilter(r === "All Regions" ? "All" : r)}
+              className={`px-3 py-1 rounded-lg text-xs font-bold transition-all ${
+                (regionFilter === "All" && r === "All Regions") || regionFilter === r
+                  ? "bg-blue-600 text-white shadow-xs"
+                  : "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
+              }`}
+            >
+              {r}
+            </button>
+          ))}
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {coreResources.map((res) => {
-            const Icon = res.icon;
-            return (
-              <Link
-                key={res.title}
-                href={res.href}
-                className="group p-5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#101726] hover:border-blue-500/50 dark:hover:border-blue-500/50 hover:shadow-md transition-all duration-200 flex flex-col justify-between"
-              >
-                <div>
-                  <div className="flex items-center justify-between mb-3">
-                    <div className="w-10 h-10 rounded-lg bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 flex items-center justify-center font-semibold group-hover:scale-105 transition-transform">
-                      <Icon className="w-5 h-5" />
-                    </div>
-                    <div className="flex items-baseline gap-1">
-                      <span className="text-2xl font-extrabold text-slate-900 dark:text-slate-100">
-                        {res.count}
-                      </span>
-                      <span className="text-xs font-semibold text-slate-400">units</span>
-                    </div>
-                  </div>
-
-                  <h3 className="text-base font-bold text-slate-900 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors flex items-center gap-1.5">
-                    {res.title}
-                    <ArrowRight className="w-4 h-4 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-blue-600" />
-                  </h3>
-
-                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 line-clamp-2 leading-relaxed">
-                    {res.description}
-                  </p>
-                </div>
-
-                <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-[11px]">
-                  <span className="text-slate-400 font-medium">Status</span>
-                  <span className="font-semibold text-slate-700 dark:text-slate-300">
-                    {res.statusSummary}
-                  </span>
-                </div>
-              </Link>
-            );
-          })}
+        <div className="flex items-center gap-2 text-xs font-mono shrink-0">
+          <Badge variant="emerald">● 94% Operational Health</Badge>
         </div>
       </div>
 
-      {/* Conceptual Architectural Flow Card */}
-      <div className="p-6 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#101726] shadow-xs space-y-4">
-        <div className="flex items-center gap-2">
-          <div className="p-2 rounded-lg bg-indigo-50 dark:bg-indigo-950/50 text-indigo-600 dark:text-indigo-400">
+      {/* TOP KPI CARDS */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+        <Card className="p-4 space-y-1">
+          <span className="text-[10px] font-mono text-slate-400 font-bold uppercase block">TOTAL TRIPS TODAY</span>
+          <div className="flex items-baseline justify-between">
+            <span className="text-2xl font-extrabold text-slate-900 dark:text-slate-100">{kpiData.total}</span>
+            <span className="text-[10px] font-mono text-blue-600 font-bold">100% Scheduled</span>
+          </div>
+        </Card>
+
+        <Card className="p-4 space-y-1 border-blue-200 dark:border-blue-900/60 bg-blue-50/20 dark:bg-blue-950/20">
+          <span className="text-[10px] font-mono text-blue-600 dark:text-blue-400 font-bold uppercase block">ACTIVE TRIPS</span>
+          <div className="flex items-baseline justify-between">
+            <span className="text-2xl font-extrabold text-blue-600 dark:text-blue-400">{kpiData.active}</span>
+            <Badge variant="blue">● In Progress</Badge>
+          </div>
+        </Card>
+
+        <Card className="p-4 space-y-1">
+          <span className="text-[10px] font-mono text-slate-400 font-bold uppercase block">UPCOMING DEPARTURES</span>
+          <div className="flex items-baseline justify-between">
+            <span className="text-2xl font-extrabold text-slate-800 dark:text-slate-200">{kpiData.upcoming}</span>
+            <span className="text-[10px] font-mono text-slate-400">Ready</span>
+          </div>
+        </Card>
+
+        <Card className="p-4 space-y-1">
+          <span className="text-[10px] font-mono text-slate-400 font-bold uppercase block">COMPLETED TRIPS</span>
+          <div className="flex items-baseline justify-between">
+            <span className="text-2xl font-extrabold text-emerald-600 dark:text-emerald-400">{kpiData.completed}</span>
+            <Badge variant="emerald">✓ Released</Badge>
+          </div>
+        </Card>
+
+        <Card className="p-4 space-y-1 border-amber-200 dark:border-amber-900/60 bg-amber-50/20 dark:bg-amber-950/20">
+          <span className="text-[10px] font-mono text-amber-600 dark:text-amber-400 font-bold uppercase block">DELAYED OPERATIONS</span>
+          <div className="flex items-baseline justify-between">
+            <span className="text-2xl font-extrabold text-amber-600 dark:text-amber-400">{kpiData.delayed}</span>
+            <Badge variant="amber">⚠ +42 min</Badge>
+          </div>
+        </Card>
+
+        <Card className="p-4 space-y-1">
+          <span className="text-[10px] font-mono text-slate-400 font-bold uppercase block">TOTAL PASSENGERS</span>
+          <div className="flex items-baseline justify-between">
+            <span className="text-2xl font-extrabold text-slate-900 dark:text-slate-100">{kpiData.pax}</span>
+            <span className="text-[10px] text-slate-400 font-mono">Pax On-Board</span>
+          </div>
+        </Card>
+      </div>
+
+      {/* SECTION 1: ACTIVE OPERATIONS & OPERATIONAL ATTENTION ALERTS (8:4 Grid) */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        {/* Left 8 Cols: Active Operations */}
+        <Card className="lg:col-span-8 p-5 space-y-4">
+          <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+            <div className="flex items-center gap-2">
+              <Activity className="w-4 h-4 text-blue-600" />
+              <h2 className="text-sm font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider">
+                Active Operations ({mockTripsData.filter(t => t.status === "In Progress").length})
+              </h2>
+            </div>
+            <Link href="/dispatch/trips" className="text-xs text-blue-600 dark:text-blue-400 font-bold hover:underline">
+              View All Trips Operations →
+            </Link>
+          </div>
+
+          <div className="space-y-3 font-sans">
+            {mockTripsData.slice(0, 4).map((trip) => (
+              <div
+                key={trip.id}
+                className="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-[#162034] space-y-2"
+              >
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className="font-bold text-sm text-slate-900 dark:text-slate-100">{trip.name}</span>
+                      <span className="font-mono text-xs text-slate-400">({trip.code})</span>
+                    </div>
+                    <span className="text-xs text-slate-500 font-mono">
+                      {trip.vehiclePlate} ({trip.driverName}) · Dest: <strong className="text-slate-700 dark:text-slate-300">{trip.destinationName}</strong>
+                    </span>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <Badge variant={trip.status === "In Progress" ? "emerald" : "blue"}>
+                      ● {trip.status}
+                    </Badge>
+                    <Link href={`/dispatch/trips/${trip.id}`}>
+                      <Button variant="outline" size="sm" className="h-7 text-xs px-2">
+                        View Trip
+                      </Button>
+                    </Link>
+                  </div>
+                </div>
+
+                {/* Progress bar */}
+                <div className="space-y-1">
+                  <div className="flex justify-between text-[10px] font-mono text-slate-500">
+                    <span>
+                      Progress: {trip.checkpoints.filter((c) => c.status === "Completed").length} / {trip.checkpoints.length} Checkpoints
+                    </span>
+                    <span>
+                      ETA: <strong className="text-slate-800 dark:text-slate-200">{trip.estimatedEndTime}</strong>
+                    </span>
+                  </div>
+                  <div className="w-full bg-slate-200 dark:bg-slate-800 rounded-full h-1.5 overflow-hidden">
+                    <div
+                      className="bg-blue-600 h-full rounded-full transition-all"
+                      style={{
+                        width: `${
+                          trip.checkpoints.length > 0
+                            ? Math.round(
+                                (trip.checkpoints.filter((c) => c.status === "Completed").length /
+                                  trip.checkpoints.length) *
+                                  100
+                              )
+                            : trip.progressPercent
+                        }%`,
+                      }}
+                    />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </Card>
+
+        {/* Right 4 Cols: Operational Attention Alerts */}
+        <Card className="lg:col-span-4 p-5 space-y-4">
+          <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+            <div className="flex items-center gap-2">
+              <AlertTriangle className="w-4 h-4 text-amber-500" />
+              <h2 className="text-sm font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider">
+                Operational Attention
+              </h2>
+            </div>
+            <span className="text-xs font-mono font-bold text-rose-500">4 Active Alerts</span>
+          </div>
+
+          <div className="space-y-2.5 font-sans text-xs">
+            {mockNotificationsData.slice(0, 4).map((alt) => (
+              <div
+                key={alt.id}
+                className={`p-3 rounded-xl border space-y-1.5 transition-all ${
+                  alt.severity === "Critical"
+                    ? "bg-rose-50/40 dark:bg-rose-950/20 border-rose-200 dark:border-rose-900/60"
+                    : "bg-amber-50/40 dark:bg-amber-950/20 border-amber-200 dark:border-amber-900/60"
+                }`}
+              >
+                <div className="flex items-center justify-between">
+                  <span className="font-bold text-slate-900 dark:text-slate-100 flex items-center gap-1.5">
+                    <span className={alt.severity === "Critical" ? "text-rose-500 font-bold" : "text-amber-500"}>
+                      {alt.severity === "Critical" ? "🔴" : "⚠️"}
+                    </span>
+                    {alt.title}
+                  </span>
+                  <span className="font-mono text-[10px] text-slate-400">{alt.relativeTime}</span>
+                </div>
+                <p className="text-slate-600 dark:text-slate-300 text-[11px] leading-relaxed">{alt.description}</p>
+                <div className="pt-1 flex justify-end">
+                  <Link href={alt.actions[0].href} className="text-blue-600 dark:text-blue-400 font-bold hover:underline text-[11px] flex items-center gap-1">
+                    {alt.actions[0].label} →
+                  </Link>
+                </div>
+              </div>
+            ))}
+          </div>
+        </Card>
+      </div>
+
+      {/* SECTION 2: LIVE FLEET TELEMETRY SNAPSHOT MAP & FLEET STATUS (8:4 Grid) */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        {/* Left 8 Cols: Live Telemetry Snapshot Map */}
+        <Card className="lg:col-span-8 p-5 space-y-3">
+          <div className="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-slate-800">
+            <div>
+              <h2 className="text-sm font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider flex items-center gap-2">
+                <Compass className="w-4 h-4 text-emerald-500" /> Live Vehicle Telemetry Snapshot
+              </h2>
+              <p className="text-xs text-slate-500">Real-time GPS positioning over East Java, Banyuwangi, and Bali corridors</p>
+            </div>
+            <Link href="/dispatch/tracking" className="text-xs text-blue-600 dark:text-blue-400 font-bold hover:underline">
+              Open Full-Screen Tracking →
+            </Link>
+          </div>
+
+          <div className="w-full h-80 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-inner">
+            <MapTracking
+              vehicles={mockTrackingVehicles}
+              selectedVehicleId={selectedMapVehicleId}
+              onSelectVehicle={(v) => setSelectedMapVehicleId(v.id)}
+              isDarkTheme={isDarkMap}
+            />
+          </div>
+        </Card>
+
+        {/* Right 4 Cols: Fleet Status & Resource Capacity Breakdown */}
+        <Card className="lg:col-span-4 p-5 space-y-4">
+          <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+            <div className="flex items-center gap-2">
+              <Truck className="w-4 h-4 text-blue-600" />
+              <h2 className="text-sm font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider">
+                Fleet & Capacity Status
+              </h2>
+            </div>
+            <span className="text-xs font-mono font-bold text-slate-500">32 Units Total</span>
+          </div>
+
+          <div className="grid grid-cols-2 gap-2 text-xs font-mono">
+            <div className="p-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-900/60">
+              <span className="text-[10px] text-emerald-600 dark:text-emerald-400 block font-bold">AVAILABLE POOL</span>
+              <span className="font-extrabold text-base text-emerald-700 dark:text-emerald-300">12 Units</span>
+            </div>
+
+            <div className="p-3 rounded-xl bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-900/60">
+              <span className="text-[10px] text-blue-600 dark:text-blue-400 block font-bold">ON ACTIVE TRIP</span>
+              <span className="font-extrabold text-base text-blue-700 dark:text-blue-300">14 Units</span>
+            </div>
+
+            <div className="p-3 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-900/60">
+              <span className="text-[10px] text-amber-600 dark:text-amber-400 block font-bold">RESERVED</span>
+              <span className="font-extrabold text-base text-amber-700 dark:text-amber-300">4 Units</span>
+            </div>
+
+            <div className="p-3 rounded-xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/60">
+              <span className="text-[10px] text-rose-600 dark:text-rose-400 block font-bold">MAINTENANCE</span>
+              <span className="font-extrabold text-base text-rose-700 dark:text-rose-300">2 Units</span>
+            </div>
+          </div>
+
+          {/* Vehicles Requiring Attention */}
+          <div className="pt-2 border-t border-slate-100 dark:border-slate-800 space-y-2">
+            <span className="text-[10px] font-mono font-bold text-slate-400 uppercase tracking-wider block">
+              VEHICLES REQUIRING ATTENTION
+            </span>
+            <div className="space-y-1.5 text-xs font-mono">
+              <div className="flex justify-between items-center p-2 rounded bg-slate-50 dark:bg-slate-800/60">
+                <span className="font-bold text-slate-800 dark:text-slate-200">Hiace B 1234 XYZ</span>
+                <Badge variant="danger">🔴 Offline 8 min</Badge>
+              </div>
+              <div className="flex justify-between items-center p-2 rounded bg-slate-50 dark:bg-slate-800/60">
+                <span className="font-bold text-slate-800 dark:text-slate-200">Innova B 2468 DEF</span>
+                <Badge variant="amber">⚠️ Service Due</Badge>
+              </div>
+            </div>
+          </div>
+        </Card>
+      </div>
+
+      {/* SECTION 3: UPCOMING DEPLOYMENTS READINESS & RESOURCE AVAILABILITY (7:5 Grid) */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        {/* Left 7 Cols: Upcoming Deployments Readiness */}
+        <Card className="lg:col-span-7 p-5 space-y-4">
+          <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+            <div className="flex items-center gap-2">
+              <ShieldCheck className="w-4 h-4 text-indigo-600" />
+              <h2 className="text-sm font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider">
+                Upcoming Deployments Readiness
+              </h2>
+            </div>
+            <Link href="/dispatch/deployment" className="text-xs text-blue-600 dark:text-blue-400 font-bold hover:underline">
+              View All Deployments →
+            </Link>
+          </div>
+
+          <div className="space-y-3 font-sans text-xs">
+            {[
+              {
+                title: "Bali South Coast Tour",
+                code: "TR-2026-003",
+                time: "08:00 WIB",
+                vehicle: "Toyota Hiace Premio (B 3456 GHI)",
+                driver: "Dewa Putra",
+                guide: "Made Arya",
+                tm: "Sinta Wijaya",
+                status: "READY",
+                readyItems: ["Veh", "Drv", "Gde", "TM", "Htl", "Dst"],
+              },
+              {
+                title: "Banyuwangi Ijen Crater Day Trip",
+                code: "TR-2026-004",
+                time: "10:30 WIB",
+                vehicle: "Toyota Innova Zenix (B 5678 ABC)",
+                driver: "Budi Hartono",
+                guide: "Dimas Saputra",
+                tm: "Ayu Lestari",
+                status: "READY",
+                readyItems: ["Veh", "Drv", "Gde", "TM", "Htl", "Dst"],
+              },
+            ].map((dep, idx) => (
+              <div key={idx} className="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-[#162034] space-y-2">
+                <div className="flex justify-between items-center">
+                  <div>
+                    <span className="font-bold text-slate-900 dark:text-slate-100 text-sm">{dep.title}</span>
+                    <span className="font-mono text-xs text-slate-400 ml-2">({dep.code}) · Departure: <strong>{dep.time}</strong></span>
+                  </div>
+                  <Badge variant="emerald">✓ {dep.status}</Badge>
+                </div>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 font-mono text-[11px] text-slate-600 dark:text-slate-400">
+                  <div><span>Veh:</span> <strong className="text-slate-800 dark:text-slate-200">{dep.vehicle}</strong></div>
+                  <div><span>Driver:</span> <strong className="text-slate-800 dark:text-slate-200">{dep.driver}</strong></div>
+                  <div><span>Guide:</span> <strong className="text-slate-800 dark:text-slate-200">{dep.guide}</strong></div>
+                  <div><span>TM:</span> <strong className="text-slate-800 dark:text-slate-200">{dep.tm}</strong></div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </Card>
+
+        {/* Right 5 Cols: Resource Capacity & Demand */}
+        <Card className="lg:col-span-5 p-5 space-y-4">
+          <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+            <div className="flex items-center gap-2">
+              <Users className="w-4 h-4 text-blue-600" />
+              <h2 className="text-sm font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider">
+                Resource Capacity & Demand
+              </h2>
+            </div>
+            <span className="text-xs font-mono text-slate-400">Available / Assigned</span>
+          </div>
+
+          <div className="space-y-3 font-sans text-xs">
+            {/* Drivers */}
+            <div className="space-y-1">
+              <div className="flex justify-between font-mono">
+                <span className="font-bold text-slate-800 dark:text-slate-200">Drivers (18 Total)</span>
+                <span className="text-emerald-600 dark:text-emerald-400 font-bold">12 Available (6 Assigned)</span>
+              </div>
+              <div className="w-full bg-slate-200 dark:bg-slate-800 rounded-full h-2 overflow-hidden flex">
+                <div className="bg-emerald-500 h-full" style={{ width: "66%" }} />
+                <div className="bg-blue-600 h-full" style={{ width: "34%" }} />
+              </div>
+            </div>
+
+            {/* Guides */}
+            <div className="space-y-1">
+              <div className="flex justify-between font-mono">
+                <span className="font-bold text-slate-800 dark:text-slate-200">Tour Guides (15 Total)</span>
+                <span className="text-emerald-600 dark:text-emerald-400 font-bold">10 Available (5 Assigned)</span>
+              </div>
+              <div className="w-full bg-slate-200 dark:bg-slate-800 rounded-full h-2 overflow-hidden flex">
+                <div className="bg-emerald-500 h-full" style={{ width: "67%" }} />
+                <div className="bg-blue-600 h-full" style={{ width: "33%" }} />
+              </div>
+            </div>
+
+            {/* Tour Managers */}
+            <div className="space-y-1">
+              <div className="flex justify-between font-mono">
+                <span className="font-bold text-slate-800 dark:text-slate-200">Tour Managers (8 Total)</span>
+                <span className="text-emerald-600 dark:text-emerald-400 font-bold">5 Available (3 Assigned)</span>
+              </div>
+              <div className="w-full bg-slate-200 dark:bg-slate-800 rounded-full h-2 overflow-hidden flex">
+                <div className="bg-emerald-500 h-full" style={{ width: "62%" }} />
+                <div className="bg-blue-600 h-full" style={{ width: "38%" }} />
+              </div>
+            </div>
+          </div>
+        </Card>
+      </div>
+
+      {/* SECTION 4: TODAY'S TIMELINE & DESTINATION OPERATIONS (6:6 Grid) */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        {/* Left 6 Cols: Today's Timeline */}
+        <Card className="lg:col-span-6 p-5 space-y-4">
+          <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+            <h2 className="text-sm font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider flex items-center gap-2">
+              <Clock className="w-4 h-4 text-blue-600" /> Today's Operations Timeline
+            </h2>
+            <span className="text-xs text-slate-400 font-mono">18 Aug 2026</span>
+          </div>
+
+          <div className="space-y-3 font-mono text-xs border-l-2 border-slate-200 dark:border-slate-800 pl-4 ml-2">
+            {[
+              { time: "03:00 WIB", title: "Bromo Sunrise Tour Departure", status: "In Progress", color: "emerald" },
+              { time: "05:30 WIB", title: "Ijen Crater Expedition Departure", status: "In Progress", color: "emerald" },
+              { time: "08:00 WIB", title: "Bali South Coast Tour Departure", status: "Ready", color: "blue" },
+              { time: "17:42 WIB", title: "Expected Return - Bromo Sunrise Tour", status: "Scheduled", color: "slate" },
+            ].map((t, idx) => (
+              <div key={idx} className="relative space-y-0.5">
+                <div className="absolute -left-[21px] top-1 w-2.5 h-2.5 rounded-full bg-blue-600 ring-4 ring-white dark:ring-[#101726]" />
+                <div className="flex justify-between items-center">
+                  <span className="font-bold text-slate-900 dark:text-slate-100">{t.time} — {t.title}</span>
+                  <Badge variant={t.color as any}>{t.status}</Badge>
+                </div>
+              </div>
+            ))}
+          </div>
+        </Card>
+
+        {/* Right 6 Cols: Today's Destination Operations */}
+        <Card className="lg:col-span-6 p-5 space-y-4">
+          <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+            <h2 className="text-sm font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider flex items-center gap-2">
+              <MapPin className="w-4 h-4 text-rose-500" /> Today's Destination Operational Demand
+            </h2>
+            <Link href="/destinations" className="text-xs text-blue-600 dark:text-blue-400 font-bold hover:underline">
+              Destinations Master →
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 font-mono text-xs">
+            {[
+              { name: "Mount Bromo", trips: "8 Trips Active", status: "Open" },
+              { name: "Ijen Crater", trips: "5 Trips Active", status: "Open" },
+              { name: "Uluwatu Temple", trips: "4 Trips Active", status: "Open" },
+              { name: "Nusa Penida", trips: "3 Trips Active", status: "Open" },
+              { name: "Ubud Culture", trips: "6 Trips Active", status: "Open" },
+              { name: "Pulau Merah", trips: "2 Trips Active", status: "Open" },
+            ].map((d, idx) => (
+              <div key={idx} className="p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-[#162034] space-y-1">
+                <span className="font-bold text-slate-900 dark:text-slate-100 block">{d.name}</span>
+                <span className="text-blue-600 dark:text-blue-400 font-extrabold text-[11px] block">{d.trips}</span>
+                <Badge variant="emerald">● {d.status}</Badge>
+              </div>
+            ))}
+          </div>
+        </Card>
+      </div>
+
+      {/* SECTION 5: QUICK ACTIONS BAR */}
+      <Card className="p-4 bg-gradient-to-r from-slate-900 via-slate-900 to-blue-950 border-slate-800 text-white flex flex-col sm:flex-row items-center justify-between gap-3">
+        <div className="flex items-center gap-3">
+          <div className="w-9 h-9 rounded-xl bg-blue-600 text-white flex items-center justify-center font-bold">
             <Layers className="w-5 h-5" />
           </div>
           <div>
-            <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100">
-              System Architecture & Operational Pipeline
-            </h3>
-            <p className="text-xs text-slate-500 dark:text-slate-400">
-              How master resources support upcoming operational workflows
-            </p>
+            <h3 className="text-sm font-extrabold text-white">OPERATIONAL QUICK SHORTCUTS</h3>
+            <p className="text-xs text-slate-400">Direct shortcuts to active dispatching and fleet monitoring hubs</p>
           </div>
         </div>
 
-        {/* Conceptual Pipeline Steps */}
-        <div className="grid grid-cols-2 md:grid-cols-6 gap-2 pt-2">
-          {[
-            { step: "01", label: "Resources", active: true, badge: "Current Phase" },
-            { step: "02", label: "Availability / State", active: false, badge: "Upcoming" },
-            { step: "03", label: "Dispatcher", active: false, badge: "Upcoming" },
-            { step: "04", label: "Assignment", active: false, badge: "Upcoming" },
-            { step: "05", label: "Deployment", active: false, badge: "Upcoming" },
-            { step: "06", label: "Execution", active: false, badge: "Upcoming" },
-          ].map((item, idx) => (
-            <div
-              key={idx}
-              className={`p-3 rounded-lg border text-center transition-all ${
-                item.active
-                  ? "border-blue-500 bg-blue-50/40 dark:bg-blue-950/30 text-blue-900 dark:text-blue-100 shadow-xs"
-                  : "border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/40 text-slate-400 opacity-70"
-              }`}
-            >
-              <span className="text-[10px] font-mono font-bold block opacity-60">STEP {item.step}</span>
-              <span className="text-xs font-bold block mt-0.5">{item.label}</span>
-              <span
-                className={`inline-block mt-1.5 text-[9px] font-bold px-1.5 py-0.5 rounded ${
-                  item.active
-                    ? "bg-blue-600 text-white"
-                    : "bg-slate-200 dark:bg-slate-800 text-slate-500"
-                }`}
-              >
-                {item.badge}
-              </span>
-            </div>
-          ))}
+        <div className="flex items-center gap-2 flex-wrap">
+          <Link href="/dispatch/new">
+            <Button variant="primary" size="sm" leftIcon={<Plus className="w-3.5 h-3.5" />}>
+              Create Deployment
+            </Button>
+          </Link>
+          <Link href="/dispatch">
+            <Button variant="outline" size="sm" className="bg-slate-800 border-slate-700 text-white hover:bg-slate-700">
+              Open Dispatcher
+            </Button>
+          </Link>
+          <Link href="/dispatch/tracking">
+            <Button variant="outline" size="sm" className="bg-slate-800 border-slate-700 text-white hover:bg-slate-700">
+              Track Vehicles
+            </Button>
+          </Link>
+          <Link href="/dispatch/trips">
+            <Button variant="outline" size="sm" className="bg-slate-800 border-slate-700 text-white hover:bg-slate-700">
+              View Trips
+            </Button>
+          </Link>
         </div>
-      </div>
+      </Card>
     </AppShell>
   );
 }

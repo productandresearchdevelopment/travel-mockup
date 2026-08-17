@@ -15,6 +15,7 @@ import {
   Briefcase,
   Hotel,
   MapPin,
+  Building,
   Settings,
   X,
 } from "lucide-react";
@@ -219,6 +220,19 @@ export function AppSidebar({ mobileOpen = false, setMobileOpen }: AppSidebarProp
           >
             <MapPin className="w-4 h-4" />
             <span>Destinations</span>
+          </Link>
+
+          <Link
+            href="/vendors"
+            onClick={() => setMobileOpen && setMobileOpen(false)}
+            className={`flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold transition-all ${
+              isMainActive("/vendors")
+                ? "bg-blue-50 text-blue-600 dark:bg-blue-950/60 dark:text-blue-400 font-bold"
+                : "text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-[#162034] hover:text-slate-900 dark:hover:text-slate-200"
+            }`}
+          >
+            <Building className="w-4 h-4" />
+            <span>Vendors</span>
           </Link>
         </div>
 

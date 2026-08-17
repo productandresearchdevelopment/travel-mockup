@@ -1,45 +1,48 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { AppShell } from "@/components/layout/AppShell";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { SearchInput } from "@/components/ui/SearchInput";
-import { FilterButton } from "@/components/ui/FilterButton";
 import { DataTable, Column } from "@/components/ui/DataTable";
 import { Pagination } from "@/components/ui/Pagination";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { Select } from "@/components/ui/Select";
 import { mockVehiclesData } from "@/data/mockVehicles";
-import { VehicleMaster, VehicleStatus } from "@/types/vehicle";
-import { Plus, Download, Eye, ExternalLink } from "lucide-react";
+import { VehicleMaster } from "@/types/vehicle";
+import { Plus, Download, ExternalLink, Truck, ShieldCheck, MapPin, Wrench } from "lucide-react";
 
 export default function VehiclesPage() {
   const router = useRouter();
-  const [vehicles, setVehicles] = useState<VehicleMaster[]>(mockVehiclesData);
+  const [vehicles] = useState<VehicleMaster[]>(mockVehiclesData);
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("ALL");
   const [typeFilter, setTypeFilter] = useState<string>("ALL");
   const [vendorFilter, setVendorFilter] = useState<string>("ALL");
+  const [regionFilter, setRegionFilter] = useState<string>("ALL");
   const [currentPage, setCurrentPage] = useState(1);
 
   // Filter logic
-  const filteredVehicles = vehicles.filter((v) => {
-    const matchesSearch =
-      v.name.toLowerCase().includes(search.toLowerCase()) ||
-      v.licensePlate.toLowerCase().includes(search.toLowerCase()) ||
-      v.vehicleType.toLowerCase().includes(search.toLowerCase()) ||
-      v.vendorName.toLowerCase().includes(search.toLowerCase()) ||
-      v.code.toLowerCase().includes(search.toLowerCase());
+  const filteredVehicles = useMemo(() => {
+    return vehicles.filter((v) => {
+      const matchesSearch =
+        v.name.toLowerCase().includes(search.toLowerCase()) ||
+        v.licensePlate.toLowerCase().includes(search.toLowerCase()) ||
+        v.vehicleType.toLowerCase().includes(search.toLowerCase()) ||
+        v.vendorName.toLowerCase().includes(search.toLowerCase()) ||
+        v.code.toLowerCase().includes(search.toLowerCase());
 
-    const matchesStatus = statusFilter === "ALL" || v.status === statusFilter;
-    const matchesType = typeFilter === "ALL" || v.vehicleType === typeFilter;
-    const matchesVendor = vendorFilter === "ALL" || v.vendorName === vendorFilter;
+      const matchesStatus = statusFilter === "ALL" || v.status === statusFilter;
+      const matchesType = typeFilter === "ALL" || v.vehicleType === typeFilter;
+      const matchesVendor = vendorFilter === "ALL" || v.vendorName === vendorFilter;
+      const matchesRegion = regionFilter === "ALL" || v.region === regionFilter;
 
-    return matchesSearch && matchesStatus && matchesType && matchesVendor;
-  });
+      return matchesSearch && matchesStatus && matchesType && matchesVendor && matchesRegion;
+    });
+  }, [vehicles, search, statusFilter, typeFilter, vendorFilter, regionFilter]);
 
   const columns: Column<VehicleMaster>[] = [
     {
@@ -58,7 +61,7 @@ export default function VehiclesPage() {
               {v.name}
             </Link>
             <div className="text-[11px] text-slate-400">
-              {v.brand} {v.model} ({v.year})
+              {v.brand} {v.model} ({v.year}) · {v.region}
             </div>
           </div>
         </div>
@@ -74,60 +77,50 @@ export default function VehiclesPage() {
       ),
     },
     {
-      key: "vehicleType",
-      header: "Type",
-      render: (v) => (
-        <span className="px-2 py-0.5 rounded text-[11px] font-semibold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
-          {v.vehicleType}
-        </span>
-      ),
-    },
-    {
       key: "vendorName",
-      header: "Vendor",
+      header: "Ownership & Vendor",
       render: (v) => (
         <div>
           <span className="font-semibold text-slate-800 dark:text-slate-200 block truncate max-w-[150px]">
             {v.vendorName}
           </span>
-          <span className="text-[10px] text-slate-400">{v.vendorContact}</span>
-        </div>
-      ),
-    },
-    {
-      key: "capacity",
-      header: "Capacity",
-      render: (v) => (
-        <div>
-          <span className="font-bold text-slate-800 dark:text-slate-200">{v.passengerCapacity} Pax</span>
-          <div className="text-[10px] text-slate-400">{v.luggageCapacity} Bags</div>
+          <span className="text-[10px] text-slate-400">{v.ownershipType} · {v.vendorContact}</span>
         </div>
       ),
     },
     {
       key: "rate",
-      header: "Rate / Day",
+      header: "Daily Rental Rate",
       render: (v) => (
         <div>
           <span className="font-extrabold text-blue-600 dark:text-blue-400">
-            Rp {v.rate.rateAmount.toLocaleString("id-ID")}
+            Rp {v.dailyRentalRate.toLocaleString("id-ID")}
           </span>
-          <span className="text-[10px] text-slate-400 block">{v.rate.rateUnit}</span>
+          <span className="text-[10px] text-slate-400 block">Per Day</span>
         </div>
       ),
     },
     {
       key: "status",
       header: "Status",
-      render: (v) => <Badge status={v.status} />,
+      render: (v) => (
+        <Badge variant={v.status === "Available" ? "emerald" : v.status === "On Trip" ? "blue" : v.status === "Maintenance" ? "danger" : "slate"}>
+          ● {v.status}
+        </Badge>
+      ),
     },
     {
       key: "currentAssignment",
-      header: "Current Assignment",
+      header: "Current Trip / Driver",
       render: (v) => (
-        <span className="text-xs text-slate-600 dark:text-slate-400 truncate max-w-[180px] block font-medium">
-          {v.currentAssignment || "—"}
-        </span>
+        <div className="text-xs">
+          <span className="font-bold text-slate-800 dark:text-slate-200 block">
+            {v.currentAssignment ? v.currentAssignment.tripName : "Unassigned / Available"}
+          </span>
+          {v.currentAssignment && (
+            <span className="text-[10px] text-slate-500">Driver: {v.currentAssignment.driverName}</span>
+          )}
+        </div>
       ),
     },
     {
@@ -143,27 +136,21 @@ export default function VehiclesPage() {
             e.stopPropagation();
             router.push(`/vehicles/${v.id}`);
           }}
-          className="h-7 px-2 text-[11px] gap-1"
+          className="h-7 px-2.5 text-[11px] gap-1"
         >
-          <span>Detail</span>
+          <span>Detail Workspace</span>
           <ExternalLink className="w-3 h-3 text-slate-400" />
         </Button>
       ),
     },
   ];
 
-  // Active filter counter
-  const activeFiltersCount =
-    (statusFilter !== "ALL" ? 1 : 0) +
-    (typeFilter !== "ALL" ? 1 : 0) +
-    (vendorFilter !== "ALL" ? 1 : 0);
-
   return (
     <AppShell>
       <PageHeader
-        title="Vehicles"
-        description="Manage vehicles used for operational activities."
-        breadcrumbItems={[{ label: "Vehicles" }]}
+        title="Vehicles Fleet Master"
+        description="Enterprise SaaS operational resource management and fleet monitoring workspace."
+        breadcrumbItems={[{ label: "Resources", href: "/vehicles" }, { label: "Vehicles" }]}
         actions={
           <>
             <Button variant="outline" size="sm" leftIcon={<Download className="w-3.5 h-3.5" />}>
@@ -179,28 +166,30 @@ export default function VehiclesPage() {
       />
 
       {/* Fleet Summary Metrics */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
         <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#101726]">
-          <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Total Fleet</span>
-          <p className="text-xl font-extrabold text-slate-900 dark:text-slate-100 mt-1">{vehicles.length} Units</p>
+          <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">TOTAL FLEET</span>
+          <p className="text-xl font-extrabold text-slate-900 dark:text-slate-100 mt-1">32 Units</p>
         </div>
+
         <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#101726]">
-          <span className="text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">Available</span>
-          <p className="text-xl font-extrabold text-emerald-600 dark:text-emerald-400 mt-1">
-            {vehicles.filter((v) => v.status === "Available").length} Units
-          </p>
+          <span className="text-[10px] font-semibold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">AVAILABLE</span>
+          <p className="text-xl font-extrabold text-emerald-600 dark:text-emerald-400 mt-1">12 Units</p>
         </div>
+
         <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#101726]">
-          <span className="text-[11px] font-semibold text-purple-600 dark:text-purple-400 uppercase tracking-wider">On Trip / Assigned</span>
-          <p className="text-xl font-extrabold text-purple-600 dark:text-purple-400 mt-1">
-            {vehicles.filter((v) => v.status === "On Trip" || v.status === "Assigned").length} Units
-          </p>
+          <span className="text-[10px] font-semibold text-blue-600 dark:text-blue-400 uppercase tracking-wider">ON TRIP</span>
+          <p className="text-xl font-extrabold text-blue-600 dark:text-blue-400 mt-1">14 Units</p>
         </div>
+
         <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#101726]">
-          <span className="text-[11px] font-semibold text-amber-600 dark:text-amber-400 uppercase tracking-wider">Maintenance</span>
-          <p className="text-xl font-extrabold text-amber-600 dark:text-amber-400 mt-1">
-            {vehicles.filter((v) => v.status === "Maintenance").length} Unit
-          </p>
+          <span className="text-[10px] font-semibold text-amber-600 dark:text-amber-400 uppercase tracking-wider">RESERVED</span>
+          <p className="text-xl font-extrabold text-amber-600 dark:text-amber-400 mt-1">4 Units</p>
+        </div>
+
+        <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#101726]">
+          <span className="text-[10px] font-semibold text-rose-600 dark:text-rose-400 uppercase tracking-wider">MAINTENANCE</span>
+          <p className="text-xl font-extrabold text-rose-600 dark:text-rose-400 mt-1">2 Units</p>
         </div>
       </div>
 
@@ -210,12 +199,11 @@ export default function VehiclesPage() {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           onClear={() => setSearch("")}
-          placeholder="Search by vehicle name, plate, type, vendor..."
+          placeholder="Search plate, vehicle name, vendor, driver..."
           containerClassName="lg:w-80"
         />
 
         <div className="flex flex-wrap items-center gap-2">
-          {/* Status Filter */}
           <div className="w-36">
             <Select
               value={statusFilter}
@@ -223,30 +211,26 @@ export default function VehiclesPage() {
               options={[
                 { value: "ALL", label: "All Statuses" },
                 { value: "Available", label: "Available" },
-                { value: "Assigned", label: "Assigned" },
                 { value: "On Trip", label: "On Trip" },
+                { value: "Reserved", label: "Reserved" },
                 { value: "Maintenance", label: "Maintenance" },
-                { value: "Inactive", label: "Inactive" },
               ]}
             />
           </div>
 
-          {/* Type Filter */}
-          <div className="w-32">
+          <div className="w-36">
             <Select
-              value={typeFilter}
-              onChange={(e) => setTypeFilter(e.target.value)}
+              value={regionFilter}
+              onChange={(e) => setRegionFilter(e.target.value)}
               options={[
-                { value: "ALL", label: "All Types" },
-                { value: "Hiace", label: "Hiace" },
-                { value: "Innova", label: "Innova" },
-                { value: "Elf", label: "Elf" },
-                { value: "Sprinter", label: "Sprinter" },
+                { value: "ALL", label: "All Regions" },
+                { value: "East Java", label: "East Java" },
+                { value: "Banyuwangi", label: "Banyuwangi" },
+                { value: "Bali", label: "Bali" },
               ]}
             />
           </div>
 
-          {/* Vendor Filter */}
           <div className="w-44">
             <Select
               value={vendorFilter}
@@ -255,26 +239,10 @@ export default function VehiclesPage() {
                 { value: "ALL", label: "All Vendors" },
                 { value: "PT ABC Transport", label: "PT ABC Transport" },
                 { value: "CV Nusantara Transport", label: "CV Nusantara Transport" },
-                { value: "PT Sumber Armada", label: "PT Sumber Armada" },
+                { value: "PT Bali VIP Rent", label: "PT Bali VIP Rent" },
               ]}
             />
           </div>
-
-          {(search || activeFiltersCount > 0) && (
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => {
-                setSearch("");
-                setStatusFilter("ALL");
-                setTypeFilter("ALL");
-                setVendorFilter("ALL");
-              }}
-              className="text-xs text-rose-600 hover:text-rose-700"
-            >
-              Reset Filters
-            </Button>
-          )}
         </div>
       </div>
 
@@ -287,7 +255,6 @@ export default function VehiclesPage() {
         emptyMessage="No vehicles match your search and filter criteria."
       />
 
-      {/* Pagination */}
       <Pagination
         currentPage={currentPage}
         totalPages={1}

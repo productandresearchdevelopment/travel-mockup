@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { VehicleTelemetry } from "@/types/tracking";
@@ -18,7 +18,7 @@ export default function MapTracking({
   vehicles,
   selectedVehicleId,
   onSelectVehicle,
-  isDarkTheme = true,
+  isDarkTheme: isDarkThemeProp,
   followVehicle = false,
   isFullScreen = false,
 }: MapTrackingProps) {
@@ -28,17 +28,35 @@ export default function MapTracking({
   const markersRef = useRef<{ [id: string]: L.Marker }>({});
   const polylinesRef = useRef<L.Polyline[]>([]);
 
-  const tileUrl = isDarkTheme
-    ? "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
-    : "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png";
+  // Detect dark mode automatically from HTML element if prop is undefined
+  const [isDark, setIsDark] = useState<boolean>(() => {
+    if (typeof isDarkThemeProp === "boolean") return isDarkThemeProp;
+    if (typeof document !== "undefined") {
+      return document.documentElement.classList.contains("dark");
+    }
+    return false;
+  });
 
-  const attribution = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>';
+  // Sync with prop changes if provided
+  useEffect(() => {
+    if (typeof isDarkThemeProp === "boolean") {
+      setIsDark(isDarkThemeProp);
+    }
+  }, [isDarkThemeProp]);
+
+  // Tile URLs (CARTO Voyager / Light for crisp light mode, Dark All for dark mode)
+  const tileUrl = isDark
+    ? "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+    : "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png";
+
+  const attribution =
+    '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>';
 
   // Initialize Map
   useEffect(() => {
     if (!mapContainerRef.current || mapRef.current) return;
 
-    // Initial view focused tightly on East Java & Bali region
+    // Focused tightly on East Java & Bali region
     const map = L.map(mapContainerRef.current, {
       center: [-8.1, 114.0],
       zoom: 9,
@@ -58,7 +76,7 @@ export default function MapTracking({
     mapRef.current = map;
     tileLayerRef.current = tileLayer;
 
-    // Trigger size calculation
+    // Recalculate size
     setTimeout(() => {
       map.invalidateSize();
     }, 250);
@@ -69,7 +87,7 @@ export default function MapTracking({
     };
   }, []);
 
-  // Handle Theme Change
+  // Handle Tile Theme Switch (Dark vs Light)
   useEffect(() => {
     if (tileLayerRef.current) {
       tileLayerRef.current.setUrl(tileUrl);
@@ -104,12 +122,12 @@ export default function MapTracking({
         v.status === "Moving"
           ? "#10B981"
           : v.status === "Stopped"
-          ? "#3B82F6"
+          ? "#2563EB"
           : v.status === "Idle"
           ? "#F59E0B"
           : "#64748B";
 
-      // Custom Vehicle Marker HTML
+      // Custom Vehicle Marker HTML adapted for light/dark mode
       const markerHtml = `
         <div class="relative group flex items-center justify-center cursor-pointer">
           ${
@@ -117,9 +135,13 @@ export default function MapTracking({
               ? `<div class="absolute -inset-2 rounded-full bg-blue-500/30 animate-ping"></div>`
               : ""
           }
-          <div class="w-9 h-9 rounded-full bg-white dark:bg-[#101726] border-2 shadow-lg flex items-center justify-center transition-transform hover:scale-110" style="border-color: ${statusBg};">
+          <div class="w-9 h-9 rounded-full ${
+            isDark ? "bg-[#101726] border-2" : "bg-white border-2"
+          } shadow-xl flex items-center justify-center transition-transform hover:scale-110" style="border-color: ${statusBg};">
             <div style="transform: rotate(${v.headingDegrees}deg);" class="transition-transform duration-300 flex items-center justify-center">
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-slate-800 dark:text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 ${
+                isDark ? "text-white" : "text-slate-800"
+              }" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M5 18H3c-.6 0-1-.4-1-1V7c0-.6.4-1 1-1h10c.6 0 1 .4 1 1v11" />
                 <path d="M14 9h4l3 3v5c0 .6-.4 1-1 1h-2" />
                 <circle cx="7" cy="18" r="2" />
@@ -127,7 +149,9 @@ export default function MapTracking({
               </svg>
             </div>
           </div>
-          <div class="absolute -bottom-5 px-1.5 py-0.5 rounded text-[9px] font-mono font-bold bg-slate-900 text-white shadow whitespace-nowrap border border-slate-700">
+          <div class="absolute -bottom-5 px-1.5 py-0.5 rounded text-[9px] font-mono font-bold ${
+            isDark ? "bg-slate-900 text-white border-slate-700" : "bg-white text-slate-900 border-slate-300"
+          } shadow-md whitespace-nowrap border">
             ${v.vehiclePlate}
           </div>
         </div>
@@ -146,7 +170,7 @@ export default function MapTracking({
         onSelectVehicle(v);
       });
 
-      // Bind Compact Popup
+      // Bind Popup
       marker.bindPopup(`
         <div class="p-1 font-sans text-xs">
           <p class="font-bold text-slate-900 mb-0.5">${v.vehicleName} (${v.vehiclePlate})</p>
@@ -174,7 +198,7 @@ export default function MapTracking({
       // Draw Route Polyline if Selected
       if (isSelected && v.routePoints.length > 0) {
         const routePolyline = L.polyline(v.routePoints, {
-          color: "#2563EB",
+          color: isDark ? "#3B82F6" : "#2563EB",
           weight: 4,
           opacity: 0.85,
           dashArray: "6, 8",
@@ -187,7 +211,7 @@ export default function MapTracking({
         }
       }
     });
-  }, [vehicles, selectedVehicleId, followVehicle]);
+  }, [vehicles, selectedVehicleId, followVehicle, isDark]);
 
   return <div ref={mapContainerRef} className="w-full h-full" />;
 }

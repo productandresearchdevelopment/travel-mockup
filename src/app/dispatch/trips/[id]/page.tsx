@@ -247,6 +247,22 @@ export default function TripDetailPage() {
               <span>Driver ({trip.driverName}): <strong className="text-emerald-400">Available</strong></span>
             </div>
           </div>
+
+          {/* Vendor Rental Cost & Locked Rate Variance Card */}
+          <div className="p-3.5 rounded-xl bg-slate-900 border border-blue-900/60 text-xs font-mono space-y-2">
+            <div className="flex items-center justify-between">
+              <span className="font-bold text-blue-400 flex items-center gap-1.5">
+                🔒 VENDOR RENTAL RATE LOCKED (PT ABC Transport — CTR-ABC-2026-001)
+              </span>
+              <Badge variant="amber">Cost Review Pending</Badge>
+            </div>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-slate-300">
+              <div><span>Agreed Locked Rate:</span> <strong className="text-white">Rp 850.000 / day 🔒</strong></div>
+              <div><span>Estimated Rental (2 Days):</span> <strong className="text-slate-200">Rp 1.700.000</strong></div>
+              <div><span>Actual Invoiced Cost:</span> <strong className="text-amber-400">Rp 1.850.000</strong></div>
+              <div><span>Variance:</span> <strong className="text-amber-400">+Rp 150.000 (+8.8%)</strong></div>
+            </div>
+          </div>
         </Card>
       )}
 
