@@ -264,6 +264,51 @@ export function AppSidebar({ mobileOpen = false, setMobileOpen }: AppSidebarProp
           </Link>
         </div>
 
+        {/* Workforce */}
+        <div className="space-y-1">
+          <span className="px-3 text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1">
+            Workforce
+          </span>
+          <Link
+            href="/workforce"
+            onClick={() => setMobileOpen && setMobileOpen(false)}
+            className={`flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold transition-all ${
+              isMainActive("/workforce") && !isMainActive("/workforce/attendance") && !isMainActive("/workforce/payroll")
+                ? "bg-blue-50 text-blue-600 dark:bg-blue-950/60 dark:text-blue-400 font-bold"
+                : "text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-[#162034] hover:text-slate-900 dark:hover:text-slate-200"
+            }`}
+          >
+            <UserCheck className="w-4 h-4" />
+            <span>Workforce</span>
+          </Link>
+
+          <Link
+            href="/workforce/attendance"
+            onClick={() => setMobileOpen && setMobileOpen(false)}
+            className={`flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold transition-all ${
+              isMainActive("/workforce/attendance")
+                ? "bg-blue-50 text-blue-600 dark:bg-blue-950/60 dark:text-blue-400 font-bold"
+                : "text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-[#162034] hover:text-slate-900 dark:hover:text-slate-200"
+            }`}
+          >
+            <CalendarCheck className="w-4 h-4" />
+            <span>Attendance</span>
+          </Link>
+
+          <Link
+            href="/workforce/payroll"
+            onClick={() => setMobileOpen && setMobileOpen(false)}
+            className={`flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold transition-all ${
+              isMainActive("/workforce/payroll")
+                ? "bg-blue-50 text-blue-600 dark:bg-blue-950/60 dark:text-blue-400 font-bold"
+                : "text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-[#162034] hover:text-slate-900 dark:hover:text-slate-200"
+            }`}
+          >
+            <Briefcase className="w-4 h-4" />
+            <span>Payroll</span>
+          </Link>
+        </div>
+
         {/* System Settings */}
         <div>
           <Link
