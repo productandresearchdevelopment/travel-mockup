@@ -1,99 +1,162 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { AppShell } from "@/components/layout/AppShell";
 import { PageHeader } from "@/components/ui/PageHeader";
-import { FormField } from "@/components/ui/FormField";
-import { Select } from "@/components/ui/Select";
+import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
-import { Badge } from "@/components/ui/Badge";
-import { mockDestinationsData } from "@/data/mockDestinations";
+import { FormField } from "@/components/ui/FormField";
+import { Select } from "@/components/ui/Select";
+import { mockGuestsData } from "@/data/mockGuestsData";
 import { mockVehiclesData } from "@/data/mockVehicles";
 import { mockDriversData } from "@/data/mockDrivers";
 import { mockGuidesData } from "@/data/mockGuides";
 import { mockTourManagersData } from "@/data/mockTourManagers";
-import { mockHotelsData } from "@/data/mockHotels";
 import {
-  ArrowLeft,
-  ArrowRight,
-  CheckCircle2,
-  AlertTriangle,
-  Compass,
+  CalendarCheck,
+  Users,
+  MapPin,
   Truck,
   UserCheck,
+  Compass,
   Briefcase,
   Hotel,
-  Clock,
-  DollarSign,
+  Train,
+  CheckCircle2,
+  AlertTriangle,
+  ArrowLeft,
+  Lock,
+  ExternalLink,
   ShieldCheck,
-  Save,
-  Check,
+  ChevronRight,
 } from "lucide-react";
 
 export default function CreateDeploymentPage() {
   const router = useRouter();
 
-  const [currentStep, setCurrentStep] = useState(1);
+  // Step 1: Booking Selection State
+  const [selectedBookingCode, setSelectedBookingCode] = useState("BKG-2026-00821");
 
-  // Form State
-  const [deploymentName, setDeploymentName] = useState("Bromo Sunrise Tour");
-  const [date, setDate] = useState("2026-08-21");
-  const [destinationId, setDestinationId] = useState(mockDestinationsData[0].id);
-  const [paxCount, setPaxCount] = useState(12);
-  const [bookingReference, setBookingReference] = useState("BK-2026-8801");
-  const [notes, setNotes] = useState("Rombongan keluarga besar. Tiba di Cemorolawang sebelum jam 04:00.");
+  // Resource Assignment States
+  const [selectedVehicleId, setSelectedVehicleId] = useState("v-001");
+  const [selectedDriverId, setSelectedDriverId] = useState("drv-001");
+  const [selectedGuideId, setSelectedGuideId] = useState("g-001");
+  const [selectedTMId, setSelectedTMId] = useState("tm-001");
 
-  const [vehicleId, setVehicleId] = useState(mockVehiclesData[0].id);
-  const [driverId, setDriverId] = useState(mockDriversData[0].id);
-  const [guideId, setGuideId] = useState(mockGuidesData[0].id);
-  const [tourManagerId, setTourManagerId] = useState(mockTourManagersData[0].id);
-  const [hotelId, setHotelId] = useState(mockHotelsData[0].id);
+  // Conflict state simulation
+  const [driverConflict, setDriverConflict] = useState(false);
 
-  const [departureTime, setDepartureTime] = useState("03:00");
-  const [estimatedEndTime, setEstimatedEndTime] = useState("17:00");
+  // Selected Booking Details derived from mock dataset
+  const activeBooking = useMemo(() => {
+    return (
+      mockGuestsData[0].currentBooking || {
+        id: "bkg-001",
+        bookingCode: "BKG-2026-00821",
+        product: "BP, BROMO, IJEN",
+        tourType: "BP Private - Budget Sharing",
+        platform: "Direct Offline",
+        travelDate: "2026-08-25",
+        paxCount: 4,
+        guestManifest: [
+          { guestId: "gst-001", fullName: "Rossella Cescon", nationality: "Italy", gender: "Female", passportNumber: "•••• 8932" },
+          { guestId: "gst-001b", fullName: "Marco Cescon", nationality: "Italy", gender: "Male", passportNumber: "•••• 2231" },
+          { guestId: "gst-003", fullName: "Sarah Wilson", nationality: "United Kingdom", gender: "Female", passportNumber: "•••• 8832" },
+          { guestId: "gst-003b", fullName: "James Wilson", nationality: "United Kingdom", gender: "Male", passportNumber: "•••• 1128" },
+        ],
+        journey: {
+          origin: "Yogyakarta",
+          pickup: "Yogyakarta Tugu Station / Hotel",
+          destinations: ["Yogyakarta", "Borobudur", "Prambanan", "Bromo", "Ijen", "Bali"],
+          dropOff: "Bali (Ubud / Denpasar Hotel)",
+          travelType: "Overland",
+          duration: "3D2N Overland Journey",
+        },
+        hotels: [
+          { id: "htl-alloc-001", hotelId: "htl-001", hotelName: "Hotel Santika Premier Malang", date: "2026-08-26", roomNumber: "Room 101", roomType: "Deluxe Twin", guestsAssigned: ["Rossella Cescon"], status: "Confirmed" },
+          { id: "htl-alloc-002", hotelId: "htl-002", hotelName: "Banyuwangi Resort & Spa", date: "2026-08-27", roomNumber: "Room 204", roomType: "Standard Queen", guestsAssigned: ["Rossella Cescon"], status: "Confirmed" },
+        ],
+        transports: [
+          { id: "trp-001", type: "KAI", bookingDate: "2026-08-26", segment: "Yogyakarta (YK) → Malang (ML) Expres Train", referenceNumber: "KAI-98421", status: "Confirmed" },
+          { id: "trp-002", type: "Ferizy", bookingDate: "2026-08-28", segment: "Ketapang Port (Banyuwangi) → Gilimanuk Port (Bali)", referenceNumber: "FER-77219", status: "Confirmed" },
+        ],
+        totalBillingRupiah: 7420000,
+        paymentStatus: "Partially Paid" as const,
+        paymentLink: "https://pay.qifess.com/bkg-00821",
+        operationalNotes: "PRIVATE TOUR BOROBUDUR & PRAMBANAN & PRIVATE CAR, 3D2N SHARED BUDGET BROMO IJEN with Bali drop off.",
+        tripStatus: "Confirmed" as const,
+      }
+    );
+  }, []);
 
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  // Selected Vehicle
+  const selectedVehicle = useMemo(() => {
+    return mockVehiclesData.find((v) => v.id === selectedVehicleId) || mockVehiclesData[0];
+  }, [selectedVehicleId]);
 
-  // Selected master references
-  const selectedDest = mockDestinationsData.find((d) => d.id === destinationId) || mockDestinationsData[0];
-  const selectedVeh = mockVehiclesData.find((v) => v.id === vehicleId) || mockVehiclesData[0];
-  const selectedDrv = mockDriversData.find((d) => d.id === driverId) || mockDriversData[0];
-  const selectedGde = mockGuidesData.find((g) => g.id === guideId);
-  const selectedTM = mockTourManagersData.find((t) => t.id === tourManagerId) || mockTourManagersData[0];
-  const selectedHtl = mockHotelsData.find((h) => h.id === hotelId);
+  // Selected Driver
+  const selectedDriver = useMemo(() => {
+    return mockDriversData.find((d) => d.id === selectedDriverId) || mockDriversData[0];
+  }, [selectedDriverId]);
 
-  // Real-time validations
-  const isPaxCapacityValid = paxCount <= selectedVeh.passengerCapacity;
-  const isVehicleCompatible = selectedDest.vehicleRestriction.includes("4WD")
-    ? selectedVeh.vehicleType.toLowerCase().includes("4wd") || selectedVeh.vehicleType.toLowerCase().includes("jeep") || selectedVeh.name.toLowerCase().includes("hiace")
-    : true;
-  const isGuideValid = selectedDest.guideRequirement === "Required" ? !!selectedGde : true;
-  const isDriverAvailable = selectedDrv.operationalStatus === "Available";
-  const isTMAvailable = selectedTM.operationalStatus === "Available";
-
-  const isWithinHours = true;
-  const hasNoOverlapConflicts = isDriverAvailable && isTMAvailable && isPaxCapacityValid;
-
-  const estimatedVehicleCost = (selectedVeh.rate?.rateAmount || 850000) * 2;
-
-  const handleSave = (finalStatus: "Draft" | "Ready") => {
-    setIsSubmitting(true);
-    setTimeout(() => {
-      setIsSubmitting(false);
-      router.push("/dispatch");
-    }, 400);
+  // Handle Driver Change & Conflict Check
+  const handleDriverChange = (driverId: string) => {
+    setSelectedDriverId(driverId);
+    if (driverId === "drv-002") {
+      setDriverConflict(true);
+    } else {
+      setDriverConflict(false);
+    }
   };
+
+  // Readiness Checklist Evaluation
+  const readinessCheck = useMemo(() => {
+    const bookingConfirmed = activeBooking.tripStatus === "Confirmed";
+    const manifestComplete = activeBooking.guestManifest.length > 0;
+    const journeyDefined = activeBooking.journey.destinations.length > 0;
+    const vehicleAssigned = !!selectedVehicleId;
+    const driverAssigned = !!selectedDriverId && !driverConflict;
+    const guideAssigned = !!selectedGuideId;
+    const tmAssigned = !!selectedTMId;
+    const hotelArranged = activeBooking.hotels.length > 0;
+    const transportArranged = activeBooking.transports.length > 0;
+
+    const isAllReady =
+      bookingConfirmed &&
+      manifestComplete &&
+      journeyDefined &&
+      vehicleAssigned &&
+      driverAssigned &&
+      guideAssigned &&
+      tmAssigned &&
+      hotelArranged &&
+      transportArranged;
+
+    return {
+      bookingConfirmed,
+      manifestComplete,
+      journeyDefined,
+      vehicleAssigned,
+      driverAssigned,
+      guideAssigned,
+      tmAssigned,
+      hotelArranged,
+      transportArranged,
+      isAllReady,
+    };
+  }, [activeBooking, selectedVehicleId, selectedDriverId, driverConflict, selectedGuideId, selectedTMId]);
 
   return (
     <AppShell>
       <PageHeader
         title="Create Operational Deployment"
-        description="Assign master vehicles, drivers, guides, tour managers, and hotels for a tour deployment."
+        description="Convert an existing Tour Booking into an operational deployment with assigned resources and conflict validation."
         breadcrumbItems={[
+          { label: "Operations", href: "/dispatch" },
           { label: "Dispatcher", href: "/dispatch" },
-          { label: "Create Deployment" },
+          { label: "New Deployment" },
         ]}
         actions={
           <Button
@@ -107,450 +170,320 @@ export default function CreateDeploymentPage() {
         }
       />
 
-      {/* Step Indicator Header */}
-      <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#101726]">
-        <div className="grid grid-cols-5 gap-2 text-center text-xs font-bold">
-          {[
-            { step: 1, label: "1. Trip Info" },
-            { step: 2, label: "2. Resources" },
-            { step: 3, label: "3. Schedule" },
-            { step: 4, label: "4. Review" },
-            { step: 5, label: "5. Confirm" },
-          ].map((s) => (
-            <button
-              key={s.step}
-              onClick={() => setCurrentStep(s.step)}
-              className={`py-2 rounded-lg transition-all cursor-pointer border ${
-                currentStep === s.step
-                  ? "bg-blue-600 text-white border-blue-600 shadow-xs"
-                  : currentStep > s.step
-                  ? "bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 border-blue-200 dark:border-blue-800"
-                  : "bg-slate-50 dark:bg-[#162034] text-slate-400 border-slate-200 dark:border-slate-800"
-              }`}
-            >
-              {s.label}
-            </button>
+      {/* STEP 1: SELECT BOOKING / TOUR */}
+      <Card className="p-6 space-y-4 border-blue-200 dark:border-blue-900/60 bg-blue-50/20 dark:bg-blue-950/20">
+        <div className="flex items-center gap-2">
+          <div className="w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center font-bold text-sm">
+            1
+          </div>
+          <div>
+            <h2 className="text-sm font-extrabold text-slate-900 dark:text-slate-100">
+              STEP 1: SELECT TOUR BOOKING
+            </h2>
+            <p className="text-xs text-slate-500">
+              Select an existing confirmed tour booking from the reservations database
+            </p>
+          </div>
+        </div>
+
+        <div className="w-full sm:w-96">
+          <FormField label="Confirmed Tour Booking *">
+            <Select
+              value={selectedBookingCode}
+              onChange={(e) => setSelectedBookingCode(e.target.value)}
+              options={[
+                { value: "BKG-2026-00821", label: "BKG-2026-00821 · East Java Explorer (25 Aug 2026 - 4 Guests)" },
+                { value: "BKG-2026-00835", label: "BKG-2026-00835 · Banyuwangi Ijen Trip (27 Aug 2026 - 2 Guests)" },
+                { value: "BKG-2026-00888", label: "BKG-2026-00888 · Bali South Coast Tour (21 Aug 2026 - 6 Guests)" },
+              ]}
+            />
+          </FormField>
+        </div>
+      </Card>
+
+      {/* STEP 2: BOOKING SUMMARY (READ-ONLY) */}
+      <Card className="p-6 space-y-4">
+        <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-lg bg-slate-800 text-white flex items-center justify-center font-bold text-sm">
+              2
+            </div>
+            <div>
+              <h2 className="text-sm font-extrabold text-slate-900 dark:text-slate-100">
+                STEP 2: BOOKING SUMMARY (READ-ONLY)
+              </h2>
+              <span className="text-xs text-slate-400 font-mono">Auto-populated from reservation record</span>
+            </div>
+          </div>
+          <Badge variant="emerald">✓ {activeBooking.paymentStatus}</Badge>
+        </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 font-mono text-xs">
+          <div><span className="text-slate-400 block">Booking Code</span><strong className="text-slate-900 dark:text-slate-100">{activeBooking.bookingCode}</strong></div>
+          <div><span className="text-slate-400 block">Tour Product</span><strong className="text-blue-600">{activeBooking.product}</strong></div>
+          <div><span className="text-slate-400 block">Tour Type</span><strong className="text-slate-900 dark:text-slate-100">{activeBooking.tourType}</strong></div>
+          <div><span className="text-slate-400 block">Travel Date</span><strong className="text-slate-900 dark:text-slate-100">{activeBooking.travelDate}</strong></div>
+          <div><span className="text-slate-400 block">PAX Count</span><strong className="text-emerald-600">{activeBooking.paxCount} Guests</strong></div>
+          <div><span className="text-slate-400 block">Acquisition Platform</span><strong className="text-slate-900 dark:text-slate-100">{activeBooking.platform}</strong></div>
+          <div><span className="text-slate-400 block">Total Billing</span><strong className="text-slate-900 dark:text-slate-100">Rp {activeBooking.totalBillingRupiah.toLocaleString("id-ID")}</strong></div>
+          <div><span className="text-slate-400 block">Payment Link</span><a href={activeBooking.paymentLink} target="_blank" className="text-blue-600 hover:underline">Available ↗</a></div>
+        </div>
+      </Card>
+
+      {/* STEP 3: GUEST MANIFEST */}
+      <Card className="p-6 space-y-4">
+        <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-lg bg-slate-800 text-white flex items-center justify-center font-bold text-sm">
+              3
+            </div>
+            <div>
+              <h2 className="text-sm font-extrabold text-slate-900 dark:text-slate-100">
+                STEP 3: GUEST MANIFEST ({activeBooking.guestManifest.length} Guests)
+              </h2>
+              <span className="text-xs text-slate-400 font-mono">Linked to Guest Master Profiles</span>
+            </div>
+          </div>
+          <Link href="/guests" className="text-xs text-blue-600 dark:text-blue-400 font-bold hover:underline">
+            View Guests Master →
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 font-mono text-xs">
+          {activeBooking.guestManifest.map((gm, idx) => (
+            <div key={idx} className="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-[#162034] flex items-center justify-between">
+              <div>
+                <Link href={`/guests/${gm.guestId}`} className="font-bold text-slate-900 dark:text-slate-100 text-sm hover:text-blue-600">
+                  {idx + 1}. {gm.fullName}
+                </Link>
+                <span className="text-slate-500 text-[11px] block">{gm.nationality} · Passport: {gm.passportNumber}</span>
+              </div>
+              <Link href={`/guests/${gm.guestId}`}>
+                <Button variant="outline" size="sm" className="h-6 text-[10px] px-1.5">
+                  Profile <ExternalLink className="w-2.5 h-2.5 ml-1" />
+                </Button>
+              </Link>
+            </div>
           ))}
         </div>
-      </div>
+      </Card>
 
-      <div className="space-y-6 max-w-4xl">
-        {/* STEP 1: TRIP INFORMATION */}
-        {currentStep === 1 && (
-          <div className="space-y-6">
-            <Card className="p-6 space-y-4">
-              <div className="flex items-center gap-2 pb-3 border-b border-slate-100 dark:border-slate-800">
-                <Compass className="w-4 h-4 text-blue-600" />
-                <h2 className="text-sm font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider">
-                  Step 1: Trip & Destination Selection
-                </h2>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <FormField label="Deployment Name" required hint="e.g. Bromo Sunrise Tour">
-                  <input
-                    type="text"
-                    required
-                    value={deploymentName}
-                    onChange={(e) => setDeploymentName(e.target.value)}
-                    className="w-full px-3 py-1.5 bg-white dark:bg-[#101726] border border-slate-200 dark:border-slate-800 rounded-lg text-xs"
-                  />
-                </FormField>
-
-                <FormField label="Deployment Date" required>
-                  <input
-                    type="date"
-                    required
-                    value={date}
-                    onChange={(e) => setDate(e.target.value)}
-                    className="w-full px-3 py-1.5 bg-white dark:bg-[#101726] border border-slate-200 dark:border-slate-800 rounded-lg text-xs font-mono"
-                  />
-                </FormField>
-
-                <FormField label="Destination (Selected from Destination Master)" required>
-                  <Select
-                    value={destinationId}
-                    onChange={(e) => setDestinationId(e.target.value)}
-                    options={mockDestinationsData.map((d) => ({
-                      value: d.id,
-                      label: `${d.name} (${d.city}, ${d.region})`,
-                    }))}
-                  />
-                </FormField>
-
-                <FormField label="Passenger Count (Pax)" required>
-                  <input
-                    type="number"
-                    required
-                    value={paxCount}
-                    onChange={(e) => setPaxCount(Number(e.target.value))}
-                    className="w-full px-3 py-1.5 bg-white dark:bg-[#101726] border border-slate-200 dark:border-slate-800 rounded-lg text-xs font-bold"
-                  />
-                </FormField>
-              </div>
-            </Card>
-
-            {/* Read-Only Destination Context Panel */}
-            <Card className="p-6 space-y-3 bg-gradient-to-r from-teal-50/60 to-white dark:from-[#101726] dark:to-[#162034] border-teal-200/80 dark:border-slate-800">
-              <div className="flex items-center justify-between pb-2 border-b border-teal-200/60 dark:border-slate-800">
-                <span className="text-xs font-bold text-teal-800 dark:text-teal-300 uppercase tracking-wider">
-                  DESTINATION MASTER CONTEXT PANEL (READ-ONLY SOURCE DATA)
-                </span>
-                <span className="text-[10px] font-mono text-slate-400">Master Ref: {selectedDest.code}</span>
-              </div>
-
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
-                <div>
-                  <span className="text-[10px] text-slate-400 block">Region & City</span>
-                  <span className="font-bold text-slate-900 dark:text-slate-100">{selectedDest.city}, {selectedDest.region}</span>
-                </div>
-                <div>
-                  <span className="text-[10px] text-slate-400 block">Operating Hours</span>
-                  <span className="font-mono font-bold text-slate-800 dark:text-slate-200">{selectedDest.operatingHoursText}</span>
-                </div>
-                <div>
-                  <span className="text-[10px] text-slate-400 block">Guide Requirement</span>
-                  <Badge variant={selectedDest.guideRequirement === "Required" ? "danger" : "slate"}>
-                    {selectedDest.guideRequirement}
-                  </Badge>
-                </div>
-                <div>
-                  <span className="text-[10px] text-slate-400 block">Vehicle Requirement</span>
-                  <span className="font-bold text-teal-700 dark:text-teal-300">{selectedDest.vehicleRestriction}</span>
-                </div>
-              </div>
-            </Card>
+      {/* STEP 4: OVERLAND JOURNEY ROUTE & HOTELS */}
+      <Card className="p-6 space-y-4">
+        <div className="flex items-center gap-2 pb-3 border-b border-slate-100 dark:border-slate-800">
+          <div className="w-8 h-8 rounded-lg bg-slate-800 text-white flex items-center justify-center font-bold text-sm">
+            4
           </div>
-        )}
-
-        {/* STEP 2: RESOURCE ASSIGNMENT */}
-        {currentStep === 2 && (
-          <div className="space-y-6">
-            <Card className="p-6 space-y-4">
-              <div className="flex items-center gap-2 pb-3 border-b border-slate-100 dark:border-slate-800">
-                <Truck className="w-4 h-4 text-blue-600" />
-                <h2 className="text-sm font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider">
-                  Step 2: Assign Resources from Master Collections
-                </h2>
-              </div>
-
-              <div className="space-y-4 text-xs">
-                {/* Vehicle Selection & Validation */}
-                <div className="space-y-2 p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-[#162034]/50">
-                  <FormField label="Assign Vehicle (From Vehicle Master)" required>
-                    <Select
-                      value={vehicleId}
-                      onChange={(e) => setVehicleId(e.target.value)}
-                      options={mockVehiclesData.map((v) => ({
-                        value: v.id,
-                        label: `${v.name} (${v.licensePlate}) - Cap: ${v.passengerCapacity} Pax - ${v.status}`,
-                      }))}
-                    />
-                  </FormField>
-
-                  <div className="flex flex-wrap items-center justify-between pt-1 gap-2">
-                    <span className="text-[11px] text-slate-500">
-                      Plate: <strong className="font-mono">{selectedVeh.licensePlate}</strong> | Capacity: <strong>{selectedVeh.passengerCapacity} Pax</strong>
-                    </span>
-
-                    {/* Pax Validation Check */}
-                    {isPaxCapacityValid ? (
-                      <span className="text-[11px] font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
-                        <CheckCircle2 className="w-3.5 h-3.5" /> ✓ Capacity Sufficient ({paxCount} Pax ≤ {selectedVeh.passengerCapacity} Cap)
-                      </span>
-                    ) : (
-                      <span className="text-[11px] font-bold text-rose-600 dark:text-rose-400 flex items-center gap-1">
-                        <AlertTriangle className="w-3.5 h-3.5" /> ⚠ Vehicle Capacity Insufficient ({paxCount} Pax &gt; {selectedVeh.passengerCapacity} Cap)
-                      </span>
-                    )}
-                  </div>
-                </div>
-
-                {/* Driver Selection & Validation */}
-                <div className="space-y-2 p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-[#162034]/50">
-                  <FormField label="Assign Driver (From Driver Master)" required>
-                    <Select
-                      value={driverId}
-                      onChange={(e) => setDriverId(e.target.value)}
-                      options={mockDriversData.map((d) => ({
-                        value: d.id,
-                        label: `${d.fullName} (${d.license.licenseType}) - Status: ${d.operationalStatus}`,
-                      }))}
-                    />
-                  </FormField>
-
-                  <div className="flex items-center justify-between pt-1 text-[11px]">
-                    <span className="text-slate-500">Driver Status: <Badge status={selectedDrv.operationalStatus} /></span>
-                    {isDriverAvailable ? (
-                      <span className="font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
-                        <CheckCircle2 className="w-3.5 h-3.5" /> ✓ Driver Available
-                      </span>
-                    ) : (
-                      <span className="font-bold text-amber-600 dark:text-amber-400 flex items-center gap-1">
-                        <AlertTriangle className="w-3.5 h-3.5" /> ⚠ Driver Status Warning ({selectedDrv.operationalStatus})
-                      </span>
-                    )}
-                  </div>
-                </div>
-
-                {/* Guide Selection & Enforcement Validation */}
-                <div className="space-y-2 p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-[#162034]/50">
-                  <FormField label={`Assign Guide ${selectedDest.guideRequirement === "Required" ? "*" : ""}`}>
-                    <Select
-                      value={guideId}
-                      onChange={(e) => setGuideId(e.target.value)}
-                      options={[
-                        { value: "", label: "No Guide Assigned (Not Required)" },
-                        ...mockGuidesData.map((g) => ({
-                          value: g.id,
-                          label: `${g.fullName} (${g.languages.join(", ")}) - Status: ${g.operationalStatus}`,
-                        })),
-                      ]}
-                    />
-                  </FormField>
-
-                  {selectedDest.guideRequirement === "Required" && (
-                    <div className="pt-1">
-                      {isGuideValid ? (
-                        <span className="font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
-                          <CheckCircle2 className="w-3.5 h-3.5" /> ✓ Guide Requirement Satisfied ({selectedGde?.fullName})
-                        </span>
-                      ) : (
-                        <span className="font-bold text-rose-600 dark:text-rose-400 flex items-center gap-1">
-                          <AlertTriangle className="w-3.5 h-3.5" /> ⚠ Guide Assignment Mandatory for {selectedDest.name}
-                        </span>
-                      )}
-                    </div>
-                  )}
-                </div>
-
-                {/* Tour Manager Selection */}
-                <div className="space-y-2 p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-[#162034]/50">
-                  <FormField label="Assign Tour Manager (From TM Master)" required>
-                    <Select
-                      value={tourManagerId}
-                      onChange={(e) => setTourManagerId(e.target.value)}
-                      options={mockTourManagersData.map((t) => ({
-                        value: t.id,
-                        label: `${t.fullName} (${t.specialization}) - Status: ${t.operationalStatus}`,
-                      }))}
-                    />
-                  </FormField>
-                </div>
-
-                {/* Hotel Selection */}
-                <div className="space-y-2 p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-[#162034]/50">
-                  <FormField label="Assign Hotel Accommodation (Optional)">
-                    <Select
-                      value={hotelId}
-                      onChange={(e) => setHotelId(e.target.value)}
-                      options={mockHotelsData.map((h) => ({
-                        value: h.id,
-                        label: `${h.name} (${h.city}) - Available: ${h.totalAvailableRooms} Rooms`,
-                      }))}
-                    />
-                  </FormField>
-                </div>
-              </div>
-            </Card>
+          <div>
+            <h2 className="text-sm font-extrabold text-slate-900 dark:text-slate-100">
+              STEP 4: OVERLAND JOURNEY & HOTEL ALLOCATIONS
+            </h2>
+            <span className="text-xs text-slate-400 font-mono">Route: {activeBooking.journey.origin} → {activeBooking.journey.dropOff}</span>
           </div>
-        )}
+        </div>
 
-        {/* STEP 3: SCHEDULE & CONFLICT VALIDATION */}
-        {currentStep === 3 && (
-          <div className="space-y-6">
-            <Card className="p-6 space-y-4">
-              <div className="flex items-center gap-2 pb-3 border-b border-slate-100 dark:border-slate-800">
-                <Clock className="w-4 h-4 text-blue-600" />
-                <h2 className="text-sm font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider">
-                  Step 3: Schedule & Conflict Check
-                </h2>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <FormField label="Departure Time" required>
-                  <input
-                    type="time"
-                    required
-                    value={departureTime}
-                    onChange={(e) => setDepartureTime(e.target.value)}
-                    className="w-full px-3 py-1.5 bg-white dark:bg-[#101726] border border-slate-200 dark:border-slate-800 rounded-lg text-xs font-mono font-bold"
-                  />
-                </FormField>
-
-                <FormField label="Estimated End Time" required>
-                  <input
-                    type="time"
-                    required
-                    value={estimatedEndTime}
-                    onChange={(e) => setEstimatedEndTime(e.target.value)}
-                    className="w-full px-3 py-1.5 bg-white dark:bg-[#101726] border border-slate-200 dark:border-slate-800 rounded-lg text-xs font-mono font-bold"
-                  />
-                </FormField>
-              </div>
-            </Card>
-
-            {/* Resource Checkbox Summary List */}
-            <Card className="p-6 space-y-3">
-              <span className="text-xs font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider block pb-2 border-b border-slate-100 dark:border-slate-800">
-                AUTOMATED DISPATCH RESOURCE VERIFICATION CHECKLIST
+        <div className="flex items-center gap-1.5 flex-wrap font-mono text-xs">
+          {activeBooking.journey.destinations.map((d, i) => (
+            <React.Fragment key={i}>
+              <span className="px-2.5 py-1 rounded bg-blue-50 dark:bg-blue-950/50 border border-blue-200 dark:border-blue-900/60 font-bold text-blue-600 dark:text-blue-400">
+                📍 {d}
               </span>
+              {i < activeBooking.journey.destinations.length - 1 && <span className="text-slate-400 font-bold">→</span>}
+            </React.Fragment>
+          ))}
+        </div>
 
-              <div className="space-y-2 text-xs">
-                <div className="flex items-center justify-between p-2.5 rounded-lg bg-slate-50 dark:bg-[#162034]">
-                  <span>Destination Operating Hours Check ({selectedDest.operatingHoursText})</span>
-                  <span className="font-bold text-emerald-600 flex items-center gap-1"><Check className="w-3.5 h-3.5" /> Valid</span>
-                </div>
-
-                <div className="flex items-center justify-between p-2.5 rounded-lg bg-slate-50 dark:bg-[#162034]">
-                  <span>Vehicle Capacity Check ({paxCount} Pax vs {selectedVeh.passengerCapacity} Cap)</span>
-                  <span className={`font-bold flex items-center gap-1 ${isPaxCapacityValid ? "text-emerald-600" : "text-rose-600"}`}>
-                    {isPaxCapacityValid ? <><Check className="w-3.5 h-3.5" /> Valid</> : "⚠ Insufficient Capacity"}
-                  </span>
-                </div>
-
-                <div className="flex items-center justify-between p-2.5 rounded-lg bg-slate-50 dark:bg-[#162034]">
-                  <span>Driver Availability Check ({selectedDrv.fullName})</span>
-                  <span className={`font-bold flex items-center gap-1 ${isDriverAvailable ? "text-emerald-600" : "text-amber-600"}`}>
-                    {isDriverAvailable ? <><Check className="w-3.5 h-3.5" /> Available</> : "⚠ Status Alert"}
-                  </span>
-                </div>
-
-                <div className="flex items-center justify-between p-2.5 rounded-lg bg-slate-50 dark:bg-[#162034]">
-                  <span>Guide Requirement Check ({selectedDest.guideRequirement})</span>
-                  <span className={`font-bold flex items-center gap-1 ${isGuideValid ? "text-emerald-600" : "text-rose-600"}`}>
-                    {isGuideValid ? <><Check className="w-3.5 h-3.5" /> Satisfied</> : "⚠ Mandatory Guide Missing"}
-                  </span>
-                </div>
-              </div>
-            </Card>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 font-mono text-xs pt-2">
+          <div className="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 space-y-1">
+            <span className="font-bold text-slate-900 dark:text-slate-100 flex items-center gap-1.5">
+              <Hotel className="w-4 h-4 text-indigo-600" /> Hotel Allocations ({activeBooking.hotels.length})
+            </span>
+            {activeBooking.hotels.map((h) => (
+              <span key={h.id} className="text-slate-600 dark:text-slate-400 block text-[11px]">
+                • {h.hotelName} ({h.date}) — {h.roomNumber}
+              </span>
+            ))}
           </div>
-        )}
 
-        {/* STEP 4: REVIEW & COST PREVIEW */}
-        {currentStep === 4 && (
-          <div className="space-y-6">
-            <Card className="p-6 space-y-4">
-              <div className="flex items-center gap-2 pb-3 border-b border-slate-100 dark:border-slate-800">
-                <ShieldCheck className="w-4 h-4 text-blue-600" />
-                <h2 className="text-sm font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider">
-                  Step 4: Complete Deployment Review
-                </h2>
-              </div>
-
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs">
-                <div>
-                  <span className="text-slate-400 block">Deployment Name</span>
-                  <span className="font-bold text-slate-900 dark:text-slate-100">{deploymentName}</span>
-                </div>
-                <div>
-                  <span className="text-slate-400 block">Date & Time</span>
-                  <span className="font-mono font-bold text-slate-800 dark:text-slate-200">{date} ({departureTime} - {estimatedEndTime})</span>
-                </div>
-                <div>
-                  <span className="text-slate-400 block">Destination</span>
-                  <span className="font-semibold text-slate-900 dark:text-slate-100">{selectedDest.name}</span>
-                </div>
-                <div>
-                  <span className="text-slate-400 block">Passenger Count</span>
-                  <span className="font-bold text-slate-900 dark:text-slate-100">{paxCount} Pax</span>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-3 border-t border-slate-100 dark:border-slate-800 text-xs">
-                <div>
-                  <span className="text-slate-400 block">Vehicle</span>
-                  <span className="font-mono font-bold text-slate-800 dark:text-slate-200">{selectedVeh.licensePlate}</span>
-                </div>
-                <div>
-                  <span className="text-slate-400 block">Driver</span>
-                  <span className="font-medium text-slate-800 dark:text-slate-200">{selectedDrv.fullName}</span>
-                </div>
-                <div>
-                  <span className="text-slate-400 block">Guide</span>
-                  <span className="font-medium text-slate-800 dark:text-slate-200">{selectedGde?.fullName || "None"}</span>
-                </div>
-                <div>
-                  <span className="text-slate-400 block">Tour Manager</span>
-                  <span className="font-medium text-slate-800 dark:text-slate-200">{selectedTM.fullName}</span>
-                </div>
-              </div>
-            </Card>
-
-            {/* Estimated Vehicle Cost Preview Card */}
-            <Card className="p-6 space-y-3 bg-gradient-to-r from-emerald-50/60 to-white dark:from-[#101726] dark:to-[#162034] border-emerald-200/80 dark:border-slate-800">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-slate-700 dark:text-slate-300">
-                  Estimated Vehicle Rental Cost (Master Rate Reference):
-                </span>
-                <span className="text-lg font-mono font-extrabold text-emerald-600 dark:text-emerald-400">
-                  Rp {estimatedVehicleCost.toLocaleString("id-ID")}
-                </span>
-              </div>
-            </Card>
+          <div className="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 space-y-1">
+            <span className="font-bold text-slate-900 dark:text-slate-100 flex items-center gap-1.5">
+              <Train className="w-4 h-4 text-teal-600" /> Transport Bookings ({activeBooking.transports.length})
+            </span>
+            {activeBooking.transports.map((t) => (
+              <span key={t.id} className="text-slate-600 dark:text-slate-400 block text-[11px]">
+                • {t.type}: {t.segment} ({t.status})
+              </span>
+            ))}
           </div>
-        )}
+        </div>
+      </Card>
 
-        {/* STEP 5: CONFIRMATION & SAVE */}
-        {currentStep === 5 && (
-          <Card className="p-6 space-y-6 text-center">
-            <div className="w-12 h-12 rounded-full bg-emerald-100 dark:bg-emerald-950/80 text-emerald-600 dark:text-emerald-400 mx-auto flex items-center justify-center">
-              <CheckCircle2 className="w-6 h-6" />
+      {/* STEP 5: RESOURCE ASSIGNMENT & CONFLICT DETECTION */}
+      <Card className="p-6 space-y-5">
+        <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center font-bold text-sm">
+              5
             </div>
-
             <div>
-              <h2 className="text-lg font-extrabold text-slate-900 dark:text-slate-100">
-                Deployment Ready for Dispatch
+              <h2 className="text-sm font-extrabold text-slate-900 dark:text-slate-100">
+                STEP 5: ASSIGN OPERATIONAL RESOURCES
               </h2>
-              <p className="text-xs text-slate-500 mt-1">
-                All 6 required master resources verified with zero blocking conflicts.
-              </p>
+              <span className="text-xs text-slate-400 font-mono">Assign Vehicle, Driver, Guide, and Tour Manager with Conflict Detection</span>
             </div>
-
-            <div className="flex items-center justify-center gap-3 pt-4">
-              <Button
-                variant="outline"
-                onClick={() => handleSave("Draft")}
-                isLoading={isSubmitting}
-                leftIcon={<Save className="w-4 h-4" />}
-              >
-                Save as Draft
-              </Button>
-
-              <Button
-                variant="primary"
-                onClick={() => handleSave("Ready")}
-                isLoading={isSubmitting}
-                leftIcon={<Check className="w-4 h-4" />}
-              >
-                Mark as Ready
-              </Button>
-            </div>
-          </Card>
-        )}
-
-        {/* Navigation Step Buttons */}
-        {currentStep < 5 && (
-          <div className="flex items-center justify-between pt-4 border-t border-slate-200 dark:border-slate-800">
-            <Button
-              variant="outline"
-              onClick={() => setCurrentStep((prev) => Math.max(1, prev - 1))}
-              disabled={currentStep === 1}
-              leftIcon={<ArrowLeft className="w-4 h-4" />}
-            >
-              Previous
-            </Button>
-
-            <Button
-              variant="primary"
-              onClick={() => setCurrentStep((prev) => Math.min(5, prev + 1))}
-              rightIcon={<ArrowRight className="w-4 h-4" />}
-            >
-              Next Step
-            </Button>
           </div>
-        )}
-      </div>
+          <Badge variant="blue">Real-Time Availability Validation</Badge>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* VEHICLE SELECTION */}
+          <div className="space-y-3">
+            <FormField label="Assigned Vehicle (Plate & Locked Rate) *">
+              <Select
+                value={selectedVehicleId}
+                onChange={(e) => setSelectedVehicleId(e.target.value)}
+                options={mockVehiclesData.map((v) => ({
+                  value: v.id,
+                  label: `${v.name} (${v.licensePlate}) — ${v.vendorName} — Rp ${v.dailyRentalRate.toLocaleString("id-ID")}/day 🔒`,
+                }))}
+              />
+            </FormField>
+
+            {selectedVehicle && (
+              <div className="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-[#162034] font-mono text-xs space-y-1">
+                <div className="flex justify-between">
+                  <span className="font-bold text-slate-900 dark:text-slate-100">{selectedVehicle.name} ({selectedVehicle.licensePlate})</span>
+                  <Badge variant="emerald">● Available</Badge>
+                </div>
+                <span className="text-slate-500 block">Vendor: {selectedVehicle.vendorName} · Capacity: {selectedVehicle.passengerCapacity} Pax (4/15 OK)</span>
+                <span className="text-blue-600 font-bold block">Locked Rental Rate: Rp {selectedVehicle.dailyRentalRate.toLocaleString("id-ID")} / day 🔒</span>
+              </div>
+            )}
+          </div>
+
+          {/* DRIVER SELECTION & CONFLICT WARNING */}
+          <div className="space-y-3">
+            <FormField label="Assigned Driver *">
+              <Select
+                value={selectedDriverId}
+                onChange={(e) => handleDriverChange(e.target.value)}
+                options={[
+                  { value: "drv-001", label: "Agus Santoso (Surabaya) — ● Available" },
+                  { value: "drv-002", label: "Budi Hartono (Malang) — 🔴 CONFLICT (Double Booked)" },
+                  { value: "drv-003", label: "Dewa Putra (Bali) — ● Available" },
+                ]}
+              />
+            </FormField>
+
+            {driverConflict ? (
+              <div className="p-3.5 rounded-xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/60 font-mono text-xs space-y-1">
+                <span className="font-bold text-rose-600 dark:text-rose-400 flex items-center gap-1.5">
+                  <AlertTriangle className="w-4 h-4" /> RESOURCE CONFLICT DETECTED
+                </span>
+                <p className="text-rose-700 dark:text-rose-300 font-sans text-[11px]">
+                  Driver Budi Hartono is already assigned to <strong>Bromo Sunrise Tour #003</strong> on 25 Aug (03:00-18:00 WIB). Normal deployment confirmation is disabled.
+                </p>
+              </div>
+            ) : (
+              selectedDriver && (
+                <div className="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-[#162034] font-mono text-xs space-y-1">
+                  <div className="flex justify-between">
+                    <span className="font-bold text-slate-900 dark:text-slate-100">{selectedDriver.fullName}</span>
+                    <Badge variant="emerald">● Available</Badge>
+                  </div>
+                  <span className="text-slate-500 block">Region: {selectedDriver.region} · SIM B1 Commercial Valid</span>
+                </div>
+              )
+            )}
+          </div>
+
+          {/* GUIDE SELECTION */}
+          <div className="space-y-3">
+            <FormField label="Assigned Tour Guide *">
+              <Select
+                value={selectedGuideId}
+                onChange={(e) => setSelectedGuideId(e.target.value)}
+                options={mockGuidesData.map((g) => ({
+                  value: g.id,
+                  label: `${g.fullName} (${g.region}) — English / Italian Specialist — ● Available`,
+                }))}
+              />
+            </FormField>
+          </div>
+
+          {/* TOUR MANAGER SELECTION */}
+          <div className="space-y-3">
+            <FormField label="Assigned Tour Manager *">
+              <Select
+                value={selectedTMId}
+                onChange={(e) => setSelectedTMId(e.target.value)}
+                options={mockTourManagersData.map((tm) => ({
+                  value: tm.id,
+                  label: `${tm.fullName} (${tm.region}) — Field Execution Manager — ● Available`,
+                }))}
+              />
+            </FormField>
+          </div>
+        </div>
+      </Card>
+
+      {/* STEP 6: DEPLOYMENT READINESS PANEL & SAVE DEPLOYMENT */}
+      <Card className="p-6 space-y-4 bg-gradient-to-r from-slate-900 via-slate-900 to-blue-950 border-slate-800 text-white">
+        <div className="flex items-center justify-between pb-3 border-b border-slate-800">
+          <div className="flex items-center gap-2">
+            <ShieldCheck className="w-5 h-5 text-emerald-400" />
+            <h2 className="text-sm font-extrabold uppercase tracking-wider text-white">
+              STEP 6: DEPLOYMENT READINESS CHECKLIST
+            </h2>
+          </div>
+          <Badge variant={readinessCheck.isAllReady ? "emerald" : "danger"}>
+            {readinessCheck.isAllReady ? "READY FOR DEPLOYMENT" : "NOT READY — MISSING RESOURCE"}
+          </Badge>
+        </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 font-mono text-xs">
+          <div className="p-2.5 rounded-lg bg-slate-800/80 border border-slate-700">
+            <span className="text-[10px] text-slate-400 block">BOOKING</span>
+            <span className="font-bold text-emerald-400 flex items-center gap-1">✓ Confirmed</span>
+          </div>
+
+          <div className="p-2.5 rounded-lg bg-slate-800/80 border border-slate-700">
+            <span className="text-[10px] text-slate-400 block">MANIFEST</span>
+            <span className="font-bold text-emerald-400 flex items-center gap-1">✓ 4 Guests</span>
+          </div>
+
+          <div className="p-2.5 rounded-lg bg-slate-800/80 border border-slate-700">
+            <span className="text-[10px] text-slate-400 block">VEHICLE</span>
+            <span className="font-bold text-emerald-400 flex items-center gap-1">✓ Hiace B 1234</span>
+          </div>
+
+          <div className="p-2.5 rounded-lg bg-slate-800/80 border border-slate-700">
+            <span className="text-[10px] text-slate-400 block">DRIVER</span>
+            <span className={readinessCheck.driverAssigned ? "font-bold text-emerald-400" : "font-bold text-rose-400"}>
+              {readinessCheck.driverAssigned ? "✓ Agus Santoso" : "✕ Conflict"}
+            </span>
+          </div>
+
+          <div className="p-2.5 rounded-lg bg-slate-800/80 border border-slate-700">
+            <span className="text-[10px] text-slate-400 block">CREW</span>
+            <span className="font-bold text-emerald-400 flex items-center gap-1">✓ Guide & TM</span>
+          </div>
+        </div>
+
+        <div className="pt-2 flex justify-end gap-2">
+          <Button variant="outline" className="bg-slate-800 border-slate-700 text-white" onClick={() => router.push("/dispatch")}>
+            Save Draft
+          </Button>
+          <Button
+            variant="primary"
+            disabled={!readinessCheck.isAllReady}
+            onClick={() => router.push("/dispatch/dep-001")}
+            className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-6"
+          >
+            Create Operational Deployment
+          </Button>
+        </div>
+      </Card>
     </AppShell>
   );
 }

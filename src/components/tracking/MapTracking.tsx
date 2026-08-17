@@ -44,7 +44,7 @@ export default function MapTracking({
     }
   }, [isDarkThemeProp]);
 
-  // Tile URLs (CARTO Voyager / Light for crisp light mode, Dark All for dark mode)
+  // Tile URLs (CARTO Voyager for light mode, Dark All for dark mode)
   const tileUrl = isDark
     ? "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
     : "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png";
@@ -76,12 +76,15 @@ export default function MapTracking({
     mapRef.current = map;
     tileLayerRef.current = tileLayer;
 
-    // Recalculate size
-    setTimeout(() => {
-      map.invalidateSize();
-    }, 250);
+    // Recalculate size to ensure all map tile tiles render without gray artifacts
+    const timer1 = setTimeout(() => map.invalidateSize(), 50);
+    const timer2 = setTimeout(() => map.invalidateSize(), 250);
+    const timer3 = setTimeout(() => map.invalidateSize(), 600);
 
     return () => {
+      clearTimeout(timer1);
+      clearTimeout(timer2);
+      clearTimeout(timer3);
       map.remove();
       mapRef.current = null;
     };

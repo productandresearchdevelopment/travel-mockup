@@ -4,563 +4,640 @@ import React, { useState, useMemo } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { AppShell } from "@/components/layout/AppShell";
+import { PageHeader } from "@/components/ui/PageHeader";
 import { DetailHeader } from "@/components/ui/DetailHeader";
 import { Badge } from "@/components/ui/Badge";
+import { Tabs } from "@/components/ui/Tabs";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
-import { Tabs } from "@/components/ui/Tabs";
+import { DataTable } from "@/components/ui/DataTable";
 import { Modal } from "@/components/ui/Modal";
 import { FormField } from "@/components/ui/FormField";
 import { Input } from "@/components/ui/Input";
-import { Textarea } from "@/components/ui/Textarea";
 import { Select } from "@/components/ui/Select";
-import { mockTripsData } from "@/data/mockTripsData";
-import { TripRecord, TripCheckpoint, TripIssue, AuditTrailItem } from "@/types/trip";
+import { Textarea } from "@/components/ui/Textarea";
+import { mockGuestsData } from "@/data/mockGuestsData";
+import TripCostsTab from "@/components/trips/TripCostsTab";
 import {
-  PlaySquare,
-  Clock,
-  MapPin,
-  Truck,
-  User,
-  Users,
   Compass,
+  MapPin,
+  Clock,
+  ExternalLink,
   AlertTriangle,
   CheckCircle2,
-  Play,
-  Check,
+  Users,
+  Truck,
+  UserCheck,
+  Briefcase,
+  Hotel,
+  Train,
   Plus,
-  ExternalLink,
-  RotateCcw,
-  FileText,
-  History,
-  Calendar,
-  MessageSquare,
   ShieldCheck,
-  ArrowRight,
-  Filter,
+  ArrowLeft,
+  Lock,
+  MessageSquare,
+  Activity,
+  FileCheck,
 } from "lucide-react";
 
-export default function TripDetailPage() {
+interface OperationalIssueItem {
+  id: string;
+  type: "Vehicle" | "Driver" | "Guide" | "Guest" | "Hotel" | "Schedule" | "Other";
+  title: string;
+  description: string;
+  reportedBy: string;
+  role: string;
+  timestamp: string;
+  priority: "Low" | "Medium" | "High" | "Critical";
+  status: "Open" | "Investigating" | "Resolved" | "Cancelled";
+  relatedResource: string;
+}
+
+interface OperationalNoteItem {
+  id: string;
+  timestamp: string;
+  author: string;
+  role: string;
+  message: string;
+}
+
+export default function TripOperationsDetailPage() {
   const params = useParams();
   const router = useRouter();
-  const tripId = params.id as string;
+  const id = (params?.id as string) || "trip-001";
 
-  const initialTrip = useMemo(() => {
-    return mockTripsData.find((t) => t.id === tripId) || mockTripsData[0];
-  }, [tripId]);
-
-  const [trip, setTrip] = useState<TripRecord>(initialTrip);
   const [activeTab, setActiveTab] = useState("overview");
 
-  // Audit Trail Filter
-  const [auditFilter, setAuditFilter] = useState<string>("All");
-
-  // Modals state
-  const [showCompleteModal, setShowCompleteModal] = useState(false);
-  const [showStartModal, setShowStartModal] = useState(false);
-  const [showDelayModal, setShowDelayModal] = useState(false);
+  // Operational State & Modals
   const [showIssueModal, setShowIssueModal] = useState(false);
-  const [showCheckpointModal, setShowCheckpointModal] = useState(false);
   const [showNoteModal, setShowNoteModal] = useState(false);
-  const [selectedCheckpoint, setSelectedCheckpoint] = useState<TripCheckpoint | null>(null);
+  const [showCompleteModal, setShowCompleteModal] = useState(false);
 
-  // Form Fields
-  const [issueType, setIssueType] = useState<TripIssue["type"]>("Other");
-  const [issueSeverity, setIssueSeverity] = useState<TripIssue["severity"]>("Medium");
-  const [issueDescription, setIssueDescription] = useState("");
-  const [delayReason, setDelayReason] = useState("");
-  const [checkpointNote, setCheckpointNote] = useState("");
-  const [newNote, setNewNote] = useState("");
+  // Issues dataset
+  const [issues, setIssues] = useState<OperationalIssueItem[]>([
+    {
+      id: "iss-001",
+      type: "Vehicle",
+      title: "Rear Air Conditioner Airflow Reduced",
+      description: "Air conditioner output in row 3 reduced. Driver inspected filter; temporary fix applied.",
+      reportedBy: "Agus Santoso",
+      role: "Driver",
+      timestamp: "2026-08-25 10:12 WIB",
+      priority: "Medium",
+      status: "Open",
+      relatedResource: "Toyota Hiace (B 1234 XYZ)",
+    },
+    {
+      id: "iss-002",
+      type: "Guest",
+      title: "Guest Pickup Slight Traffic Delay",
+      description: "Heavy traffic near Prambanan delayed pickup by 15 mins. Schedule adjusted.",
+      reportedBy: "Sinta Wijaya",
+      role: "Tour Manager",
+      timestamp: "2026-08-25 08:15 WIB",
+      priority: "Low",
+      status: "Resolved",
+      relatedResource: "Rossella Cescon (+3 Pax)",
+    },
+  ]);
 
-  // Handle Complete Trip
-  const handleCompleteTrip = () => {
-    setTrip((prev) => ({
-      ...prev,
-      status: "Completed",
-      completedAt: "2026-08-21 17:42",
-      plannedDuration: "14h 00m",
-      actualDuration: "14h 42m",
-      scheduleVariance: "+42 min",
-      performanceStatus: "Completed with Delay",
-      resourceReleaseStatus: "Released / Available",
-      progressPercent: 100,
-      currentCheckpoint: "Malang Completion (Finished)",
-      history: [
-        {
-          id: `h-${Date.now()}`,
-          timestamp: "17:42",
-          title: "Trip Completed",
-          description: "Trip marked as Completed. Resources released to Available pool.",
-          user: "Sinta Wijaya",
-          category: "Trip Events",
-        },
-        ...prev.history,
-      ],
-      auditTrail: [
-        {
-          id: `aud-${Date.now()}`,
-          timestamp: "17:42",
-          activity: "Trip Completed",
-          category: "Trip Events",
-          user: "Sinta Wijaya",
-          notes: "Trip completed with 6/6 checkpoints verified. Resources released.",
-          status: "Success",
-        },
-        ...(prev.auditTrail || []),
-      ],
-    }));
-    setShowCompleteModal(false);
+  // Operational Notes timeline
+  const [notes, setNotes] = useState<OperationalNoteItem[]>([
+    {
+      id: "note-001",
+      timestamp: "2026-08-25 10:42 WIB",
+      author: "Sinta Wijaya",
+      role: "Tour Manager",
+      message: "Arrived at Mount Bromo viewpoint. All 4 guests present and in good spirits.",
+    },
+    {
+      id: "note-002",
+      timestamp: "2026-08-25 08:15 WIB",
+      author: "Agus Santoso",
+      role: "Driver",
+      message: "Refueled Toyota Hiace at Pertamina Rest Area KM 429 (Rp 450.000). Receipt attached.",
+    },
+    {
+      id: "note-003",
+      timestamp: "2026-08-25 07:02 WIB",
+      author: "Rian Kurniawan",
+      role: "Guide",
+      message: "Guided tour at Borobudur Temple completed cleanly with local historian.",
+    },
+  ]);
+
+  // Issue Form State
+  const [issueType, setIssueType] = useState<OperationalIssueItem["type"]>("Vehicle");
+  const [issueTitle, setIssueTitle] = useState("");
+  const [issueDesc, setIssueDesc] = useState("");
+  const [issuePriority, setIssuePriority] = useState<OperationalIssueItem["priority"]>("Medium");
+  const [newNoteText, setNewNoteText] = useState("");
+
+  // Milestone Progress Calculation (3/6 milestones completed = 65%)
+  const milestoneProgress = 65;
+
+  // Add Issue
+  const handleSaveIssue = () => {
+    if (!issueTitle) return;
+    const newIssue: OperationalIssueItem = {
+      id: `iss-${Date.now()}`,
+      type: issueType,
+      title: issueTitle,
+      description: issueDesc,
+      reportedBy: "Sinta Wijaya",
+      role: "Tour Manager",
+      timestamp: "2026-08-25 11:30 WIB",
+      priority: issuePriority,
+      status: "Open",
+      relatedResource: "Toyota Hiace B 1234 XYZ",
+    };
+    setIssues([newIssue, ...issues]);
+    setShowIssueModal(false);
+    setIssueTitle("");
+    setIssueDesc("");
   };
 
-  // Filtered Audit Trail
-  const filteredAuditTrail = useMemo(() => {
-    if (!trip.auditTrail) return [];
-    if (auditFilter === "All") return trip.auditTrail;
-    return trip.auditTrail.filter((item) => item.category === auditFilter);
-  }, [trip.auditTrail, auditFilter]);
-
-  // Validation Checks for Completion
-  const completedCheckpointsCount = trip.checkpoints.filter((c) => c.status === "Completed").length;
-  const totalCheckpointsCount = trip.checkpoints.length;
-  const openIssuesCount = trip.issues.filter((i) => i.status === "Open").length;
-  const resolvedIssuesCount = trip.issues.filter((i) => i.status === "Resolved").length;
-
-  const isReadyToComplete = totalCheckpointsCount > 0 && openIssuesCount === 0;
+  // Add Note
+  const handleSaveNote = () => {
+    if (!newNoteText) return;
+    const newNote: OperationalNoteItem = {
+      id: `note-${Date.now()}`,
+      timestamp: "2026-08-25 11:32 WIB",
+      author: "Operations Staff",
+      role: "Operations HQ",
+      message: newNoteText,
+    };
+    setNotes([newNote, ...notes]);
+    setShowNoteModal(false);
+    setNewNoteText("");
+  };
 
   return (
     <AppShell>
-      {/* HEADER SECTION */}
-      <DetailHeader
-        title={trip.name}
-        code={trip.code}
-        subtitle={`${trip.destinationName} (${trip.region}) — Planned: ${trip.departureTime} - ${trip.estimatedEndTime}`}
-        status={trip.status as any}
-        metrics={[
-          { label: "Pax Count", value: `${trip.paxCount} Pax` },
-          { label: "Assigned Vehicle", value: trip.vehiclePlate },
-          { label: "Driver", value: trip.driverName },
-          { label: "Tour Manager", value: trip.tourManagerName },
+      <PageHeader
+        title="East Java Explorer — Trip TRP-2026-00421"
+        description="Live Trip Operations & Field Execution Control Center for Booking BKG-2026-00821."
+        breadcrumbItems={[
+          { label: "Operations", href: "/dispatch" },
+          { label: "Trip Operations", href: "/dispatch/trips" },
+          { label: "TRP-2026-00421" },
         ]}
         actions={
-          <div className="flex items-center gap-2 flex-wrap">
-            {trip.status !== "Completed" && (
-              <>
-                <Button
-                  variant="primary"
-                  size="sm"
-                  onClick={() => setShowCompleteModal(true)}
-                  leftIcon={<CheckCircle2 className="w-3.5 h-3.5" />}
-                  className="bg-emerald-600 hover:bg-emerald-700 border-emerald-500"
-                >
-                  Complete Trip
-                </Button>
-
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setShowIssueModal(true)}
-                  leftIcon={<AlertTriangle className="w-3.5 h-3.5 text-rose-500" />}
-                >
-                  Report Issue
-                </Button>
-              </>
-            )}
+          <div className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => router.push("/dispatch/trips")}
+              leftIcon={<ArrowLeft className="w-3.5 h-3.5" />}
+            >
+              Back to Trips
+            </Button>
 
             <Link href="/dispatch/tracking">
               <Button variant="outline" size="sm" leftIcon={<Compass className="w-3.5 h-3.5 text-blue-600" />}>
-                Track Vehicle
+                View Live Telemetry Map
               </Button>
             </Link>
 
-            <Link href={`/dispatch/${trip.deploymentId}`}>
-              <Button variant="outline" size="sm" leftIcon={<ExternalLink className="w-3.5 h-3.5 text-slate-500" />}>
-                Deployment Ref
-              </Button>
-            </Link>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setShowNoteModal(true)}
+              leftIcon={<MessageSquare className="w-3.5 h-3.5 text-indigo-600" />}
+            >
+              Add Operational Note
+            </Button>
+
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setShowIssueModal(true)}
+              leftIcon={<AlertTriangle className="w-3.5 h-3.5 text-rose-500" />}
+            >
+              Report Issue
+            </Button>
           </div>
         }
       />
 
-      {/* COMPLETED TRIP SUMMARY BANNER (Visually Prominent when Completed) */}
-      {trip.status === "Completed" && (
-        <Card className="p-5 border-2 border-emerald-500/40 bg-gradient-to-r from-emerald-950/20 via-slate-900 to-slate-900 text-white space-y-4">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-emerald-800/40 pb-3">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-bold shadow-lg">
-                <CheckCircle2 className="w-6 h-6" />
+      {/* TOP COMMAND DASHBOARD / MILESTONE PROGRESS BANNER */}
+      <Card className="p-6 bg-gradient-to-r from-slate-900 via-slate-900 to-blue-950 border-slate-800 text-white space-y-4">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-slate-800 pb-3">
+          <div>
+            <span className="text-[10px] font-mono font-bold text-blue-400 uppercase tracking-wider block">
+              LIVE TRIP OPERATIONS COMMAND
+            </span>
+            <h1 className="text-lg font-extrabold text-white">
+              East Java Explorer (BP, BROMO, IJEN) — TRP-2026-00421
+            </h1>
+          </div>
+          <Badge variant="blue">● In Progress</Badge>
+        </div>
+
+        {/* MILESTONE PROGRESS BAR */}
+        <div className="space-y-1.5 font-mono text-xs">
+          <div className="flex justify-between font-bold">
+            <span className="text-slate-300">OVERLAND JOURNEY PROGRESS</span>
+            <span className="text-emerald-400">{milestoneProgress}% COMPLETED (3 of 6 Milestones)</span>
+          </div>
+          <div className="w-full bg-slate-800 h-3 rounded-full overflow-hidden p-0.5 border border-slate-700">
+            <div className="bg-gradient-to-r from-blue-500 to-emerald-400 h-full rounded-full transition-all duration-500" style={{ width: `${milestoneProgress}%` }} />
+          </div>
+        </div>
+
+        {/* TOP METRICS GRID */}
+        <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 font-mono text-xs pt-1">
+          <div className="p-3 rounded-xl bg-slate-800/80 border border-slate-700">
+            <span className="text-[10px] text-slate-400 block">CURRENT LOCATION</span>
+            <strong className="text-emerald-400 font-bold text-sm block">📍 Mount Bromo</strong>
+            <span className="text-[9px] text-slate-400 block">Last updated 10:42 WIB (● Moving)</span>
+          </div>
+
+          <div className="p-3 rounded-xl bg-slate-800/80 border border-slate-700">
+            <span className="text-[10px] text-slate-400 block">NEXT DESTINATION</span>
+            <strong className="text-white font-bold text-sm block">Ijen Crater</strong>
+            <span className="text-[9px] text-slate-400 block">ETA: 28 Aug 03:00 WIB</span>
+          </div>
+
+          <div className="p-3 rounded-xl bg-slate-800/80 border border-slate-700">
+            <span className="text-[10px] text-slate-400 block">GUESTS MANIFEST</span>
+            <strong className="text-slate-200 font-bold text-sm block">4 Guests</strong>
+            <span className="text-[9px] text-emerald-400 block">● All 4 Picked Up / On Trip</span>
+          </div>
+
+          <div className="p-3 rounded-xl bg-slate-800/80 border border-slate-700">
+            <span className="text-[10px] text-slate-400 block">ASSIGNED VEHICLE</span>
+            <strong className="text-slate-200 font-bold text-sm block">Hiace B 1234 XYZ</strong>
+            <span className="text-[9px] text-slate-400 block">Vendor: PT ABC Transport</span>
+          </div>
+
+          <div className="p-3 rounded-xl bg-slate-800/80 border border-slate-700">
+            <span className="text-[10px] text-slate-400 block">FIELD ISSUES</span>
+            <strong className="text-amber-400 font-bold text-sm block">{issues.filter((i) => i.status === "Open").length} Open Issue</strong>
+            <span className="text-[9px] text-amber-400 block">Medium Priority</span>
+          </div>
+        </div>
+      </Card>
+
+      {/* VENDOR RENTAL RATE LOCK BANNER */}
+      <Card className="p-3.5 bg-slate-900 border border-blue-900/60 font-mono text-xs text-slate-300 flex items-center justify-between">
+        <span className="font-bold text-blue-400 flex items-center gap-1.5">
+          🔒 VENDOR RENTAL RATE LOCKED (PT ABC Transport — CTR-ABC-2026-001)
+        </span>
+        <div className="flex items-center gap-4 text-[11px]">
+          <span>Agreed Rate: <strong className="text-white">Rp 850.000 / day 🔒</strong></span>
+          <span>Estimated Rental (2 Days): <strong className="text-slate-200">Rp 1.700.000</strong></span>
+        </div>
+      </Card>
+
+      {/* TABS */}
+      <Tabs
+        activeTab={activeTab}
+        onChange={setActiveTab}
+        tabs={[
+          { id: "overview", label: "Overview & Resources" },
+          { id: "timeline", label: "Operational Timeline" },
+          { id: "destinations", label: "Destination Progress (3/6)" },
+          { id: "costs", label: "Costs" },
+          { id: "notes", label: `Operational Notes (${notes.length})` },
+          { id: "issues", label: `Issues & Checklist (${issues.length})` },
+          { id: "audit", label: "Audit Trail" },
+        ]}
+      />
+
+      {/* TAB 1: OVERVIEW & RESOURCES */}
+      {activeTab === "overview" && (
+        <div className="space-y-6">
+          {/* BOOKING REFERENCE & GUEST MANIFEST CARD */}
+          <Card className="p-6 space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+              <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider flex items-center gap-2">
+                <Users className="w-4 h-4 text-blue-600" /> Booking Reference & Guest Manifest
+              </h3>
+              <Link href="/guests/gst-001" className="text-xs text-blue-600 dark:text-blue-400 font-bold hover:underline">
+                View Guest Master Profile →
+              </Link>
+            </div>
+
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 font-mono text-xs">
+              <div><span>Booking Code:</span> <strong className="text-slate-900 dark:text-slate-100 block">BKG-2026-00821</strong></div>
+              <div><span>Product Package:</span> <strong className="text-blue-600 block">BP, BROMO, IJEN</strong></div>
+              <div><span>Tour Category:</span> <strong className="text-slate-900 dark:text-slate-100 block">BP Private - Budget Sharing</strong></div>
+              <div><span>Total Billing:</span> <strong className="text-slate-900 dark:text-slate-100 block">Rp 7.420.000 (Partially Paid)</strong></div>
+            </div>
+
+            {/* GUEST MANIFEST OPERATIONAL STATUSES */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 font-mono text-xs pt-2">
+              <div className="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-[#162034] space-y-1">
+                <div className="flex justify-between">
+                  <Link href="/guests/gst-001" className="font-bold text-slate-900 dark:text-slate-100 hover:text-blue-600">1. Rossella Cescon (Italy)</Link>
+                  <Badge variant="emerald">● On Trip</Badge>
+                </div>
+                <span className="text-slate-500 text-[11px] block">Passport: •••• 8932 · Vegetarian · Phone: +39 340 189 3053</span>
               </div>
+
+              <div className="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-[#162034] space-y-1">
+                <div className="flex justify-between">
+                  <span className="font-bold text-slate-900 dark:text-slate-100">2. Marco Cescon (Italy)</span>
+                  <Badge variant="emerald">● On Trip</Badge>
+                </div>
+                <span className="text-slate-500 text-[11px] block">Passport: •••• 2231 · Phone: +39 340 998 7711</span>
+              </div>
+
+              <div className="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-[#162034] space-y-1">
+                <div className="flex justify-between">
+                  <span className="font-bold text-slate-900 dark:text-slate-100">3. Sarah Wilson (UK)</span>
+                  <Badge variant="emerald">● On Trip</Badge>
+                </div>
+                <span className="text-slate-500 text-[11px] block">Passport: •••• 8832 · Gluten-Free · Phone: +44 7700 900077</span>
+              </div>
+
+              <div className="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-[#162034] space-y-1">
+                <div className="flex justify-between">
+                  <span className="font-bold text-slate-900 dark:text-slate-100">4. James Wilson (UK)</span>
+                  <Badge variant="emerald">● On Trip</Badge>
+                </div>
+                <span className="text-slate-500 text-[11px] block">Passport: •••• 1128 · Phone: +44 7700 900088</span>
+              </div>
+            </div>
+          </Card>
+
+          {/* ASSIGNED FIELD RESOURCES */}
+          <Card className="p-6 space-y-4">
+            <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider">
+              Assigned Field Operations Resources
+            </h3>
+
+            <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 font-mono text-xs">
+              <Link href="/vehicles/v-001" className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-blue-500 transition-all space-y-1 bg-slate-50/50 dark:bg-[#162034]">
+                <span className="text-[10px] text-slate-400 block font-bold">VEHICLE</span>
+                <span className="font-bold text-blue-600 block text-sm">Toyota Hiace (B 1234 XYZ)</span>
+                <span className="text-slate-500 block">Vendor: PT ABC Transport</span>
+                <span className="text-emerald-600 font-bold block">● Active on Road</span>
+              </Link>
+
+              <Link href="/drivers/drv-001" className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-blue-500 transition-all space-y-1 bg-slate-50/50 dark:bg-[#162034]">
+                <span className="text-[10px] text-slate-400 block font-bold">DRIVER</span>
+                <span className="font-bold text-slate-900 dark:text-slate-100 block text-sm">Agus Santoso</span>
+                <span className="text-slate-500 block">Phone: +62 812-3456-7890</span>
+                <span className="text-emerald-600 font-bold block">● On Duty</span>
+              </Link>
+
+              <Link href="/guides/g-001" className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-blue-500 transition-all space-y-1 bg-slate-50/50 dark:bg-[#162034]">
+                <span className="text-[10px] text-slate-400 block font-bold">TOUR GUIDE</span>
+                <span className="font-bold text-slate-900 dark:text-slate-100 block text-sm">Rian Kurniawan</span>
+                <span className="text-slate-500 block">Phone: +62 813-9876-5432</span>
+                <span className="text-emerald-600 font-bold block">● Active Guided</span>
+              </Link>
+
+              <Link href="/tour-managers/tm-001" className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-blue-500 transition-all space-y-1 bg-slate-50/50 dark:bg-[#162034]">
+                <span className="text-[10px] text-slate-400 block font-bold">TOUR MANAGER</span>
+                <span className="font-bold text-slate-900 dark:text-slate-100 block text-sm">Sinta Wijaya</span>
+                <span className="text-slate-500 block">Field Ops Manager</span>
+                <span className="text-emerald-600 font-bold block">● Active On Site</span>
+              </Link>
+            </div>
+          </Card>
+        </div>
+      )}
+
+      {/* TAB 2: OPERATIONAL TIMELINE */}
+      {activeTab === "timeline" && (
+        <Card className="p-6 space-y-4 font-mono text-xs">
+          <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider">
+            Operational Execution Timeline & Milestones
+          </h3>
+
+          <div className="space-y-3">
+            <div className="p-3.5 rounded-xl border border-emerald-200 dark:border-emerald-900/60 bg-emerald-50/20 dark:bg-emerald-950/20 flex items-center justify-between">
               <div>
-                <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-emerald-400">
-                  OFFICIALLY COMPLETED & STORED IN HISTORY
-                </span>
-                <h2 className="text-base font-extrabold text-white">
-                  {trip.name} ({trip.code})
-                </h2>
-                <span className="text-xs text-slate-300">
-                  Completed on {trip.completedAt || "2026-08-21 17:42 WIB"}
-                </span>
+                <span className="font-bold text-emerald-600 dark:text-emerald-400 block">25 Aug 03:00 WIB — Pickup Yogyakarta</span>
+                <span className="text-slate-500 block text-[11px]">Pickup all 4 guests at Tugu Station & Hotel.</span>
               </div>
+              <Badge variant="emerald">✓ Completed</Badge>
             </div>
 
-            <Badge variant={trip.performanceStatus === "On Schedule" ? "emerald" : "amber"}>
-              ● {trip.performanceStatus || "Completed"} ({trip.scheduleVariance || "+0 min"})
-            </Badge>
-          </div>
-
-          {/* Operational Performance & Duration Grid */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 font-mono text-xs">
-            <div className="p-3 rounded-xl bg-slate-800/70 border border-slate-700">
-              <span className="text-[10px] text-slate-400 block">PLANNED DURATION</span>
-              <span className="font-bold text-sm text-slate-200">{trip.plannedDuration || "14h 00m"}</span>
+            <div className="p-3.5 rounded-xl border border-emerald-200 dark:border-emerald-900/60 bg-emerald-50/20 dark:bg-emerald-950/20 flex items-center justify-between">
+              <div>
+                <span className="font-bold text-emerald-600 dark:text-emerald-400 block">25 Aug 07:00 WIB — Borobudur Temple Tour</span>
+                <span className="text-slate-500 block text-[11px]">Guided temple climb & local guide session.</span>
+              </div>
+              <Badge variant="emerald">✓ Completed</Badge>
             </div>
 
-            <div className="p-3 rounded-xl bg-slate-800/70 border border-slate-700">
-              <span className="text-[10px] text-slate-400 block">ACTUAL DURATION</span>
-              <span className="font-bold text-sm text-emerald-400">{trip.actualDuration || "14h 42m"}</span>
+            <div className="p-3.5 rounded-xl border border-emerald-200 dark:border-emerald-900/60 bg-emerald-50/20 dark:bg-emerald-950/20 flex items-center justify-between">
+              <div>
+                <span className="font-bold text-emerald-600 dark:text-emerald-400 block">25 Aug 11:00 WIB — Prambanan Temple Tour</span>
+                <span className="text-slate-500 block text-[11px]">Prambanan complex guided walk.</span>
+              </div>
+              <Badge variant="emerald">✓ Completed</Badge>
             </div>
 
-            <div className="p-3 rounded-xl bg-slate-800/70 border border-slate-700">
-              <span className="text-[10px] text-slate-400 block">CHECKPOINTS</span>
-              <span className="font-bold text-sm text-emerald-400">
-                {completedCheckpointsCount} / {totalCheckpointsCount} Done
-              </span>
+            <div className="p-3.5 rounded-xl border border-blue-200 dark:border-blue-900/60 bg-blue-50/30 dark:bg-blue-950/30 flex items-center justify-between">
+              <div>
+                <span className="font-bold text-blue-600 dark:text-blue-400 block">27 Aug 03:00 WIB — Mount Bromo Sunrise Tour</span>
+                <span className="text-slate-500 block text-[11px]">Jeep 4x4 transfer to Penanjakan viewpoint & crater trek.</span>
+              </div>
+              <Badge variant="blue">● Current Milestone</Badge>
             </div>
 
-            <div className="p-3 rounded-xl bg-slate-800/70 border border-slate-700">
-              <span className="text-[10px] text-slate-400 block">ISSUES HANDLED</span>
-              <span className="font-bold text-sm text-slate-200">
-                {resolvedIssuesCount} Resolved / {trip.issues.length} Total
-              </span>
+            <div className="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 flex items-center justify-between text-slate-400">
+              <div>
+                <span className="font-bold block">28 Aug 03:00 WIB — Ijen Crater Blue Flame Trek</span>
+                <span className="block text-[11px]">Midnight trek to Ijen sulfur crater lake.</span>
+              </div>
+              <Badge variant="slate">○ Upcoming</Badge>
             </div>
-          </div>
 
-          {/* Resource Lifecycle Release Status Card */}
-          <div className="p-3.5 rounded-xl bg-emerald-950/40 border border-emerald-800/60 flex items-center justify-between text-xs font-mono">
-            <div className="flex items-center gap-2 text-emerald-300">
-              <ShieldCheck className="w-4 h-4" />
-              <span>
-                Resource Availability Status: <strong>RELEASED TO AVAILABLE POOL</strong>
-              </span>
-            </div>
-            <div className="flex items-center gap-3 text-[11px] text-slate-300">
-              <span>Vehicle ({trip.vehiclePlate}): <strong className="text-emerald-400">Available</strong></span>
-              <span>Driver ({trip.driverName}): <strong className="text-emerald-400">Available</strong></span>
-            </div>
-          </div>
-
-          {/* Vendor Rental Cost & Locked Rate Variance Card */}
-          <div className="p-3.5 rounded-xl bg-slate-900 border border-blue-900/60 text-xs font-mono space-y-2">
-            <div className="flex items-center justify-between">
-              <span className="font-bold text-blue-400 flex items-center gap-1.5">
-                🔒 VENDOR RENTAL RATE LOCKED (PT ABC Transport — CTR-ABC-2026-001)
-              </span>
-              <Badge variant="amber">Cost Review Pending</Badge>
-            </div>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-slate-300">
-              <div><span>Agreed Locked Rate:</span> <strong className="text-white">Rp 850.000 / day 🔒</strong></div>
-              <div><span>Estimated Rental (2 Days):</span> <strong className="text-slate-200">Rp 1.700.000</strong></div>
-              <div><span>Actual Invoiced Cost:</span> <strong className="text-amber-400">Rp 1.850.000</strong></div>
-              <div><span>Variance:</span> <strong className="text-amber-400">+Rp 150.000 (+8.8%)</strong></div>
+            <div className="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 flex items-center justify-between text-slate-400">
+              <div>
+                <span className="font-bold block">28 Aug 18:00 WIB — Ferizy Ferry & Bali Drop-off</span>
+                <span className="block text-[11px]">Ketapang port ferry crossing and hotel drop-off in Ubud/Kuta.</span>
+              </div>
+              <Badge variant="slate">○ Upcoming</Badge>
             </div>
           </div>
         </Card>
       )}
 
-      {/* OPERATIONAL DETAIL TABS */}
-      <Tabs
-        activeTab={activeTab}
-        onChange={setActiveTab}
-        tabs={[
-          { id: "overview", label: "Overview" },
-          { id: "timeline", label: `Checkpoints (${completedCheckpointsCount}/${totalCheckpointsCount})` },
-          { id: "resources", label: "Assigned Resources" },
-          { id: "issues", label: `Issues (${trip.issues.length})` },
-          { id: "history", label: `Audit Trail & History (${trip.history.length})` },
-        ]}
-      />
+      {/* TAB 3: DESTINATION PROGRESS */}
+      {activeTab === "destinations" && (
+        <Card className="p-6 space-y-4 font-mono text-xs">
+          <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider">
+            Overland Destination Progress Checklist
+          </h3>
 
-      {/* TAB 1: OVERVIEW */}
-      {activeTab === "overview" && (
-        <div className="space-y-6">
-          {/* Top Progress & Metrics Card */}
-          <Card className="p-5 space-y-4">
-            <div className="flex items-center justify-between">
-              <div className="space-y-1">
-                <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
-                  TRIP EXECUTION PROGRESS
-                </span>
-                <h3 className="font-extrabold text-lg text-slate-900 dark:text-slate-100">
-                  {trip.progressPercent}% Completed
-                </h3>
-              </div>
-              <Badge variant={trip.status === "Completed" ? "emerald" : "blue"}>
-                Current: {trip.currentCheckpoint}
-              </Badge>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div className="p-3 rounded-xl border border-emerald-800 bg-emerald-950/20 text-emerald-300 space-y-1">
+              <span className="font-bold block">1. 📍 Yogyakarta City — ✓ Completed</span>
+              <span className="text-[11px] text-slate-400 block">Pickup & city orientation complete.</span>
             </div>
 
-            <div className="w-full bg-slate-200 dark:bg-slate-800 rounded-full h-3 overflow-hidden">
-              <div className="bg-emerald-500 h-full transition-all duration-500" style={{ width: `${trip.progressPercent}%` }} />
+            <div className="p-3 rounded-xl border border-emerald-800 bg-emerald-950/20 text-emerald-300 space-y-1">
+              <span className="font-bold block">2. 📍 Borobudur Temple — ✓ Completed</span>
+              <span className="text-[11px] text-slate-400 block">Guided tour completed cleanly.</span>
             </div>
-          </Card>
 
-          {/* 6 Assigned Master Resource Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            <Card className="p-4 space-y-2">
-              <div className="flex items-center justify-between text-xs text-slate-500">
-                <span className="font-mono font-bold flex items-center gap-1">
-                  <Truck className="w-3.5 h-3.5 text-blue-600" /> VEHICLE
-                </span>
-                <Link href={`/vehicles/${trip.vehicleId}`} className="text-blue-600 hover:underline">
-                  Master →
-                </Link>
-              </div>
-              <h4 className="font-bold text-sm text-slate-900 dark:text-slate-100">{trip.vehicleName}</h4>
-              <span className="font-mono text-xs font-bold text-blue-600 block">{trip.vehiclePlate}</span>
-              <span className="text-[11px] text-emerald-600 font-semibold block">
-                Status: {trip.resourceReleaseStatus || "On Trip"}
-              </span>
-            </Card>
+            <div className="p-3 rounded-xl border border-emerald-800 bg-emerald-950/20 text-emerald-300 space-y-1">
+              <span className="font-bold block">3. 📍 Prambanan Temple — ✓ Completed</span>
+              <span className="text-[11px] text-slate-400 block">Temple complex visit finished.</span>
+            </div>
 
-            <Card className="p-4 space-y-2">
-              <div className="flex items-center justify-between text-xs text-slate-500">
-                <span className="font-mono font-bold flex items-center gap-1">
-                  <User className="w-3.5 h-3.5 text-emerald-600" /> DRIVER
-                </span>
-                <Link href={`/drivers/${trip.driverId}`} className="text-blue-600 hover:underline">
-                  Master →
-                </Link>
-              </div>
-              <h4 className="font-bold text-sm text-slate-900 dark:text-slate-100">{trip.driverName}</h4>
-              <span className="text-xs text-slate-500 block">Primary Operational Driver</span>
-              <span className="text-[11px] text-emerald-600 font-semibold block">
-                Status: {trip.resourceReleaseStatus || "On Trip"}
-              </span>
-            </Card>
+            <div className="p-3 rounded-xl border border-blue-800 bg-blue-950/30 text-blue-300 space-y-1">
+              <span className="font-bold block">4. 📍 Mount Bromo — ● Current Location</span>
+              <span className="text-[11px] text-slate-400 block">Sunrise jeep transfer in progress.</span>
+            </div>
 
-            <Card className="p-4 space-y-2">
-              <div className="flex items-center justify-between text-xs text-slate-500">
-                <span className="font-mono font-bold flex items-center gap-1">
-                  <User className="w-3.5 h-3.5 text-teal-600" /> TOUR MANAGER
-                </span>
-                <Link href={`/tour-managers/${trip.tourManagerId}`} className="text-blue-600 hover:underline">
-                  Master →
-                </Link>
-              </div>
-              <h4 className="font-bold text-sm text-slate-900 dark:text-slate-100">{trip.tourManagerName}</h4>
-              <span className="text-xs text-slate-500 block">Lead Operational Manager</span>
-              <span className="text-[11px] text-emerald-600 font-semibold block">
-                Status: {trip.resourceReleaseStatus || "On Trip"}
-              </span>
-            </Card>
+            <div className="p-3 rounded-xl border border-slate-800 bg-slate-900/40 text-slate-400 space-y-1">
+              <span className="font-bold block">5. 📍 Ijen Crater — ○ Upcoming</span>
+              <span className="text-[11px] text-slate-500 block">Scheduled for 28 Aug 03:00 WIB.</span>
+            </div>
+
+            <div className="p-3 rounded-xl border border-slate-800 bg-slate-900/40 text-slate-400 space-y-1">
+              <span className="font-bold block">6. 📍 Bali Drop-off — ○ Upcoming</span>
+              <span className="text-[11px] text-slate-500 block">Scheduled for 28 Aug 18:00 WIB.</span>
+            </div>
           </div>
-        </div>
+        </Card>
       )}
 
-      {/* TAB 2: TIMELINE / CHECKPOINTS */}
-      {activeTab === "timeline" && (
-        <Card className="p-5 space-y-4">
-          <h3 className="font-bold text-sm text-slate-900 dark:text-slate-100">Checkpoint Schedule & Execution</h3>
+      {/* TAB 4: COSTS */}
+      {activeTab === "costs" && (
+        <TripCostsTab tripId={id} paxCount={4} />
+      )}
+
+      {/* TAB 5: OPERATIONAL NOTES & LOG */}
+      {activeTab === "notes" && (
+        <Card className="p-6 space-y-4">
+          <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+            <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider">
+              Field Operational Notes Timeline
+            </h3>
+            <Button variant="primary" size="sm" onClick={() => setShowNoteModal(true)} leftIcon={<Plus className="w-3.5 h-3.5" />}>
+              Add Note
+            </Button>
+          </div>
+
           <div className="space-y-3 font-mono text-xs">
-            {trip.checkpoints.map((cp) => (
-              <div key={cp.id} className="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 flex items-center justify-between bg-slate-50/50 dark:bg-[#162034]">
-                <div>
-                  <h4 className="font-bold text-slate-900 dark:text-slate-100 text-sm">{cp.name}</h4>
-                  <span className="text-slate-500">
-                    Scheduled: {cp.scheduledTime} {cp.actualTime && `· Actual: ${cp.actualTime}`}
-                  </span>
-                  {cp.notes && <p className="text-[11px] text-slate-600 dark:text-slate-400 font-sans mt-0.5">{cp.notes}</p>}
+            {notes.map((n) => (
+              <div key={n.id} className="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-[#162034] space-y-1">
+                <div className="flex justify-between">
+                  <span className="font-bold text-slate-900 dark:text-slate-100">{n.author} ({n.role})</span>
+                  <span className="text-slate-400 text-[10px]">{n.timestamp}</span>
                 </div>
-                <Badge variant={cp.status === "Completed" ? "emerald" : "slate"}>
-                  ✓ {cp.status}
-                </Badge>
+                <p className="text-slate-600 dark:text-slate-300 font-sans text-xs">{n.message}</p>
               </div>
             ))}
           </div>
         </Card>
       )}
 
-      {/* TAB 3: ASSIGNED RESOURCES */}
-      {activeTab === "resources" && (
-        <Card className="p-5 space-y-4">
-          <h3 className="font-bold text-sm text-slate-900 dark:text-slate-100">Assigned Operational Master Resources</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-mono">
-            <div className="p-3 rounded-lg border border-slate-200 dark:border-slate-800 space-y-1">
-              <span className="text-slate-400 block text-[10px]">VEHICLE RESOURCE</span>
-              <span className="font-bold text-sm text-slate-800 dark:text-slate-200">{trip.vehicleName} ({trip.vehiclePlate})</span>
-            </div>
-            <div className="p-3 rounded-lg border border-slate-200 dark:border-slate-800 space-y-1">
-              <span className="text-slate-400 block text-[10px]">DRIVER RESOURCE</span>
-              <span className="font-bold text-sm text-slate-800 dark:text-slate-200">{trip.driverName}</span>
-            </div>
-          </div>
-        </Card>
-      )}
-
-      {/* TAB 4: ISSUES */}
+      {/* TAB 5: ISSUES & CHECKLIST */}
       {activeTab === "issues" && (
-        <Card className="p-5 space-y-4">
-          <h3 className="font-bold text-sm text-slate-900 dark:text-slate-100">Operational Issues & Resolution</h3>
-          {trip.issues.length === 0 ? (
-            <p className="text-xs text-slate-500 italic">No operational issues recorded for this trip.</p>
-          ) : (
-            trip.issues.map((iss) => (
-              <div key={iss.id} className="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 space-y-2 text-xs">
-                <div className="flex items-center justify-between">
-                  <span className="font-bold text-slate-900 dark:text-slate-100">{iss.type} ({iss.severity} Severity)</span>
-                  <Badge variant={iss.status === "Open" ? "danger" : "emerald"}>{iss.status}</Badge>
-                </div>
-                <p className="text-slate-700 dark:text-slate-300">{iss.description}</p>
-                {iss.resolutionNote && (
-                  <p className="text-emerald-600 dark:text-emerald-400 font-semibold">
-                    Resolution Note: {iss.resolutionNote}
-                  </p>
-                )}
-              </div>
-            ))
-          )}
-        </Card>
-      )}
-
-      {/* TAB 5: AUDIT TRAIL & HISTORY */}
-      {activeTab === "history" && (
-        <div className="space-y-4">
-          {/* Audit Category Filter Bar */}
-          <div className="flex items-center justify-between gap-3 p-3 rounded-xl bg-white dark:bg-[#101726] border border-slate-200 dark:border-slate-800">
-            <div className="flex items-center gap-2 text-xs font-bold text-slate-700 dark:text-slate-300">
-              <Filter className="w-4 h-4 text-blue-600" />
-              <span>Category Filter:</span>
+        <div className="space-y-6">
+          {/* OPERATIONAL ISSUES CARD */}
+          <Card className="p-6 space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+              <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider flex items-center gap-2">
+                <AlertTriangle className="w-4 h-4 text-rose-500" /> Operational Issue Management
+              </h3>
+              <Button variant="outline" size="sm" onClick={() => setShowIssueModal(true)} leftIcon={<Plus className="w-3.5 h-3.5" />}>
+                Report New Issue
+              </Button>
             </div>
-            <div className="flex items-center gap-1.5 flex-wrap">
-              {["All", "Trip Events", "Checkpoints", "Issues", "Status Changes"].map((cat) => (
-                <button
-                  key={cat}
-                  onClick={() => setAuditFilter(cat)}
-                  className={`px-3 py-1 rounded-md text-xs font-semibold transition-colors ${
-                    auditFilter === cat
-                      ? "bg-blue-600 text-white font-bold"
-                      : "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900"
-                  }`}
-                >
-                  {cat}
-                </button>
+
+            <div className="space-y-3 font-mono text-xs">
+              {issues.map((iss) => (
+                <div key={iss.id} className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-[#162034] space-y-2">
+                  <div className="flex justify-between items-center">
+                    <span className="font-bold text-slate-900 dark:text-slate-100 text-sm">{iss.title}</span>
+                    <div className="flex items-center gap-2">
+                      <Badge variant={iss.priority === "High" ? "danger" : "amber"}>{iss.priority} Priority</Badge>
+                      <Badge variant={iss.status === "Open" ? "amber" : "emerald"}>{iss.status}</Badge>
+                    </div>
+                  </div>
+                  <p className="text-slate-600 dark:text-slate-300 font-sans text-xs">{iss.description}</p>
+                  <span className="text-[10px] text-slate-400 block">Reported by {iss.reportedBy} ({iss.role}) · {iss.timestamp} · Target: {iss.relatedResource}</span>
+                </div>
               ))}
             </div>
-          </div>
+          </Card>
 
-          {/* Structured Audit Trail Table */}
-          <Card className="p-0 overflow-hidden">
-            <div className="p-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
-              <h3 className="font-bold text-sm text-slate-900 dark:text-slate-100">
-                Operational Audit Trail & Activity Log
-              </h3>
-              <span className="text-xs font-mono text-slate-500">
-                {filteredAuditTrail.length} Records Found
-              </span>
-            </div>
-
-            <div className="overflow-x-auto font-mono text-xs">
-              <table className="w-full text-left">
-                <thead className="bg-slate-50 dark:bg-[#162034] text-slate-500 border-b border-slate-200 dark:border-slate-800">
-                  <tr>
-                    <th className="p-3">Time</th>
-                    <th className="p-3">Activity</th>
-                    <th className="p-3">Category</th>
-                    <th className="p-3">Status</th>
-                    <th className="p-3">User / Performed By</th>
-                    <th className="p-3">Notes / Details</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                  {filteredAuditTrail.map((aud) => (
-                    <tr key={aud.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-800/40">
-                      <td className="p-3 text-slate-400 font-bold">{aud.timestamp}</td>
-                      <td className="p-3 font-bold text-slate-900 dark:text-slate-100">{aud.activity}</td>
-                      <td className="p-3 text-slate-500">{aud.category}</td>
-                      <td className="p-3">
-                        <Badge variant={aud.status === "Success" ? "emerald" : aud.status === "Resolved" ? "blue" : "amber"}>
-                          {aud.status}
-                        </Badge>
-                      </td>
-                      <td className="p-3 text-slate-700 dark:text-slate-300">{aud.user}</td>
-                      <td className="p-3 text-slate-600 dark:text-slate-400 font-sans">{aud.notes}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+          {/* TRIP OPERATIONAL PRE-CHECKLIST */}
+          <Card className="p-6 space-y-3 font-mono text-xs">
+            <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider">
+              Pre-Trip & Execution Checklist
+            </h3>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+              <div className="p-2.5 rounded bg-emerald-950/20 border border-emerald-800 text-emerald-300 font-bold">✓ Guest Manifest Verified</div>
+              <div className="p-2.5 rounded bg-emerald-950/20 border border-emerald-800 text-emerald-300 font-bold">✓ Vehicle Inspected</div>
+              <div className="p-2.5 rounded bg-emerald-950/20 border border-emerald-800 text-emerald-300 font-bold">✓ Driver Confirmed</div>
+              <div className="p-2.5 rounded bg-emerald-950/20 border border-emerald-800 text-emerald-300 font-bold">✓ Guide Briefed</div>
             </div>
           </Card>
         </div>
       )}
 
-      {/* MODAL: COMPLETE TRIP CONFIRMATION & VALIDATION */}
-      <Modal
-        isOpen={showCompleteModal}
-        onClose={() => setShowCompleteModal(false)}
-        title={`Complete Trip? — ${trip.name}`}
-      >
+      {/* TAB 6: AUDIT TRAIL */}
+      {activeTab === "audit" && (
+        <Card className="p-6 space-y-4 font-mono text-xs">
+          <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider">
+            Trip Operations Execution Log
+          </h3>
+          <div className="space-y-2 text-slate-500">
+            <div className="p-2 border-b border-slate-800">2026-08-25 10:42 WIB — Milestone 4 (Mount Bromo) reached by Driver Agus Santoso.</div>
+            <div className="p-2 border-b border-slate-800">2026-08-25 07:02 WIB — Milestone 2 (Borobudur) completed by Guide Rian Kurniawan.</div>
+            <div className="p-2 border-b border-slate-800">2026-08-25 03:00 WIB — Trip Dispatched from Yogyakarta Tugu Station by TM Sinta Wijaya.</div>
+          </div>
+        </Card>
+      )}
+
+      {/* REPORT ISSUE MODAL */}
+      <Modal isOpen={showIssueModal} onClose={() => setShowIssueModal(false)} title="Report Operational Field Issue">
         <div className="space-y-4 text-xs">
-          <p className="text-slate-600 dark:text-slate-400">
-            Are you sure you want to mark <strong>{trip.name} ({trip.code})</strong> as completed?
-          </p>
+          <div className="grid grid-cols-2 gap-3">
+            <FormField label="Issue Category *">
+              <Select
+                value={issueType}
+                onChange={(e) => setIssueType(e.target.value as any)}
+                options={[
+                  { value: "Vehicle", label: "Vehicle Issue" },
+                  { value: "Driver", label: "Driver Issue" },
+                  { value: "Guide", label: "Guide Issue" },
+                  { value: "Guest", label: "Guest Request / Issue" },
+                  { value: "Hotel", label: "Hotel Issue" },
+                  { value: "Schedule", label: "Schedule Delay" },
+                ]}
+              />
+            </FormField>
 
-          {/* Validation Checklist Summary */}
-          <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-[#162034] border border-slate-200 dark:border-slate-800 space-y-2 font-mono">
-            <div className="flex items-center justify-between">
-              <span className="text-slate-500">Checkpoints Completed:</span>
-              <span className="font-bold text-emerald-600">{completedCheckpointsCount} / {totalCheckpointsCount} ✓</span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-slate-500">Operational Issues:</span>
-              <span className="font-bold text-emerald-600">{openIssuesCount === 0 ? "All Issues Resolved ✓" : `${openIssuesCount} Open Issues ⚠`}</span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-slate-500">Vehicle Assignment:</span>
-              <span className="font-bold text-slate-800 dark:text-slate-200">{trip.vehiclePlate} ✓</span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-slate-500">Driver Assignment:</span>
-              <span className="font-bold text-slate-800 dark:text-slate-200">{trip.driverName} ✓</span>
-            </div>
+            <FormField label="Priority Level *">
+              <Select
+                value={issuePriority}
+                onChange={(e) => setIssuePriority(e.target.value as any)}
+                options={[
+                  { value: "Low", label: "Low Priority" },
+                  { value: "Medium", label: "Medium Priority" },
+                  { value: "High", label: "High Priority" },
+                  { value: "Critical", label: "Critical Priority" },
+                ]}
+              />
+            </FormField>
           </div>
 
-          <div className="p-3 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-900/60 text-emerald-800 dark:text-emerald-300">
-            <span className="font-bold block">✓ Ready to Complete</span>
-            Completing this trip will release assigned vehicle <strong>{trip.vehiclePlate}</strong> and driver <strong>{trip.driverName}</strong> back to the Available resource pool.
-          </div>
-
-          <div className="pt-2 flex justify-end gap-2">
-            <Button variant="outline" onClick={() => setShowCompleteModal(false)}>
-              Cancel
-            </Button>
-            <Button variant="primary" className="bg-emerald-600 hover:bg-emerald-700 border-emerald-500" onClick={handleCompleteTrip}>
-              Confirm Complete Trip
-            </Button>
-          </div>
-        </div>
-      </Modal>
-
-      {/* MODAL: REPORT ISSUE */}
-      <Modal isOpen={showIssueModal} onClose={() => setShowIssueModal(false)} title="Report Operational Issue">
-        <div className="space-y-4 text-xs">
-          <FormField label="Issue Type">
-            <Select
-              value={issueType}
-              onChange={(e) => setIssueType(e.target.value as TripIssue["type"])}
-              options={[
-                { value: "Destination", label: "Destination Delay / Access" },
-                { value: "Vehicle", label: "Vehicle Breakdown / Issue" },
-                { value: "Driver", label: "Driver Health / Absence" },
-                { value: "Passenger", label: "Passenger Delay" },
-                { value: "Other", label: "Other" },
-              ]}
+          <FormField label="Issue Summary / Title *">
+            <Input
+              placeholder="e.g. Rear AC airflow reduced"
+              value={issueTitle}
+              onChange={(e) => setIssueTitle(e.target.value)}
             />
           </FormField>
 
-          <FormField label="Description">
+          <FormField label="Detailed Description">
             <Textarea
-              placeholder="Describe the operational delay or issue..."
-              value={issueDescription}
-              onChange={(e) => setIssueDescription(e.target.value)}
+              placeholder="Describe what happened in the field..."
+              value={issueDesc}
+              onChange={(e) => setIssueDesc(e.target.value)}
             />
           </FormField>
 
@@ -568,26 +645,30 @@ export default function TripDetailPage() {
             <Button variant="outline" onClick={() => setShowIssueModal(false)}>
               Cancel
             </Button>
-            <Button
-              variant="primary"
-              onClick={() => {
-                const newIss: TripIssue = {
-                  id: `iss-${Date.now()}`,
-                  type: issueType,
-                  severity: issueSeverity,
-                  description: issueDescription || "Operational issue reported.",
-                  reportedTime: "10:15",
-                  reportedBy: "Sinta Wijaya",
-                  status: "Open",
-                };
-                setTrip((prev) => ({
-                  ...prev,
-                  issues: [newIss, ...prev.issues],
-                }));
-                setShowIssueModal(false);
-              }}
-            >
-              Report Issue
+            <Button variant="primary" onClick={handleSaveIssue}>
+              Report Field Issue
+            </Button>
+          </div>
+        </div>
+      </Modal>
+
+      {/* ADD NOTE MODAL */}
+      <Modal isOpen={showNoteModal} onClose={() => setShowNoteModal(false)} title="Add Field Operational Note">
+        <div className="space-y-4 text-xs">
+          <FormField label="Operational Note Message *">
+            <Textarea
+              placeholder="Type field updates, guest feedback, or trip milestones..."
+              value={newNoteText}
+              onChange={(e) => setNewNoteText(e.target.value)}
+            />
+          </FormField>
+
+          <div className="pt-2 flex justify-end gap-2">
+            <Button variant="outline" onClick={() => setShowNoteModal(false)}>
+              Cancel
+            </Button>
+            <Button variant="primary" onClick={handleSaveNote}>
+              Add Note
             </Button>
           </div>
         </div>

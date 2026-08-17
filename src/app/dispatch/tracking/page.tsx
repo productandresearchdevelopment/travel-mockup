@@ -417,6 +417,18 @@ export default function VehicleLiveTrackingPage() {
                   </Button>
                 </Link>
               </div>
+
+              <div className="p-2 rounded-lg bg-blue-50/50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-900/60 flex items-center justify-between text-[11px]">
+                <div>
+                  <span className="text-[9px] text-blue-600 dark:text-blue-400 font-bold block">GUEST MANIFEST (4 PAX)</span>
+                  <span className="font-bold text-slate-900 dark:text-slate-100">Rossella Cescon (+3 Pax)</span>
+                </div>
+                <Link href="/guests/gst-001">
+                  <Button variant="outline" size="sm" className="h-5 text-[9px] px-1.5 text-blue-600 dark:text-blue-400 border-blue-300 dark:border-blue-800 gap-1">
+                    Guests <ExternalLink className="w-2.5 h-2.5" />
+                  </Button>
+                </Link>
+              </div>
             </div>
 
             {/* Today's Tracking History Log */}

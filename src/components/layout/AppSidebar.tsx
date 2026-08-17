@@ -11,10 +11,12 @@ import {
   PlaySquare,
   Truck,
   UserCheck,
+  Users,
   Compass,
   Briefcase,
   Hotel,
   MapPin,
+  Package,
   Building,
   Settings,
   X,
@@ -103,26 +105,13 @@ export function AppSidebar({ mobileOpen = false, setMobileOpen }: AppSidebarProp
             href="/dispatch"
             onClick={() => setMobileOpen && setMobileOpen(false)}
             className={`flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold transition-all ${
-              isMainActive("/dispatch") && pathname !== "/dispatch/tracking" && !pathname.startsWith("/dispatch/trips")
+              isMainActive("/dispatch") && !isMainActive("/dispatch/tracking") && !isMainActive("/dispatch/trips")
                 ? "bg-blue-50 text-blue-600 dark:bg-blue-950/60 dark:text-blue-400 font-bold"
                 : "text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-[#162034] hover:text-slate-900 dark:hover:text-slate-200"
             }`}
           >
             <CalendarCheck className="w-4 h-4" />
             <span>Dispatcher</span>
-          </Link>
-
-          <Link
-            href="/dispatch/tracking"
-            onClick={() => setMobileOpen && setMobileOpen(false)}
-            className={`flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold transition-all ${
-              isMainActive("/dispatch/tracking")
-                ? "bg-blue-50 text-blue-600 dark:bg-blue-950/60 dark:text-blue-400 font-bold"
-                : "text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-[#162034] hover:text-slate-900 dark:hover:text-slate-200"
-            }`}
-          >
-            <Navigation className="w-4 h-4" />
-            <span>Live Tracking</span>
           </Link>
 
           <Link
@@ -137,6 +126,19 @@ export function AppSidebar({ mobileOpen = false, setMobileOpen }: AppSidebarProp
             <PlaySquare className="w-4 h-4" />
             <span>Trip Operations</span>
           </Link>
+
+          <Link
+            href="/dispatch/tracking"
+            onClick={() => setMobileOpen && setMobileOpen(false)}
+            className={`flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold transition-all ${
+              isMainActive("/dispatch/tracking")
+                ? "bg-blue-50 text-blue-600 dark:bg-blue-950/60 dark:text-blue-400 font-bold"
+                : "text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-[#162034] hover:text-slate-900 dark:hover:text-slate-200"
+            }`}
+          >
+            <Navigation className="w-4 h-4" />
+            <span>Live Tracking</span>
+          </Link>
         </div>
 
         {/* Resources */}
@@ -144,6 +146,19 @@ export function AppSidebar({ mobileOpen = false, setMobileOpen }: AppSidebarProp
           <span className="px-3 text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1">
             Resources
           </span>
+          <Link
+            href="/guests"
+            onClick={() => setMobileOpen && setMobileOpen(false)}
+            className={`flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold transition-all ${
+              isMainActive("/guests")
+                ? "bg-blue-50 text-blue-600 dark:bg-blue-950/60 dark:text-blue-400 font-bold"
+                : "text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-[#162034] hover:text-slate-900 dark:hover:text-slate-200"
+            }`}
+          >
+            <Users className="w-4 h-4" />
+            <span>Guests</span>
+          </Link>
+
           <Link
             href="/vehicles"
             onClick={() => setMobileOpen && setMobileOpen(false)}
@@ -220,6 +235,19 @@ export function AppSidebar({ mobileOpen = false, setMobileOpen }: AppSidebarProp
           >
             <MapPin className="w-4 h-4" />
             <span>Destinations</span>
+          </Link>
+
+          <Link
+            href="/tour-packages"
+            onClick={() => setMobileOpen && setMobileOpen(false)}
+            className={`flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold transition-all ${
+              isMainActive("/tour-packages")
+                ? "bg-blue-50 text-blue-600 dark:bg-blue-950/60 dark:text-blue-400 font-bold"
+                : "text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-[#162034] hover:text-slate-900 dark:hover:text-slate-200"
+            }`}
+          >
+            <Package className="w-4 h-4" />
+            <span>Tour Package</span>
           </Link>
 
           <Link
