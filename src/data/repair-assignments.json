@@ -1,0 +1,32 @@
+[
+  {
+    "id": "RPR-001",
+    "issue": "Front Brake Pad Wear (Checklist Failed)",
+    "vehicle": "N 8901 AA (Isuzu ELF Microbus)",
+    "priority": "High",
+    "assignedTo": "Agus Mechanic (Surabaya Central Workshop)",
+    "created": "2026-08-23 02:30 WIB",
+    "dueDate": "2026-08-23 16:00 WIB",
+    "status": "In Progress"
+  },
+  {
+    "id": "RPR-002",
+    "issue": "AC Cooling Refrigerant Pressure Low",
+    "vehicle": "N 7102 CD (Toyota Fortuner 4x4)",
+    "priority": "Medium",
+    "assignedTo": "Bambang Auto AC Service",
+    "created": "2026-08-22 14:00 WIB",
+    "dueDate": "2026-08-23 12:00 WIB",
+    "status": "In Progress"
+  },
+  {
+    "id": "RPR-003",
+    "issue": "Right Rear Turn Signal Lamp Replacement",
+    "vehicle": "N 7411 BC (Hiace Standard)",
+    "priority": "Low",
+    "assignedTo": "Surabaya Hub Maintenance Crew",
+    "created": "2026-08-22 09:00 WIB",
+    "dueDate": "2026-08-22 11:30 WIB",
+    "status": "Completed"
+  }
+]

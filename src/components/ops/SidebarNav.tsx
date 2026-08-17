@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { useSidebar } from "@/context/SidebarContext";
@@ -127,20 +128,15 @@ export const SidebarNav: React.FC<SidebarNavProps> = ({ counts }) => {
       >
         {/* Brand & Workspace Title */}
         <div className="h-[64px] px-3.5 border-b border-[#E4E7EC] dark:border-[#202B38] flex items-center justify-between shrink-0 bg-[#FFFFFF] dark:bg-[#0B111A]">
-          <div className="flex items-center gap-3 overflow-hidden">
-            <div className="w-8 h-8 rounded-lg bg-[#2563EB] dark:bg-[#4F8CFF] text-white flex items-center justify-center font-bold shrink-0 shadow-xs">
-              <Compass className="w-4.5 h-4.5" />
-            </div>
-            {!isCollapsed && (
-              <div className="flex flex-col truncate">
-                <span className="font-extrabold text-xs text-[#172033] dark:text-[#F8FAFC] tracking-tight leading-tight">
-                  QIFESS <span className="text-[#2563EB] dark:text-[#4F8CFF] font-semibold text-[9px] uppercase tracking-wider">Ops</span>
-                </span>
-                <span className="text-[10px] text-[#667085] dark:text-[#A7B1C0] truncate">
-                  {user?.roleLabel || "Operation Manager"}
-                </span>
-              </div>
-            )}
+          <div className="flex items-center gap-2 overflow-hidden">
+            <Image
+              src="/images/logo-qifess.png"
+              alt="QIFESS Travel"
+              width={140}
+              height={36}
+              priority
+              className="h-8 w-auto object-contain shrink-0"
+            />
           </div>
 
           {/* Sidebar Collapse Toggle Button */}
@@ -674,6 +670,53 @@ export const SidebarNav: React.FC<SidebarNavProps> = ({ counts }) => {
                 href="/reports"
                 icon={<BarChart3 className="w-4 h-4 text-purple-600 dark:text-purple-400" />}
                 label="Crew Reports"
+                active={pathname.startsWith("/reports")}
+                isCollapsed={isCollapsed}
+              />
+            </>
+          )}
+
+          {/* ================================================== */}
+          {/* 6. FINANCE & ADMIN NAVIGATION */}
+          {/* ================================================== */}
+          {role === "admin" && (
+            <>
+              <NavItem
+                href="/dashboard/finance"
+                icon={<LayoutDashboard className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />}
+                label="Finance Dashboard"
+                active={pathname === "/dashboard/finance"}
+                isCollapsed={isCollapsed}
+              />
+
+              <NavItem
+                href="/finance/bop"
+                icon={<DollarSign className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />}
+                label="BOP Approvals"
+                active={pathname.startsWith("/finance/bop")}
+                isCollapsed={isCollapsed}
+              />
+
+              <NavItem
+                href="/finance/reimbursement"
+                icon={<DollarSign className="w-4 h-4 text-blue-600 dark:text-blue-400" />}
+                label="Reimbursements"
+                active={pathname.startsWith("/finance/reimbursement")}
+                isCollapsed={isCollapsed}
+              />
+
+              <NavItem
+                href="/finance/expenses"
+                icon={<DollarSign className="w-4 h-4 text-purple-600 dark:text-purple-400" />}
+                label="Expense Tracking"
+                active={pathname.startsWith("/finance/expenses")}
+                isCollapsed={isCollapsed}
+              />
+
+              <NavItem
+                href="/reports"
+                icon={<BarChart3 className="w-4 h-4 text-purple-600 dark:text-purple-400" />}
+                label="Financial Reports"
                 active={pathname.startsWith("/reports")}
                 isCollapsed={isCollapsed}
               />

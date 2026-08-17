@@ -1,0 +1,44 @@
+[
+  {
+    "id": "LOG-001",
+    "date": "2026-08-23",
+    "vehicle": "N 7012 AA (Hiace Premio)",
+    "driver": "Andi Pratama",
+    "kmStart": 45120,
+    "kmEnd": 45280,
+    "distance": 160,
+    "fuelStart": 100,
+    "fuelEnd": 78,
+    "fuelUsagePercent": 22,
+    "purpose": "Bromo Sunrise Excursion Transfer",
+    "status": "Completed"
+  },
+  {
+    "id": "LOG-002",
+    "date": "2026-08-23",
+    "vehicle": "N 7812 AB (Hiace Commuter)",
+    "driver": "Budi Santoso",
+    "kmStart": 61890,
+    "kmEnd": 62150,
+    "distance": 260,
+    "fuelStart": 95,
+    "fuelEnd": 65,
+    "fuelUsagePercent": 30,
+    "purpose": "Ijen Crater Night Trekking Transfer",
+    "status": "Completed"
+  },
+  {
+    "id": "LOG-003",
+    "date": "2026-08-23",
+    "vehicle": "N 7411 BC (Hiace Standard)",
+    "driver": "Dedi Kurniawan",
+    "kmStart": 78650,
+    "kmEnd": 78900,
+    "distance": 250,
+    "fuelStart": 90,
+    "fuelEnd": 68,
+    "fuelUsagePercent": 22,
+    "purpose": "Tumpak Sewu Waterfall & Lumajang Overland",
+    "status": "In Progress"
+  }
+]

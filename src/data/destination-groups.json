@@ -1,0 +1,20 @@
+[
+  {
+    "region": "BALI ISLAND CORRIDOR",
+    "destinations": [
+      { "name": "Ubud Cultural Sanctuary", "paxCount": 28, "bookingCount": 6 },
+      { "name": "Kuta & Seminyak Coast", "paxCount": 32, "bookingCount": 8 },
+      { "name": "Nusa Dua Luxury Resorts", "paxCount": 14, "bookingCount": 3 },
+      { "name": "Sanur Harbour & Ferry", "paxCount": 10, "bookingCount": 2 }
+    ]
+  },
+  {
+    "region": "EAST JAVA OVERLAND CORRIDOR",
+    "destinations": [
+      { "name": "Mount Bromo & Sea of Sand", "paxCount": 42, "bookingCount": 9 },
+      { "name": "Ijen Crater Blue Fire", "paxCount": 24, "bookingCount": 5 },
+      { "name": "Tumpak Sewu Waterfall", "paxCount": 18, "bookingCount": 4 },
+      { "name": "Malang & Batu Highlands", "paxCount": 15, "bookingCount": 3 }
+    ]
+  }
+]

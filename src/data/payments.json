@@ -1,0 +1,38 @@
+[
+  {
+    "id": "PAY-260823-001",
+    "type": "BOP Disbursal",
+    "recipient": "Hendra Wijaya (TM)",
+    "amount": 7500000,
+    "referenceNo": "BCA-TRF-908123",
+    "paymentDate": "2026-08-23 03:30 WIB",
+    "financialStatus": "Paid"
+  },
+  {
+    "id": "PAY-260823-002",
+    "type": "BOP Disbursal",
+    "recipient": "Bambang Utama (TM)",
+    "amount": 8200000,
+    "referenceNo": "Pending Disbursal",
+    "paymentDate": "--",
+    "financialStatus": "Pending Payment"
+  },
+  {
+    "id": "PAY-260823-003",
+    "type": "Reimbursement",
+    "recipient": "Andi Pratama (Driver)",
+    "amount": 650000,
+    "referenceNo": "BCA-TRF-908144",
+    "paymentDate": "2026-08-23 14:00 WIB",
+    "financialStatus": "Paid"
+  },
+  {
+    "id": "PAY-260823-004",
+    "type": "Reimbursement",
+    "recipient": "Made Suardana (Driver)",
+    "amount": 120000,
+    "referenceNo": "Pending Settlement",
+    "paymentDate": "--",
+    "financialStatus": "Approved"
+  }
+]

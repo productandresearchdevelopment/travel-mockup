@@ -32,6 +32,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         return "/dashboard/fleet";
       case "sdm":
         return "/dashboard/sdm";
+      case "admin":
+        return "/dashboard/finance";
       default:
         return "/dashboard/operation-manager";
     }

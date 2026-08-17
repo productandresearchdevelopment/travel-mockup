@@ -1,0 +1,52 @@
+[
+  {
+    "id": "ALT-001",
+    "type": "Checklist Incomplete",
+    "severity": "Warning",
+    "title": "2 Tours Have Incomplete Vehicle Checklist",
+    "description": "Vehicle N 7812 AB (Hiace Commuter) & N 1092 UV (Jeep 4x4) daily checklist pending inspection.",
+    "targetModule": "fleet",
+    "targetId": "VH-002",
+    "tourId": "TR-260823-002"
+  },
+  {
+    "id": "ALT-002",
+    "type": "Missing Crew",
+    "severity": "Urgent",
+    "title": "1 Tour Has No Available Tour Manager",
+    "description": "Bali Overland 3D2N departure TR-260823-005 requires Tour Manager assignment before 04:30 WIB.",
+    "targetModule": "crew",
+    "targetId": "CRW-009",
+    "tourId": "TR-260823-005"
+  },
+  {
+    "id": "ALT-003",
+    "type": "Maintenance Required",
+    "severity": "High",
+    "title": "1 Vehicle Requires Maintenance",
+    "description": "Vehicle N 7102 CD reported brake pad wear during Malang depot checklist.",
+    "targetModule": "fleet",
+    "targetId": "VH-005",
+    "tourId": "TR-260823-008"
+  },
+  {
+    "id": "ALT-004",
+    "type": "Incomplete Deployment",
+    "severity": "Warning",
+    "title": "2 Deployment Schedules Are Incomplete",
+    "description": "Tumpak Sewu Waterfall & Ijen Midnight tours pending guide confirmation.",
+    "targetModule": "dispatch",
+    "targetId": "TR-260823-003",
+    "tourId": "TR-260823-003"
+  },
+  {
+    "id": "ALT-005",
+    "type": "Handover Pending",
+    "severity": "Urgent",
+    "title": "1 Ferry Handover Pending Confirmation",
+    "description": "TR-260823-004 Ketapang Ferry Port handover awaiting BM Bali confirmation.",
+    "targetModule": "operations",
+    "targetId": "HO-001",
+    "tourId": "TR-260823-004"
+  }
+]

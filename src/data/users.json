@@ -2,51 +2,61 @@
   {
     "id": "USR-001",
     "name": "Andi Wijaya",
-    "email": "andi@qifess-demo.com",
+    "email": "om@qifess.test",
     "password": "demo123",
     "role": "operation_manager",
     "roleLabel": "Operation Manager",
     "region": "All Regions",
-    "avatar": "AW"
+    "avatar": "OM"
   },
   {
     "id": "USR-002",
     "name": "Budi Santoso",
-    "email": "budi@qifess-demo.com",
+    "email": "bm.surabaya@qifess.test",
     "password": "demo123",
     "role": "business_manager",
     "roleLabel": "Business Manager",
-    "region": "East Java",
-    "avatar": "BS"
+    "region": "Jawa Timur",
+    "avatar": "BM"
   },
   {
     "id": "USR-003",
     "name": "Rina Pratama",
-    "email": "rina@qifess-demo.com",
+    "email": "dispatcher@qifess.test",
     "password": "demo123",
     "role": "dispatcher",
     "roleLabel": "Dispatcher",
-    "region": "East Java",
-    "avatar": "RP"
+    "region": "Jawa Timur",
+    "avatar": "DP"
   },
   {
     "id": "USR-004",
     "name": "Dimas Saputra",
-    "email": "dimas@qifess-demo.com",
+    "email": "fleet@qifess.test",
     "password": "demo123",
     "role": "fleet",
     "roleLabel": "Fleet Management",
-    "region": "East Java",
-    "avatar": "DS"
+    "region": "Jawa Timur",
+    "avatar": "FL"
   },
   {
     "id": "USR-005",
     "name": "Sari Lestari",
-    "email": "sari@qifess-demo.com",
+    "email": "sdm@qifess.test",
     "password": "demo123",
     "role": "sdm",
     "roleLabel": "SDM / Crew Management",
-    "region": "East Java",
-    "avatar": "SL"
+    "region": "Jawa Timur",
+    "avatar": "SD"
+  },
+  {
+    "id": "USR-006",
+    "name": "Hendra Finance",
+    "email": "admin@qifess.test",
+    "password": "demo123",
+    "role": "admin",
+    "roleLabel": "Finance & Admin",
+    "region": "All Regions",
+    "avatar": "FA"
   }
 ]

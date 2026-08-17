@@ -1,0 +1,46 @@
+[
+  {
+    "id": "TM-001",
+    "name": "Hendra Wijaya",
+    "role": "Senior Tour Manager",
+    "phone": "+62 811-9988-7766",
+    "availability": "Available",
+    "currentAssignment": "TR-260823-001",
+    "currentTour": "Bromo Sunrise VIP",
+    "location": "Wonokitri Bromo",
+    "status": "Assigned"
+  },
+  {
+    "id": "TM-002",
+    "name": "Bambang Utama",
+    "role": "Tour Manager",
+    "phone": "+62 812-7766-5544",
+    "availability": "Available",
+    "currentAssignment": "TR-260823-002",
+    "currentTour": "Ijen Midnight Expedition",
+    "location": "Paltuding Basecamp",
+    "status": "On Trip"
+  },
+  {
+    "id": "TM-003",
+    "name": "Ketut Arta",
+    "role": "Bali Operations TM",
+    "phone": "+62 813-5544-3322",
+    "availability": "Available",
+    "currentAssignment": "TR-260823-006",
+    "currentTour": "Bali Ubud Sanctuary",
+    "location": "Ubud Hub",
+    "status": "On Trip"
+  },
+  {
+    "id": "TM-004",
+    "name": "Rina Putri",
+    "role": "Tour Manager",
+    "phone": "+62 815-4433-2211",
+    "availability": "Available",
+    "currentAssignment": "Unassigned",
+    "currentTour": "N/A",
+    "location": "Surabaya Hub",
+    "status": "Available"
+  }
+]

@@ -1,0 +1,78 @@
+[
+  {
+    "id": "DPL-260823-001",
+    "tourId": "TR-260823-001",
+    "tourName": "Bromo Sunrise & Sea of Sand VIP Excursion",
+    "date": "2026-08-23",
+    "departure": "Surabaya Hub (02:30 WIB)",
+    "destination": "Mount Bromo, Probolinggo",
+    "dropOff": "JW Marriott Hotel Surabaya",
+    "pax": 12,
+    "status": "Ready",
+    "resources": {
+      "vehicle": { "assigned": true, "name": "N 7012 AA (Hiace Premio)" },
+      "driver": { "assigned": true, "name": "Andi Pratama" },
+      "guide": { "assigned": true, "name": "Rizky Ramadhan" },
+      "tourManager": { "assigned": true, "name": "Hendra Wijaya" }
+    },
+    "isReady": true,
+    "readinessLabel": "READY FOR DEPLOYMENT"
+  },
+  {
+    "id": "DPL-260823-002",
+    "tourId": "TR-260823-002",
+    "tourName": "Ijen Blue Fire Midnight Expedition",
+    "date": "2026-08-23",
+    "departure": "Malang Hub (00:15 WIB)",
+    "destination": "Ijen Crater, Banyuwangi",
+    "dropOff": "Ketan Resort Banyuwangi",
+    "pax": 14,
+    "status": "Incomplete",
+    "resources": {
+      "vehicle": { "assigned": true, "name": "N 7812 AB (Hiace Commuter)" },
+      "driver": { "assigned": true, "name": "Budi Santoso" },
+      "guide": { "assigned": true, "name": "Eko Prasetyo" },
+      "tourManager": { "assigned": false, "name": "Missing" }
+    },
+    "isReady": false,
+    "readinessLabel": "NOT READY FOR DEPLOYMENT (Missing TM)"
+  },
+  {
+    "id": "DPL-260823-003",
+    "tourId": "TR-260823-003",
+    "tourName": "Tumpak Sewu Waterfall & East Java Overland",
+    "date": "2026-08-23",
+    "departure": "Surabaya Hub (05:00 WIB)",
+    "destination": "Lumajang & Bromo Corridor",
+    "dropOff": "Hotel Java Paragon Surabaya",
+    "pax": 10,
+    "status": "Draft",
+    "resources": {
+      "vehicle": { "assigned": true, "name": "N 7411 BC (Hiace)" },
+      "driver": { "assigned": true, "name": "Dedi Kurniawan" },
+      "guide": { "assigned": false, "name": "Missing" },
+      "tourManager": { "assigned": true, "name": "Agus Setiawan" }
+    },
+    "isReady": false,
+    "readinessLabel": "NOT READY FOR DEPLOYMENT (Missing Guide)"
+  },
+  {
+    "id": "DPL-260823-004",
+    "tourId": "TR-260823-004",
+    "tourName": "Java-Bali Overland Express 5D4N",
+    "date": "2026-08-23",
+    "departure": "Surabaya Hub (03:00 WIB)",
+    "destination": "Denpasar & Kuta Corridor",
+    "dropOff": "Grand Inna Kuta Hotel",
+    "pax": 14,
+    "status": "Dispatched",
+    "resources": {
+      "vehicle": { "assigned": true, "name": "N 7012 AA (Hiace Premio)" },
+      "driver": { "assigned": true, "name": "Andi Pratama" },
+      "guide": { "assigned": true, "name": "Rizky Ramadhan" },
+      "tourManager": { "assigned": true, "name": "Hendra Wijaya" }
+    },
+    "isReady": true,
+    "readinessLabel": "DISPATCHED"
+  }
+]

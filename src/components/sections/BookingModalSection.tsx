@@ -59,7 +59,7 @@ export function BookingModalSection({
       title={isSuccess ? "Reservation Requested!" : `Reserve ${selectedDest.title}`}
       description={
         isSuccess
-          ? "Your 2026 WanderLuxe AI Concierge & Lifestyle Manager will contact you within 15 minutes."
+          ? "Your QIFESS Travel Operations Concierge will contact you within 15 minutes."
           : `Customize your travel dates and unlock guaranteed VIP perks at ${selectedDest.country}.`
       }
       maxWidth="xl"

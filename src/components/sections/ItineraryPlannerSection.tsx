@@ -33,7 +33,7 @@ export function ItineraryPlannerSection() {
           time: "08:45 PM",
           icon: <Utensils className="w-4 h-4 text-cyan-400" />,
           title: "Michelin Tasting Menu at La Sponda",
-          desc: "400-candlelit dining room reserved under WanderLuxe VIP table code.",
+          desc: "400-candlelit dining room reserved under QIFESS Travel VIP table code.",
         },
       ],
     },
@@ -71,7 +71,7 @@ export function ItineraryPlannerSection() {
           time: "10:30 AM",
           icon: <Compass className="w-4 h-4 text-emerald-400" />,
           title: "Villa Cimbrone Infinity Terrace Walk",
-          desc: "Panoramic photography session with personal WanderLuxe photographer.",
+          desc: "Panoramic photography session with personal QIFESS Travel photographer.",
         },
         {
           time: "01:00 PM",

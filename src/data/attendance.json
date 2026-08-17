@@ -1,0 +1,38 @@
+[
+  {
+    "id": "ATT-001",
+    "name": "Andi Pratama",
+    "role": "Driver",
+    "date": "2026-08-23",
+    "checkIn": "02:15 WIB",
+    "checkOut": "15:30 WIB",
+    "status": "Present"
+  },
+  {
+    "id": "ATT-002",
+    "name": "Budi Santoso",
+    "role": "Driver",
+    "date": "2026-08-23",
+    "checkIn": "23:45 WIB (Prev Day)",
+    "checkOut": "Pending",
+    "status": "On Assignment"
+  },
+  {
+    "id": "ATT-003",
+    "name": "Rizky Ramadhan",
+    "role": "Guide",
+    "date": "2026-08-23",
+    "checkIn": "02:20 WIB",
+    "checkOut": "15:30 WIB",
+    "status": "Present"
+  },
+  {
+    "id": "ATT-004",
+    "name": "Dedi Kurniawan",
+    "role": "Driver",
+    "date": "2026-08-23",
+    "checkIn": "05:15 WIB",
+    "checkOut": "Pending",
+    "status": "Late"
+  }
+]

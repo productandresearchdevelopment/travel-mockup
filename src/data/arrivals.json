@@ -1,0 +1,57 @@
+[
+  {
+    "id": "TR-260823-010",
+    "tourName": "Banyuwangi & Ijen Crater Return",
+    "destination": "Surabaya Operating Depot",
+    "eta": "16:30 WIB",
+    "actualArrival": "16:25 WIB",
+    "vehicle": "N 7012 AA (Hiace Premio)",
+    "crew": "Andi Pratama (Driver) & Rizky R. (Guide)",
+    "status": "Arrived",
+    "pax": 12
+  },
+  {
+    "id": "TR-260823-011",
+    "tourName": "Malang Heritage & Batu Excursion",
+    "destination": "Malang Operating Hub",
+    "eta": "17:15 WIB",
+    "actualArrival": "17:10 WIB",
+    "vehicle": "N 7411 BC (Hiace)",
+    "crew": "Dedi Kurniawan (Driver)",
+    "status": "Arrived",
+    "pax": 10
+  },
+  {
+    "id": "TR-260823-012",
+    "tourName": "Bromo Sunset & Sukapura Drop-off",
+    "destination": "Probolinggo Transit Hub",
+    "eta": "18:45 WIB",
+    "actualArrival": "--",
+    "vehicle": "N 7812 AB (Hiace Commuter)",
+    "crew": "Budi Santoso (Driver)",
+    "status": "Arriving",
+    "pax": 14
+  },
+  {
+    "id": "TR-260823-013",
+    "tourName": "Bali South Coast Beach Express",
+    "destination": "Denpasar Depot",
+    "eta": "19:30 WIB",
+    "actualArrival": "--",
+    "vehicle": "DK 9012 AA (Hiace Premio)",
+    "crew": "Made Suardana (Driver)",
+    "status": "Expected",
+    "pax": 8
+  },
+  {
+    "id": "TR-260823-014",
+    "tourName": "Madura Island Cultural Overland",
+    "destination": "Surabaya Depot",
+    "eta": "15:00 WIB",
+    "actualArrival": "16:40 WIB",
+    "vehicle": "N 8901 AA (Isuzu ELF)",
+    "crew": "Fajar Hidayat (Driver)",
+    "status": "Delayed",
+    "pax": 16
+  }
+]

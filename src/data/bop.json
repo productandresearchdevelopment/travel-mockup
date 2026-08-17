@@ -1,0 +1,60 @@
+[
+  {
+    "id": "BOP-260823-001",
+    "tourId": "TR-260823-001",
+    "tour": "Bromo Sunrise & Sea of Sand VIP Excursion",
+    "requester": "Hendra Wijaya (TM)",
+    "date": "2026-08-23",
+    "amount": 7500000,
+    "purpose": "Jeep 4x4 transfers at Wonokitri (6 units) + Bromo entrance permits + driver per diem.",
+    "status": "Approved",
+    "supportingDocuments": ["jeep_voucher_bop.pdf", "national_park_receipt.pdf"],
+    "approvalHistory": [
+      { "approver": "Budi Santoso (BM)", "action": "Approved", "date": "2026-08-23 03:00 WIB" }
+    ],
+    "paymentStatus": "Paid"
+  },
+  {
+    "id": "BOP-260823-002",
+    "tourId": "TR-260823-002",
+    "tour": "Ijen Blue Fire Midnight Expedition",
+    "requester": "Bambang Utama (TM)",
+    "date": "2026-08-23",
+    "amount": 8200000,
+    "purpose": "Gas mask rental (14 pax) + Ijen crater conservation fees + guide allowances.",
+    "status": "Submitted",
+    "supportingDocuments": ["ijen_gasmask_quote.pdf"],
+    "approvalHistory": [
+      { "approver": "Pending BM Review", "action": "Under Review", "date": "2026-08-23 01:15 WIB" }
+    ],
+    "paymentStatus": "Pending Payment"
+  },
+  {
+    "id": "BOP-260823-003",
+    "tourId": "TR-260823-004",
+    "tour": "Java-Bali Overland Express 5D4N",
+    "requester": "Andi Pratama (Lead Driver)",
+    "date": "2026-08-23",
+    "amount": 12500000,
+    "purpose": "ASDP Ketapang-Gilimanuk ferry VIP vehicle ticket + Bali highway tolls + fuel advance.",
+    "status": "Approved",
+    "supportingDocuments": ["asdp_ferry_boarding_pass.pdf"],
+    "approvalHistory": [
+      { "approver": "Budi Santoso (BM)", "action": "Approved", "date": "2026-08-23 04:30 WIB" }
+    ],
+    "paymentStatus": "Paid"
+  },
+  {
+    "id": "BOP-260823-004",
+    "tourId": "TR-260823-006",
+    "tour": "Bali Ubud Cultural Sanctuary 3D2N",
+    "requester": "Ketut Arta (TM)",
+    "date": "2026-08-23",
+    "amount": 6800000,
+    "purpose": "Ubud temple entrance tickets + Kintamani volcano lunch buffet voucher.",
+    "status": "Under Review",
+    "supportingDocuments": ["kintamani_restaurant_invoice.pdf"],
+    "approvalHistory": [],
+    "paymentStatus": "Pending Payment"
+  }
+]

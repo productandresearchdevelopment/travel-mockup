@@ -20,7 +20,7 @@ export function FAQSection() {
           as="h2"
           align="center"
           badge="Got Questions?"
-          subtitle="Everything you need to know about WanderLuxe memberships, AI itinerary customization, and resort room perks."
+          subtitle="Everything you need to know about QIFESS Travel operations, dispatch clearance, and BOP field disbursals."
         >
           Frequently Asked Questions
         </Heading>

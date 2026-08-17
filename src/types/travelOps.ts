@@ -3,7 +3,8 @@ export type UserRole =
   | 'business_manager'
   | 'dispatcher'
   | 'fleet'
-  | 'sdm';
+  | 'sdm'
+  | 'admin';
 
 export interface User {
   id: string;

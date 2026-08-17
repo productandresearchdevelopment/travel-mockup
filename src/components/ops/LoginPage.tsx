@@ -1,74 +1,107 @@
 "use client";
 
 import React, { useState } from "react";
-import { OperationalRole } from "@/types/travelOps";
-import { Compass, ShieldCheck, Lock, User, ArrowRight, CheckCircle2, MapPin, Key, Sparkles } from "lucide-react";
-
-interface LoginPageProps {
-  onLogin: (role: OperationalRole) => void;
-}
+import { useRouter } from "next/navigation";
+import Image from "next/image";
+import { useAuth } from "@/context/AuthContext";
+import { UserRole } from "@/types/travelOps";
+import { Lock, User as UserIcon, ArrowRight, CheckCircle2, MapPin, Key } from "lucide-react";
 
 const demoAccounts: {
-  role: OperationalRole;
+  role: UserRole;
+  roleLabel: string;
+  name: string;
   email: string;
   badge: string;
   desc: string;
   iconColor: string;
 }[] = [
   {
-    role: "Operation Manager (OM)",
-    email: "om@qifess.ops",
-    badge: "OM Command",
-    desc: "Full operational override & SLA monitoring",
+    role: "operation_manager",
+    roleLabel: "Operation Manager (OM)",
+    name: "Andi Wijaya",
+    email: "om@qifess.test",
+    badge: "OM Command Tower",
+    desc: "Full operational override & regional SLA monitoring",
     iconColor: "text-emerald-400 border-emerald-500/30 bg-emerald-500/10",
   },
   {
-    role: "Business Manager (BM)",
-    email: "bm@qifess.ops",
-    badge: "BM Yield & P&L",
-    desc: "Yield management & BOP budget sign-off",
+    role: "business_manager",
+    roleLabel: "Business Manager (BM)",
+    name: "Budi Santoso",
+    email: "bm.surabaya@qifess.test",
+    badge: "BM Regional Hub",
+    desc: "Regional control tower, departures, arrivals & handovers",
     iconColor: "text-blue-400 border-blue-500/30 bg-blue-500/10",
   },
   {
-    role: "Dispatcher",
-    email: "dispatcher@qifess.ops",
+    role: "dispatcher",
+    roleLabel: "Dispatcher",
+    name: "Rina Pratama",
+    email: "dispatcher@qifess.test",
     badge: "Live Dispatch",
-    desc: "Arrivals/departures & handover tracking",
+    desc: "Collector booking, grouping & deployment matching",
     iconColor: "text-cyan-400 border-cyan-500/30 bg-cyan-500/10",
   },
   {
-    role: "Vehicle / Fleet Management",
-    email: "fleet@qifess.ops",
+    role: "fleet",
+    roleLabel: "Vehicle / Fleet",
+    name: "Dimas Saputra",
+    email: "fleet@qifess.test",
     badge: "Fleet Ops",
-    desc: "Odometer, fuel & workshop scheduling",
+    desc: "Vehicle checklists, fuel logbook & repair tickets",
     iconColor: "text-amber-400 border-amber-500/30 bg-amber-500/10",
   },
   {
-    role: "SDM / Crew Management",
-    email: "sdm@qifess.ops",
+    role: "sdm",
+    roleLabel: "SDM / Crew",
+    name: "Sari Lestari",
+    email: "sdm@qifess.test",
     badge: "Crew Roster",
-    desc: "Driver/Guide rosters & freelance daily staff",
+    desc: "Driver/Guide rosters, availability & field reports",
     iconColor: "text-purple-400 border-purple-500/30 bg-purple-500/10",
+  },
+  {
+    role: "admin",
+    roleLabel: "Finance & Admin",
+    name: "Hendra Finance",
+    email: "admin@qifess.test",
+    badge: "Finance Admin",
+    desc: "BOP disbursals, reimbursements & payment settlements",
+    iconColor: "text-emerald-400 border-emerald-500/30 bg-emerald-500/10",
   },
 ];
 
-export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
-  const [selectedRole, setSelectedRole] = useState<OperationalRole>("Operation Manager (OM)");
-  const [email, setEmail] = useState("om@qifess.ops");
-  const [password, setPassword] = useState("••••••••••••");
+export const LoginPage: React.FC = () => {
+  const router = useRouter();
+  const { login, getRoleDashboardPath } = useAuth();
+
+  const [selectedAccount, setSelectedAccount] = useState(demoAccounts[0]);
+  const [email, setEmail] = useState("om@qifess.test");
+  const [password, setPassword] = useState("demo123");
   const [rememberMe, setRememberMe] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSelectDemoAccount = (acc: typeof demoAccounts[0]) => {
-    setSelectedRole(acc.role);
+    setSelectedAccount(acc);
     setEmail(acc.email);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleLoginSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
     setTimeout(() => {
-      onLogin(selectedRole);
+      const loggedUser = login(email, password);
+      if (loggedUser) {
+        const redirectPath = getRoleDashboardPath(loggedUser.role);
+        router.push(redirectPath);
+      } else {
+        // Fallback login
+        const loggedUserFallback = login(selectedAccount.email);
+        if (loggedUserFallback) {
+          router.push(getRoleDashboardPath(loggedUserFallback.role));
+        }
+      }
     }, 400);
   };
 
@@ -81,56 +114,51 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
       {/* Top Brand Bar */}
       <header className="p-6 flex items-center justify-between z-10">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-600 via-indigo-600 to-emerald-500 p-0.5 shadow-xl flex items-center justify-center">
-            <div className="w-full h-full bg-slate-950 rounded-[7px] flex items-center justify-center">
-              <Compass className="w-5 h-5 text-emerald-400" />
-            </div>
-          </div>
-          <div>
-            <span className="font-extrabold text-base tracking-tight text-white flex items-center gap-1.5">
-              QIFESS <span className="text-emerald-400 font-extrabold text-sm uppercase">Travel Ops</span>
-            </span>
-            <span className="text-[10px] text-slate-400 block font-mono">
-              East Java & Bali Dispatch Control Terminal
-            </span>
-          </div>
+          <Image
+            src="/images/logo-qifess.png"
+            alt="QIFESS Travel Logo"
+            width={180}
+            height={48}
+            priority
+            className="h-11 w-auto object-contain"
+          />
         </div>
 
         <div className="flex items-center gap-2 text-xs bg-slate-900 border border-slate-800 px-3 py-1.5 rounded-lg text-slate-300">
           <MapPin className="w-3.5 h-3.5 text-emerald-400" />
-          <span>HQ Malang / Sub-Depot Banyuwangi</span>
+          <span>HQ Surabaya / East Java & Bali Corridor</span>
         </div>
       </header>
 
       {/* Main Login Shell */}
       <main className="flex-1 flex items-center justify-center p-4 z-10">
-        <div className="w-full max-w-4xl grid grid-cols-1 lg:grid-cols-12 bg-slate-900/90 border border-slate-800 rounded-2xl overflow-hidden shadow-2xl backdrop-blur-xl">
+        <div className="w-full max-w-5xl grid grid-cols-1 lg:grid-cols-12 bg-slate-900/90 border border-slate-800 rounded-2xl overflow-hidden shadow-2xl backdrop-blur-xl">
           {/* Left Column: Form (7 cols) */}
           <div className="lg:col-span-7 p-8 space-y-6 flex flex-col justify-between">
             <div className="space-y-2">
               <span className="text-[10px] uppercase font-bold tracking-widest px-2.5 py-1 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 inline-block">
-                Secure Operational Login
+                Role-Based Operational Terminal
               </span>
               <h2 className="text-2xl font-extrabold text-white tracking-tight">
-                Sign In to QIFESS Control Center
+                Sign In to QIFESS Operations System
               </h2>
               <p className="text-xs text-slate-400">
-                Access real-time tour execution, vehicle fleet dispatch, crew rosters, and field BOP reimbursement management.
+                Select your assigned role session or enter operator credentials to access your dedicated workspace.
               </p>
             </div>
 
             {/* Login Form */}
-            <form onSubmit={handleSubmit} className="space-y-4 text-xs">
+            <form onSubmit={handleLoginSubmit} className="space-y-4 text-xs">
               <div className="space-y-1">
-                <label className="block font-semibold text-slate-300">Operator Email Address</label>
+                <label className="block font-semibold text-slate-300">Operator Email Credentials</label>
                 <div className="relative">
-                  <User className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                  <UserIcon className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
                   <input
                     type="email"
                     required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    placeholder="operator@qifess.ops"
+                    placeholder="operator@qifess.test"
                     className="w-full bg-slate-950 border border-slate-800 rounded-xl pl-9 pr-4 py-2.5 text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all font-mono"
                   />
                 </div>
@@ -156,22 +184,6 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
                 </div>
               </div>
 
-              {/* Active Role Selection for Login */}
-              <div className="space-y-1 pt-1">
-                <label className="block font-semibold text-slate-300">Target Role Session</label>
-                <select
-                  value={selectedRole}
-                  onChange={(e) => setSelectedRole(e.target.value as OperationalRole)}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-xs text-emerald-400 font-semibold focus:outline-none focus:border-emerald-500"
-                >
-                  {demoAccounts.map((acc) => (
-                    <option key={acc.role} value={acc.role}>
-                      {acc.role} ({acc.badge})
-                    </option>
-                  ))}
-                </select>
-              </div>
-
               <div className="flex items-center justify-between pt-1 text-[11px] text-slate-400">
                 <label className="flex items-center gap-2 cursor-pointer">
                   <input
@@ -180,20 +192,20 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
                     onChange={(e) => setRememberMe(e.target.checked)}
                     className="rounded bg-slate-950 border-slate-800 text-emerald-500 focus:ring-0"
                   />
-                  <span>Remember session on this station</span>
+                  <span>Remember operational station</span>
                 </label>
               </div>
 
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full bg-gradient-to-r from-blue-600 via-indigo-600 to-emerald-600 hover:from-blue-500 hover:to-emerald-500 text-white py-3 rounded-xl font-bold text-xs shadow-xl shadow-blue-950/50 flex items-center justify-center gap-2 transition-all cursor-pointer"
+                className="w-full bg-gradient-to-r from-blue-600 via-indigo-600 to-emerald-600 hover:from-blue-500 hover:to-emerald-500 text-white py-3 rounded-xl font-bold text-xs shadow-xl flex items-center justify-center gap-2 transition-all cursor-pointer"
               >
                 {isSubmitting ? (
                   <span>Authenticating Session...</span>
                 ) : (
                   <>
-                    <span>Sign In to Operations System</span>
+                    <span>Sign In to {selectedAccount.roleLabel}</span>
                     <ArrowRight className="w-4 h-4" />
                   </>
                 )}
@@ -206,17 +218,17 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
             <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <h3 className="font-bold text-xs uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
-                  <Key className="w-3.5 h-3.5 text-amber-400" /> Demo Role Access
+                  <Key className="w-3.5 h-3.5 text-amber-400" /> Operational Role Sessions
                 </h3>
                 <span className="text-[10px] text-emerald-400 font-mono">1-Click Login</span>
               </div>
               <p className="text-[11px] text-slate-400 leading-relaxed">
-                Click any operational role below to prefill credentials and enter the system:
+                Select an operational role to automatically prefill credentials and enter its dedicated workspace:
               </p>
 
-              <div className="space-y-2">
+              <div className="space-y-2 max-h-[340px] overflow-y-auto pr-1 scrollbar-none">
                 {demoAccounts.map((acc) => {
-                  const isSelected = selectedRole === acc.role;
+                  const isSelected = selectedAccount.role === acc.role;
                   return (
                     <div
                       key={acc.role}
@@ -228,7 +240,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
                       }`}
                     >
                       <div className="flex items-center justify-between">
-                        <span className="font-bold text-slate-200">{acc.role}</span>
+                        <span className="font-bold text-slate-200">{acc.roleLabel}</span>
                         <span className={`px-2 py-0.5 rounded text-[9px] font-bold border ${acc.iconColor}`}>
                           {acc.badge}
                         </span>
@@ -244,7 +256,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
             </div>
 
             <div className="pt-3 border-t border-slate-850 text-[10px] text-slate-500 flex items-center justify-between">
-              <span>Encrypted TLS 1.3 Terminal</span>
+              <span>QIFESS Enterprise Hub</span>
               <span>v2026.08.16</span>
             </div>
           </div>
@@ -256,7 +268,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
         <span>© 2026 QIFESS Travel Operations. All Rights Reserved.</span>
         <span>•</span>
         <span className="text-emerald-400 flex items-center gap-1 font-medium">
-          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Systems 100% Operational
+          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Terminal Active & Ready
         </span>
       </footer>
     </div>

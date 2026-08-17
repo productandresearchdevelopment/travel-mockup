@@ -1,0 +1,29 @@
+[
+  {
+    "id": "AVL-001",
+    "person": "Andi Pratama",
+    "role": "Driver",
+    "date": "2026-08-23",
+    "availability": "Available",
+    "assignment": "TR-260823-001 (Bromo Sunrise VIP)",
+    "notes": "Rest period completed. Certified 4x4 & Premio driver."
+  },
+  {
+    "id": "AVL-002",
+    "person": "Rina Putri",
+    "role": "Tour Manager",
+    "date": "2026-08-23",
+    "availability": "Available",
+    "assignment": "Standby for Dispatch",
+    "notes": "Ready for large group assignments."
+  },
+  {
+    "id": "AVL-003",
+    "person": "Fajar Hidayat",
+    "role": "Driver",
+    "date": "2026-08-23",
+    "availability": "Off",
+    "assignment": "Rest Day",
+    "notes": "Scheduled weekly rest day."
+  }
+]

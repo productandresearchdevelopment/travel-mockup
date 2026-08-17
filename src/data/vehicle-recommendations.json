@@ -1,0 +1,53 @@
+[
+  {
+    "type": "Recommended",
+    "vehicles": [
+      {
+        "plateNumber": "N 7012 AA",
+        "name": "Toyota Hiace Premio VIP #1",
+        "type": "Hiace Premio (12 Pax)",
+        "reasons": [
+          "✓ Available for Immediate Dispatch",
+          "✓ 9-Category Pre-Deployment Checklist Passed 100%",
+          "✓ Fuel Level Sufficient (92%)",
+          "✓ Maintenance & Engine Oil Status OK"
+        ]
+      },
+      {
+        "plateNumber": "DK 9012 AA",
+        "name": "Toyota Hiace Premio Bali #6",
+        "type": "Hiace Premio (12 Pax)",
+        "reasons": [
+          "✓ Available at Denpasar Depot",
+          "✓ Daily Safety Checklist Passed",
+          "✓ Fuel Tank 88% Full",
+          "✓ AC Cooling System Verified"
+        ]
+      }
+    ]
+  },
+  {
+    "type": "Not Recommended",
+    "vehicles": [
+      {
+        "plateNumber": "N 7102 CD",
+        "name": "Toyota Fortuner 4x4 #5",
+        "type": "Fortuner 4WD (6 Pax)",
+        "reasons": [
+          "⚠ Scheduled Maintenance Overdue",
+          "⚠ Brake Inspection Required (Front Pads Worn)",
+          "⚠ Engine Oil Pressure Warning Issued"
+        ]
+      },
+      {
+        "plateNumber": "N 8901 AA",
+        "name": "Isuzu ELF Microbus #4",
+        "type": "ELF Long (19 Pax)",
+        "reasons": [
+          "⚠ Checklist Failed (Brake System Issue)",
+          "⚠ Repair Ticket #RPR-001 Currently In Progress"
+        ]
+      }
+    ]
+  }
+]

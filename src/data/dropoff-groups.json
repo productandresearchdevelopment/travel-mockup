@@ -1,0 +1,27 @@
+[
+  {
+    "area": "Kuta & Seminyak Corridor",
+    "hotels": [
+      { "name": "Grand Inna Kuta Hotel", "paxCount": 12 },
+      { "name": "Hard Rock Hotel Bali", "paxCount": 8 },
+      { "name": "Bali Rani Hotel Kuta", "paxCount": 5 },
+      { "name": "The Stones Hotel Legian", "paxCount": 7 }
+    ]
+  },
+  {
+    "area": "Ubud & Gianyar Corridor",
+    "hotels": [
+      { "name": "Alaya Resort Ubud", "paxCount": 10 },
+      { "name": "Maya Ubud Resort & Spa", "paxCount": 12 },
+      { "name": "Kamandalu Ubud Hotel", "paxCount": 6 }
+    ]
+  },
+  {
+    "area": "Surabaya & Malang Hubs",
+    "hotels": [
+      { "name": "JW Marriott Hotel Surabaya", "paxCount": 14 },
+      { "name": "Hotel Santika Premier Malang", "paxCount": 8 },
+      { "name": "Hotel Java Paragon Surabaya", "paxCount": 6 }
+    ]
+  }
+]

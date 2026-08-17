@@ -70,7 +70,7 @@ export function FeaturesSection() {
           badge="AI Travel Capabilities"
           subtitle="Engineered for ultra-high-net-worth travelers demanding precision, privacy, and flawless luxury execution."
         >
-          Why Discerning Travelers Choose WanderLuxe
+          Why Operations Managers Choose QIFESS Travel
         </Heading>
 
         <motion.div

@@ -1,0 +1,35 @@
+{
+  "recommendedDrivers": [
+    {
+      "name": "Andi Pratama",
+      "reasons": [
+        "✓ Available for Immediate Deployment",
+        "✓ No Conflicting Shift Assignment",
+        "✓ Certified Hiace Premio & 4x4 Overland Driver"
+      ]
+    },
+    {
+      "name": "Budi Santoso",
+      "reasons": [
+        "✓ Available at Banyuwangi Hub",
+        "✓ Experienced with Ijen & Ferry Crossing Routes"
+      ]
+    }
+  ],
+  "recommendedTms": [
+    {
+      "name": "Rina Putri",
+      "reasons": [
+        "✓ Available at Surabaya Depot",
+        "✓ Suitable for 14+ Pax Large Group Coordination",
+        "✓ Multilingual (English / Indonesian / Mandarin)"
+      ]
+    }
+  ],
+  "warnings": [
+    {
+      "code": "WRN-CRW-001",
+      "message": "⚠ 1 Tour Manager missing assignment for Bromo Sunset TR-260824-005 departure tomorrow."
+    }
+  ]
+}

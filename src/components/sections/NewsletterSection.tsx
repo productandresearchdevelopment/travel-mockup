@@ -66,7 +66,7 @@ export function NewsletterSection() {
           )}
 
           <p className="text-xs text-slate-500">
-            Zero spam. Unsubscribe with 1-click anytime. Encrypted strictly for WanderLuxe members.
+            Zero spam. Unsubscribe with 1-click anytime. Encrypted strictly for QIFESS Travel operators.
           </p>
         </div>
       </Card>

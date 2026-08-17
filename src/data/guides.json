@@ -1,0 +1,35 @@
+[
+  {
+    "id": "GD-001",
+    "name": "Rizky Ramadhan",
+    "role": "Local Trekking Guide",
+    "phone": "+62 821-1122-3344",
+    "availability": "Available",
+    "currentAssignment": "Bromo Sunrise Group",
+    "currentTour": "Bromo Sunrise & Sea of Sand VIP Excursion",
+    "location": "Wonokitri Bromo Hub",
+    "status": "Assigned"
+  },
+  {
+    "id": "GD-002",
+    "name": "Eko Prasetyo",
+    "role": "Crater & Volcanology Guide",
+    "phone": "+62 822-3344-5566",
+    "availability": "Available",
+    "currentAssignment": "Ijen Midnight Group",
+    "currentTour": "Ijen Blue Fire Midnight Expedition",
+    "location": "Paltuding Basecamp",
+    "status": "On Trip"
+  },
+  {
+    "id": "GD-003",
+    "name": "Wayan Gede",
+    "role": "Bali Cultural Guide",
+    "phone": "+62 819-8877-6655",
+    "availability": "Available",
+    "currentAssignment": "Ubud VIP Excursion",
+    "currentTour": "Bali Ubud Cultural Sanctuary 3D2N",
+    "location": "Denpasar Depot",
+    "status": "On Trip"
+  }
+]

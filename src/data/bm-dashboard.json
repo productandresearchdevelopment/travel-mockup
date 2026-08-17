@@ -1,0 +1,36 @@
+{
+  "region": "East Java & Bali Region",
+  "responsibleBm": "Budi Santoso (BM East Java)",
+  "overviewKpis": {
+    "totalToursToday": 48,
+    "departing": 12,
+    "inProgress": 24,
+    "arriving": 8,
+    "handover": 2,
+    "issues": 2
+  },
+  "teamOverview": {
+    "dispatcher": {
+      "bookings": 42,
+      "deployment": 18,
+      "unassigned": 2
+    },
+    "fleet": {
+      "available": 18,
+      "assigned": 14,
+      "maintenance": 2
+    },
+    "sdm": {
+      "driverAvailable": 12,
+      "guideAvailable": 9,
+      "tmAvailable": 6,
+      "missingAssignment": 1
+    }
+  },
+  "financeOverview": {
+    "bopRequested": 45000000,
+    "bopApproved": 38000000,
+    "bopPending": 7000000,
+    "reimbursementPending": 3500000
+  }
+}

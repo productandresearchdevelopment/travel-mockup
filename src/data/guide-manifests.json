@@ -1,0 +1,26 @@
+[
+  {
+    "id": "MNF-GD-001",
+    "guide": "Rizky Ramadhan",
+    "tour": "TR-260823-001 (Bromo Sunrise VIP)",
+    "passengerGroup": "GetYourGuide VIP (12 Pax)",
+    "destination": "Wonokitri & Bromo Crater",
+    "status": "Guide Assigned"
+  },
+  {
+    "id": "MNF-GD-002",
+    "guide": "Eko Prasetyo",
+    "tour": "TR-260823-002 (Ijen Midnight Expedition)",
+    "passengerGroup": "Direct Online Group (14 Pax)",
+    "destination": "Paltuding Ijen Crater",
+    "status": "Guide Assigned"
+  },
+  {
+    "id": "MNF-GD-003",
+    "guide": "Wayan Gede",
+    "tour": "TR-260823-006 (Bali Ubud Cultural Sanctuary)",
+    "passengerGroup": "Direct Online VIP (8 Pax)",
+    "destination": "Ubud Rice Terraces",
+    "status": "Guide Assigned"
+  }
+]

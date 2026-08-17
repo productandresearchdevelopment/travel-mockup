@@ -18,7 +18,7 @@ export function TestimonialsSection() {
           as="h2"
           align="center"
           badge="Verified Reviews"
-          subtitle="Discover how discerning founders, executives, and luxury travelers experience the world with WanderLuxe."
+          subtitle="Discover how regional managers, dispatchers, and fleet leads experience seamless operations with QIFESS Travel."
         >
           Trusted by Global High-Net-Worth Travelers
         </Heading>

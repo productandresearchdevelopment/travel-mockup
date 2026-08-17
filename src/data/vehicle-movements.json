@@ -1,0 +1,50 @@
+[
+  {
+    "id": "GPS-001",
+    "vehicle": "N 7012 AA (Hiace Premio)",
+    "plateNumber": "N 7012 AA",
+    "currentLocation": "Wonokitri Viewpoint Checkpoint (Bromo Area)",
+    "coordinates": { "lat": -7.9254, "lng": 112.9515 },
+    "tour": "TR-260823-001 (Bromo Sunrise VIP)",
+    "driver": "Andi Pratama",
+    "speed": "32 km/h",
+    "lastUpdate": "1 minute ago (15:44 WIB)",
+    "status": "En Route"
+  },
+  {
+    "id": "GPS-002",
+    "vehicle": "N 7812 AB (Hiace Commuter)",
+    "plateNumber": "N 7812 AB",
+    "currentLocation": "Paltuding Basecamp Checkpoint (Ijen Crater)",
+    "coordinates": { "lat": -8.0583, "lng": 114.2422 },
+    "tour": "TR-260823-002 (Ijen Midnight Expedition)",
+    "driver": "Budi Santoso",
+    "speed": "0 km/h (Parked at Basecamp)",
+    "lastUpdate": "3 minutes ago (15:42 WIB)",
+    "status": "Parked at Basecamp"
+  },
+  {
+    "id": "GPS-003",
+    "vehicle": "N 7411 BC (Hiace Standard)",
+    "plateNumber": "N 7411 BC",
+    "currentLocation": "Pasuruan Rest Area KM 792",
+    "coordinates": { "lat": -7.6453, "lng": 112.9075 },
+    "tour": "TR-260823-003 (Tumpak Sewu Overland)",
+    "driver": "Dedi Kurniawan",
+    "speed": "75 km/h",
+    "lastUpdate": "Just now (15:45 WIB)",
+    "status": "Cruising Highway"
+  },
+  {
+    "id": "GPS-004",
+    "vehicle": "DK 9012 AA (Hiace Premio Bali)",
+    "plateNumber": "DK 9012 AA",
+    "currentLocation": "Tegallalang Rice Terrace (Ubud)",
+    "coordinates": { "lat": -8.4312, "lng": 115.2798 },
+    "tour": "TR-260823-006 (Bali Ubud Cultural Sanctuary)",
+    "driver": "Made Suardana",
+    "speed": "24 km/h",
+    "lastUpdate": "2 minutes ago (16:45 WITA)",
+    "status": "En Route"
+  }
+]

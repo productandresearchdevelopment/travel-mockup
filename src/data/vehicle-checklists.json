@@ -1,0 +1,62 @@
+[
+  {
+    "id": "CHK-001",
+    "vehicleId": "VH-001",
+    "vehicle": "N 7012 AA (Hiace Premio)",
+    "inspector": "Agus Mechanic",
+    "date": "2026-08-23 05:00 WIB",
+    "categories": {
+      "engine": "Passed",
+      "oil": "Passed",
+      "brake": "Passed",
+      "tire": "Passed",
+      "ac": "Passed",
+      "lights": "Passed",
+      "battery": "Passed",
+      "safetyEquipment": "Passed",
+      "cleanliness": "Passed"
+    },
+    "overallResult": "READY",
+    "notes": "All systems operational. Fuel tank 92% full."
+  },
+  {
+    "id": "CHK-002",
+    "vehicleId": "VH-002",
+    "vehicle": "N 7812 AB (Hiace Commuter)",
+    "inspector": "Agus Mechanic",
+    "date": "2026-08-23 04:30 WIB",
+    "categories": {
+      "engine": "Passed",
+      "oil": "Warning",
+      "brake": "Passed",
+      "tire": "Passed",
+      "ac": "Passed",
+      "lights": "Passed",
+      "battery": "Passed",
+      "safetyEquipment": "Passed",
+      "cleanliness": "Passed"
+    },
+    "overallResult": "READY",
+    "notes": "Engine oil level slightly low. Top-up recommended before long trip."
+  },
+  {
+    "id": "CHK-003",
+    "vehicleId": "VH-004",
+    "vehicle": "N 8901 AA (Isuzu ELF)",
+    "inspector": "Agus Mechanic",
+    "date": "2026-08-23 02:00 WIB",
+    "categories": {
+      "engine": "Passed",
+      "oil": "Passed",
+      "brake": "Failed",
+      "tire": "Passed",
+      "ac": "Warning",
+      "lights": "Passed",
+      "battery": "Passed",
+      "safetyEquipment": "Passed",
+      "cleanliness": "Passed"
+    },
+    "overallResult": "NOT READY",
+    "notes": "Front brake pads worn below safety margin. Repair ticket created."
+  }
+]

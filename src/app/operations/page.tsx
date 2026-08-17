@@ -11,6 +11,7 @@ import {
 
 import { AppLayout } from "@/components/ops/AppLayout";
 import { TourMonitoringView } from "@/components/ops/views/TourMonitoringView";
+import { IntegratedOperationalPipeline } from "@/components/ops/IntegratedOperationalPipeline";
 
 export default function TourOperationsPage() {
   const router = useRouter();
@@ -21,12 +22,18 @@ export default function TourOperationsPage() {
 
   return (
     <AppLayout>
-      <TourMonitoringView
-        tours={tours}
-        vehicles={vehicles}
-        crews={crews}
-        onSelectTourDetail={(tourId) => router.push(`/operations/${tourId}`)}
-      />
+      <div className="space-y-8 font-sans">
+        {/* INTEGRATED OPERATIONAL PIPELINE STEPPER */}
+        <IntegratedOperationalPipeline />
+
+        {/* TOUR MONITORING CONTROL CENTER VIEW */}
+        <TourMonitoringView
+          tours={tours}
+          vehicles={vehicles}
+          crews={crews}
+          onSelectTourDetail={(tourId) => router.push(`/operations/${tourId}`)}
+        />
+      </div>
     </AppLayout>
   );
 }

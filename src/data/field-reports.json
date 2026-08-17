@@ -1,0 +1,41 @@
+[
+  {
+    "id": "REP-001",
+    "tour": "TR-260823-001 (Bromo Sunrise VIP)",
+    "submittedBy": "Hendra Wijaya",
+    "role": "Tour Manager",
+    "date": "2026-08-23 09:30 WIB",
+    "status": "Submitted",
+    "summary": "Bromo sunrise excursion proceeded smoothly. All 12 VIP guests transferred to Wonokitri 4x4 Jeeps on schedule.",
+    "issue": "Minor traffic congestion near Tosari checkpoint, delayed coffee break by 15 minutes.",
+    "attachmentCount": 3,
+    "photos": ["bromo_sunrise_group.jpg", "jeep_transfer.jpg", "crater_rim.jpg"],
+    "resolution": "Adjusted return departure by 15 mins. Guests fully satisfied."
+  },
+  {
+    "id": "REP-002",
+    "tour": "TR-260823-002 (Ijen Midnight Expedition)",
+    "submittedBy": "Eko Prasetyo",
+    "role": "Local Guide",
+    "date": "2026-08-23 07:15 WIB",
+    "status": "Acknowledged",
+    "summary": "Blue fire visibility excellent. Gas masks distributed to all 14 passengers at Paltuding basecamp.",
+    "issue": "1 passenger requested extra trekking pole.",
+    "attachmentCount": 2,
+    "photos": ["ijen_bluefire.jpg", "paltuding_checkpoint.jpg"],
+    "resolution": "Provided spare trekking pole from guide kit."
+  },
+  {
+    "id": "REP-003",
+    "tour": "TR-260823-004 (Java-Bali Overland Express)",
+    "submittedBy": "Bambang Utama",
+    "role": "Tour Manager",
+    "date": "2026-08-23 11:00 WIB",
+    "status": "Escalated",
+    "summary": "Ferry boarding pass scanned at Ketapang terminal. Awaiting Bali unit handover at Gilimanuk port.",
+    "issue": "Ferry departure delayed 40 minutes due to ASDP harbor congestion.",
+    "attachmentCount": 4,
+    "photos": ["ketapang_ferry.jpg", "asdp_ticket.jpg"],
+    "resolution": "Notified BM Bali (Wayan Gede) to adjust pickup schedule at Gilimanuk."
+  }
+]

@@ -2,7 +2,8 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { Compass, Menu, X, Sparkles, ArrowRight } from "lucide-react";
+import Image from "next/image";
+import { Menu, X, Sparkles, ArrowRight } from "lucide-react";
 import { mainNav } from "@/config/navigation";
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
@@ -35,22 +36,19 @@ export function Navbar({ onOpenBooking }: NavbarProps) {
     >
       <Container size="xl">
         <nav className="flex items-center justify-between">
-          {/* Logo */}
+          {/* Logo PNG Image */}
           <Link
             href="/"
-            className="flex items-center gap-2.5 group focus:outline-none"
+            className="flex items-center group focus:outline-none"
           >
-            <div className="w-10 h-10 rounded-2xl bg-[#2563EB] dark:bg-[#4F8CFF] text-white flex items-center justify-center shadow-xs font-bold group-hover:scale-105 transition-transform">
-              <Compass className="w-5 h-5 group-hover:rotate-45 transition-transform duration-500" />
-            </div>
-            <div className="flex flex-col">
-              <span className="text-xl font-extrabold tracking-tight text-[#172033] dark:text-white flex items-center gap-1">
-                Wander<span className="text-[#2563EB] dark:text-[#4F8CFF]">Luxe</span>
-              </span>
-              <span className="text-[9px] uppercase tracking-widest text-[#667085] dark:text-[#A7B1C0] font-semibold -mt-1">
-                Travel AI
-              </span>
-            </div>
+            <Image
+              src="/images/logo-qifess.png"
+              alt="QIFESS Travel"
+              width={180}
+              height={48}
+              priority
+              className="h-10 w-auto object-contain group-hover:scale-105 transition-transform"
+            />
           </Link>
 
           {/* Desktop Nav Links */}

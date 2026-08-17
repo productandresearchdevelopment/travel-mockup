@@ -1,0 +1,27 @@
+{
+  "bopByTour": [
+    { "tour": "TR-260823-001 (Bromo Sunrise VIP)", "amount": 7500000 },
+    { "tour": "TR-260823-002 (Ijen Midnight Expedition)", "amount": 8200000 },
+    { "tour": "TR-260823-004 (Java-Bali Overland 5D4N)", "amount": 12500000 },
+    { "tour": "TR-260823-006 (Bali Ubud Sanctuary)", "amount": 6800000 }
+  ],
+  "reimbursementByTour": [
+    { "tour": "TR-260823-001 (Bromo Sunrise VIP)", "amount": 650000 },
+    { "tour": "TR-260823-002 (Ijen Midnight Expedition)", "amount": 285000 },
+    { "tour": "TR-260823-004 (Java-Bali Overland 5D4N)", "amount": 850000 },
+    { "tour": "TR-260823-006 (Bali Ubud Sanctuary)", "amount": 120000 }
+  ],
+  "expenseByCategory": [
+    { "category": "BOP Field Allowance", "amount": 35000000, "percentage": 78 },
+    { "category": "Fuel / BBM", "amount": 4200000, "percentage": 9 },
+    { "category": "Trans-Java Toll", "amount": 2100000, "percentage": 5 },
+    { "category": "Crew Meals & Accommodation", "amount": 2500000, "percentage": 6 },
+    { "category": "Parking & Ferry Crossing", "amount": 1200000, "percentage": 2 }
+  ],
+  "monthlyExpenseTrend": [
+    { "month": "May 2026", "bop": 310000000, "reimbursement": 24000000 },
+    { "month": "Jun 2026", "bop": 380000000, "reimbursement": 29000000 },
+    { "month": "Jul 2026", "bop": 420000000, "reimbursement": 34000000 },
+    { "month": "Aug 2026 (YTD)", "bop": 350000000, "reimbursement": 28000000 }
+  ]
+}

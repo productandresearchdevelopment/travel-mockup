@@ -1,0 +1,35 @@
+[
+  {
+    "id": "VM-001",
+    "vehicle": "N 7012 AA (Hiace Premio VIP)",
+    "tour": "TR-260823-001 (Bromo Sunrise VIP)",
+    "driver": "Andi Pratama",
+    "tourManager": "Hendra Wijaya",
+    "guide": "Rizky Ramadhan",
+    "departure": "Surabaya Hub (02:30 WIB)",
+    "destination": "Mount Bromo Crater",
+    "status": "Manifest Verified"
+  },
+  {
+    "id": "VM-002",
+    "vehicle": "N 7812 AB (Hiace Commuter)",
+    "tour": "TR-260823-002 (Ijen Midnight Expedition)",
+    "driver": "Budi Santoso",
+    "tourManager": "Bambang Utama",
+    "guide": "Eko Prasetyo",
+    "departure": "Malang Hub (00:15 WIB)",
+    "destination": "Ijen Crater Basecamp",
+    "status": "Assigned"
+  },
+  {
+    "id": "VM-003",
+    "vehicle": "DK 9012 AA (Hiace Premio Bali)",
+    "tour": "TR-260823-006 (Bali Ubud Cultural Sanctuary)",
+    "driver": "Made Suardana",
+    "tourManager": "Ketut Arta",
+    "guide": "Wayan Gede",
+    "departure": "Denpasar Hub (07:30 WITA)",
+    "destination": "Ubud & Kintamani",
+    "status": "En Route"
+  }
+]

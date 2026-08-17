@@ -1,0 +1,32 @@
+[
+  {
+    "id": "CMF-001",
+    "person": "Andi Pratama (Driver)",
+    "tour": "TR-260823-001 (Bromo Sunrise VIP)",
+    "date": "2026-08-23",
+    "departure": "Surabaya Hub (02:30 WIB)",
+    "destination": "Mount Bromo Crater",
+    "vehicle": "N 7012 AA (Hiace Premio)",
+    "status": "Manifest Confirmed"
+  },
+  {
+    "id": "CMF-002",
+    "person": "Rizky Ramadhan (Guide)",
+    "tour": "TR-260823-001 (Bromo Sunrise VIP)",
+    "date": "2026-08-23",
+    "departure": "Surabaya Hub (02:30 WIB)",
+    "destination": "Mount Bromo Crater",
+    "vehicle": "N 7012 AA (Hiace Premio)",
+    "status": "Manifest Confirmed"
+  },
+  {
+    "id": "CMF-003",
+    "person": "Hendra Wijaya (TM)",
+    "tour": "TR-260823-001 (Bromo Sunrise VIP)",
+    "date": "2026-08-23",
+    "departure": "Surabaya Hub (02:30 WIB)",
+    "destination": "Mount Bromo Crater",
+    "vehicle": "N 7012 AA (Hiace Premio)",
+    "status": "Manifest Confirmed"
+  }
+]

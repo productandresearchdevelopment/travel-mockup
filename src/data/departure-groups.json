@@ -1,0 +1,58 @@
+[
+  {
+    "date": "23 August 2026",
+    "hub": "Surabaya Operating Hub",
+    "tours": [
+      {
+        "id": "TR-260823-001",
+        "name": "Bali Overland Tour A",
+        "bookingCount": 4,
+        "pax": 14,
+        "destination": "Denpasar & Ubud Corridor",
+        "departureTime": "03:00 WIB",
+        "assignedVehicle": "N 7012 AA (Hiace Premio)",
+        "assignedCrew": "Andi Pratama (Driver) & Wayan G. (Guide)",
+        "readiness": "Ready"
+      },
+      {
+        "id": "TR-260823-002",
+        "name": "Bali Overland Tour B",
+        "bookingCount": 3,
+        "pax": 10,
+        "destination": "Kuta & Nusa Dua Resort Corridor",
+        "departureTime": "04:15 WIB",
+        "assignedVehicle": "N 7411 BC (Hiace)",
+        "assignedCrew": "Dedi Kurniawan (Driver)",
+        "readiness": "Attention"
+      },
+      {
+        "id": "TR-260823-003",
+        "name": "Malang Heritage & Waterfall Tour",
+        "bookingCount": 2,
+        "pax": 8,
+        "destination": "Malang & Tumpak Sewu",
+        "departureTime": "05:00 WIB",
+        "assignedVehicle": "N 7812 AB (Hiace Commuter)",
+        "assignedCrew": "Budi Santoso (Driver) & Eko P. (Guide)",
+        "readiness": "Ready"
+      }
+    ]
+  },
+  {
+    "date": "23 August 2026",
+    "hub": "Malang Operating Hub",
+    "tours": [
+      {
+        "id": "TR-260823-005",
+        "name": "Bromo Sunrise Crater Safari",
+        "bookingCount": 5,
+        "pax": 14,
+        "destination": "Mount Bromo, Probolinggo",
+        "departureTime": "01:30 WIB",
+        "assignedVehicle": "N 8901 AA (Isuzu ELF)",
+        "assignedCrew": "Fajar Hidayat (Driver) & Rizky R. (Guide)",
+        "readiness": "Ready"
+      }
+    ]
+  }
+]

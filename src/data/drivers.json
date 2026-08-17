@@ -1,0 +1,46 @@
+[
+  {
+    "id": "DRV-001",
+    "name": "Andi Pratama",
+    "role": "Lead Driver",
+    "phone": "+62 812-3456-7890",
+    "availability": "Available",
+    "currentAssignment": "Hiace Premio VIP #1 (N 7012 AA)",
+    "currentTour": "Bromo Sunrise & Sea of Sand VIP Excursion",
+    "location": "Surabaya Hub",
+    "status": "Assigned"
+  },
+  {
+    "id": "DRV-002",
+    "name": "Budi Santoso",
+    "role": "Senior Driver",
+    "phone": "+62 813-9876-5432",
+    "availability": "Available",
+    "currentAssignment": "Hiace Commuter #2 (N 7812 AB)",
+    "currentTour": "Ijen Blue Fire Midnight Expedition",
+    "location": "Banyuwangi Hub",
+    "status": "On Trip"
+  },
+  {
+    "id": "DRV-003",
+    "name": "Dedi Kurniawan",
+    "role": "Driver",
+    "phone": "+62 815-6789-0123",
+    "availability": "Available",
+    "currentAssignment": "Hiace Standard #3 (N 7411 BC)",
+    "currentTour": "Tumpak Sewu Waterfall & East Java Overland",
+    "location": "Pasuruan Rest Area",
+    "status": "On Trip"
+  },
+  {
+    "id": "DRV-004",
+    "name": "Fajar Hidayat",
+    "role": "Driver",
+    "phone": "+62 817-2345-6789",
+    "availability": "Off",
+    "currentAssignment": "Unassigned",
+    "currentTour": "N/A",
+    "location": "Surabaya Hub",
+    "status": "Off"
+  }
+]

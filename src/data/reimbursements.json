@@ -1,0 +1,50 @@
+[
+  {
+    "id": "RMB-260823-001",
+    "tourId": "TR-260823-001",
+    "tour": "Bromo Sunrise & Sea of Sand VIP Excursion",
+    "employee": "Andi Pratama (Driver)",
+    "expenseType": "Fuel",
+    "amount": 650000,
+    "date": "2026-08-23",
+    "status": "Paid",
+    "receipt": "pertamina_receipt_001.jpg",
+    "notes": "Pertamax Turbo refuel at Pasuruan SPBU."
+  },
+  {
+    "id": "RMB-260823-002",
+    "tourId": "TR-260823-002",
+    "tour": "Ijen Blue Fire Midnight Expedition",
+    "employee": "Budi Santoso (Driver)",
+    "expenseType": "Toll",
+    "amount": 285000,
+    "date": "2026-08-23",
+    "status": "Approved",
+    "receipt": "e_toll_receipt_002.jpg",
+    "notes": "Trans-Java toll gate fees (Surabaya - Probolinggo Timur)."
+  },
+  {
+    "id": "RMB-260823-003",
+    "tourId": "TR-260823-004",
+    "tour": "Java-Bali Overland Express 5D4N",
+    "employee": "Hendra Wijaya (TM)",
+    "expenseType": "Meals",
+    "amount": 850000,
+    "date": "2026-08-23",
+    "status": "Submitted",
+    "receipt": "crew_lunch_receipt.jpg",
+    "notes": "Emergency driver & guide dinner during ferry delay."
+  },
+  {
+    "id": "RMB-260823-004",
+    "tourId": "TR-260823-006",
+    "tour": "Bali Ubud Cultural Sanctuary 3D2N",
+    "employee": "Made Suardana (Driver)",
+    "expenseType": "Parking",
+    "amount": 120000,
+    "date": "2026-08-23",
+    "status": "Approved",
+    "receipt": "parking_ticket_ubud.jpg",
+    "notes": "VIP parking at Tegallalang & Monkey Forest Ubud."
+  }
+]

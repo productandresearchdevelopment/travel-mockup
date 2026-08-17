@@ -1,0 +1,29 @@
+[
+  {
+    "id": "MNF-HT-001",
+    "hotel": "Grand Inna Kuta Hotel",
+    "tour": "TR-260823-004 (Java-Bali Overland Express)",
+    "guest": "Elena Rostova",
+    "pax": 6,
+    "checkIn": "15:00 WITA (23 Aug)",
+    "status": "Voucher Confirmed"
+  },
+  {
+    "id": "MNF-HT-002",
+    "hotel": "Hotel Santika Premier Malang",
+    "tour": "TR-260823-001 (Bromo Sunrise VIP)",
+    "guest": "Sarah Jenkins",
+    "pax": 4,
+    "checkIn": "14:00 WIB (23 Aug)",
+    "status": "Voucher Confirmed"
+  },
+  {
+    "id": "MNF-HT-003",
+    "hotel": "Alaya Resort Ubud",
+    "tour": "TR-260823-006 (Bali Ubud Cultural Sanctuary)",
+    "guest": "Takeshi Kovacs",
+    "pax": 8,
+    "checkIn": "14:30 WITA (23 Aug)",
+    "status": "Pending Check-In"
+  }
+]
