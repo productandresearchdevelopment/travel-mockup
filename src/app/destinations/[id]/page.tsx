@@ -78,16 +78,6 @@ export default function DestinationDetailPage() {
           { label: "Destinations", href: "/destinations" },
           { label: dest.code },
         ]}
-        actions={
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => router.push("/destinations")}
-            leftIcon={<ArrowLeft className="w-3.5 h-3.5" />}
-          >
-            Back to Destinations
-          </Button>
-        }
       />
 
       {/* Temporary Closure Alert Banner */}

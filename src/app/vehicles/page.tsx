@@ -11,9 +11,10 @@ import { Pagination } from "@/components/ui/Pagination";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { Select } from "@/components/ui/Select";
+import { MetricCard } from "@/components/ui/MetricCard";
 import { mockVehiclesData } from "@/data/mockVehicles";
 import { VehicleMaster } from "@/types/vehicle";
-import { Plus, Download, ExternalLink, Truck, ShieldCheck, MapPin, Wrench } from "lucide-react";
+import { Plus, Download, ExternalLink, Truck, ShieldCheck, MapPin, Wrench, Building, Navigation, CheckCircle, Clock, Eye } from "lucide-react";
 
 export default function VehiclesPage() {
   const router = useRouter();
@@ -129,18 +130,17 @@ export default function VehiclesPage() {
       headerClassName: "text-right",
       className: "text-right",
       render: (v) => (
-        <Button
-          variant="outline"
-          size="sm"
+        <button
+          type="button"
           onClick={(e) => {
             e.stopPropagation();
             router.push(`/vehicles/${v.id}`);
           }}
-          className="h-7 px-2.5 text-[11px] gap-1"
+          className="w-8 h-8 rounded-full border border-slate-200/90 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-800/60 hover:bg-blue-50 dark:hover:bg-blue-950/60 text-slate-600 dark:text-slate-300 hover:text-blue-600 hover:border-blue-200 dark:hover:border-blue-800 flex items-center justify-center transition-all duration-200 group"
+          title="View Detail"
         >
-          <span>Detail Workspace</span>
-          <ExternalLink className="w-3 h-3 text-slate-400" />
-        </Button>
+          <Eye className="w-4 h-4 text-slate-500 group-hover:text-blue-600 transition-colors" />
+        </button>
       ),
     },
   ];
@@ -167,99 +167,110 @@ export default function VehiclesPage() {
 
       {/* Fleet Summary Metrics */}
       <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
-        <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#101726]">
-          <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">TOTAL FLEET</span>
-          <p className="text-xl font-extrabold text-slate-900 dark:text-slate-100 mt-1">32 Units</p>
-        </div>
-
-        <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#101726]">
-          <span className="text-[10px] font-semibold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">AVAILABLE</span>
-          <p className="text-xl font-extrabold text-emerald-600 dark:text-emerald-400 mt-1">12 Units</p>
-        </div>
-
-        <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#101726]">
-          <span className="text-[10px] font-semibold text-blue-600 dark:text-blue-400 uppercase tracking-wider">ON TRIP</span>
-          <p className="text-xl font-extrabold text-blue-600 dark:text-blue-400 mt-1">14 Units</p>
-        </div>
-
-        <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#101726]">
-          <span className="text-[10px] font-semibold text-amber-600 dark:text-amber-400 uppercase tracking-wider">RESERVED</span>
-          <p className="text-xl font-extrabold text-amber-600 dark:text-amber-400 mt-1">4 Units</p>
-        </div>
-
-        <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#101726]">
-          <span className="text-[10px] font-semibold text-rose-600 dark:text-rose-400 uppercase tracking-wider">MAINTENANCE</span>
-          <p className="text-xl font-extrabold text-rose-600 dark:text-rose-400 mt-1">2 Units</p>
-        </div>
-      </div>
-
-      {/* Search & Multi-Filter Controls */}
-      <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3 pt-2">
-        <SearchInput
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          onClear={() => setSearch("")}
-          placeholder="Search plate, vehicle name, vendor, driver..."
-          containerClassName="lg:w-80"
+        <MetricCard
+          title="TOTAL FLEET"
+          value="32"
+          subtitle="Units"
+          icon={<Truck className="w-4 h-4" />}
+          variant="slate"
         />
-
-        <div className="flex flex-wrap items-center gap-2">
-          <div className="w-36">
-            <Select
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
-              options={[
-                { value: "ALL", label: "All Statuses" },
-                { value: "Available", label: "Available" },
-                { value: "On Trip", label: "On Trip" },
-                { value: "Reserved", label: "Reserved" },
-                { value: "Maintenance", label: "Maintenance" },
-              ]}
-            />
-          </div>
-
-          <div className="w-36">
-            <Select
-              value={regionFilter}
-              onChange={(e) => setRegionFilter(e.target.value)}
-              options={[
-                { value: "ALL", label: "All Regions" },
-                { value: "East Java", label: "East Java" },
-                { value: "Banyuwangi", label: "Banyuwangi" },
-                { value: "Bali", label: "Bali" },
-              ]}
-            />
-          </div>
-
-          <div className="w-44">
-            <Select
-              value={vendorFilter}
-              onChange={(e) => setVendorFilter(e.target.value)}
-              options={[
-                { value: "ALL", label: "All Vendors" },
-                { value: "PT ABC Transport", label: "PT ABC Transport" },
-                { value: "CV Nusantara Transport", label: "CV Nusantara Transport" },
-                { value: "PT Bali VIP Rent", label: "PT Bali VIP Rent" },
-              ]}
-            />
-          </div>
-        </div>
+        <MetricCard
+          title="AVAILABLE"
+          value="12"
+          subtitle="Units"
+          icon={<CheckCircle className="w-4 h-4" />}
+          variant="emerald"
+          badge="Available"
+        />
+        <MetricCard
+          title="ON TRIP"
+          value="14"
+          subtitle="Units"
+          icon={<Navigation className="w-4 h-4" />}
+          variant="blue"
+          badge="● On Trip"
+        />
+        <MetricCard
+          title="RESERVED"
+          value="4"
+          subtitle="Units"
+          icon={<Clock className="w-4 h-4" />}
+          variant="amber"
+          badge="Reserved"
+        />
+        <MetricCard
+          title="MAINTENANCE"
+          value="2"
+          subtitle="Units"
+          icon={<Wrench className="w-4 h-4" />}
+          variant="rose"
+          badge="Maintenance"
+        />
       </div>
 
-      {/* Data Table */}
+      {/* UNIFIED MASTER DATA TABLE */}
       <DataTable
         columns={columns}
         data={filteredVehicles}
         keyExtractor={(row) => row.id}
         onRowClick={(row) => router.push(`/vehicles/${row.id}`)}
         emptyMessage="No vehicles match your search and filter criteria."
-      />
-
-      <Pagination
+        searchQuery={search}
+        onSearchChange={(e) => setSearch(e.target.value)}
+        searchPlaceholder="Search plate, vehicle name, vendor, driver..."
+        filters={[
+          {
+            key: "status",
+            value: statusFilter,
+            onChange: setStatusFilter,
+            options: [
+              { value: "ALL", label: "All Statuses" },
+              { value: "Available", label: "Available" },
+              { value: "On Trip", label: "On Trip" },
+              { value: "Reserved", label: "Reserved" },
+              { value: "Maintenance", label: "Maintenance" },
+            ],
+          },
+          {
+            key: "region",
+            value: regionFilter,
+            onChange: setRegionFilter,
+            options: [
+              { value: "ALL", label: "All Regions" },
+              { value: "East Java", label: "East Java" },
+              { value: "Banyuwangi", label: "Banyuwangi" },
+              { value: "Bali", label: "Bali" },
+            ],
+          },
+          {
+            key: "vendor",
+            value: vendorFilter,
+            onChange: setVendorFilter,
+            options: [
+              { value: "ALL", label: "All Vendors" },
+              { value: "PT ABC Transport", label: "PT ABC Transport" },
+              { value: "CV Nusantara Transport", label: "CV Nusantara Transport" },
+              { value: "PT Bali VIP Rent", label: "PT Bali VIP Rent" },
+            ],
+          },
+        ]}
+        onExport={() => {
+          const headers = "Plate Number,Vehicle Name,Status,Region\n";
+          const rows = filteredVehicles
+            .map((v) => `"${v.licensePlate}","${v.name}","${v.status}","${v.region}"`)
+            .join("\n");
+          const blob = new Blob([headers + rows], { type: "text/csv" });
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = "Vehicles_Fleet_Export.csv";
+          a.click();
+        }}
+        exportLabel="Export Fleet"
+        pageSize={10}
         currentPage={currentPage}
         totalPages={1}
         totalItems={filteredVehicles.length}
-        pageSize={10}
         onPageChange={(page) => setCurrentPage(page)}
       />
     </AppShell>

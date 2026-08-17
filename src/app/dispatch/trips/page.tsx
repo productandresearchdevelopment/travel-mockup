@@ -25,6 +25,7 @@ import {
   Users,
   Truck,
   UserCheck,
+  Eye,
 } from "lucide-react";
 
 interface TripItem {
@@ -363,11 +364,15 @@ export default function TripOperationsMainPage() {
                 key: "actions",
                 header: "Actions",
                 render: (r: TripItem) => (
-                  <div className="flex items-center gap-1.5">
+                  <div className="flex justify-end items-center gap-1.5">
                     <Link href={`/dispatch/trips/${r.id}`}>
-                      <Button variant="outline" size="sm" className="h-7 text-xs px-2">
-                        View Detail
-                      </Button>
+                      <button
+                        type="button"
+                        className="w-8 h-8 rounded-full border border-slate-200/90 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-800/60 hover:bg-blue-50 dark:hover:bg-blue-950/60 text-slate-600 dark:text-slate-300 hover:text-blue-600 hover:border-blue-200 dark:hover:border-blue-800 flex items-center justify-center transition-all duration-200 group"
+                        title="View Detail"
+                      >
+                        <Eye className="w-4 h-4 text-slate-500 group-hover:text-blue-600 transition-colors" />
+                      </button>
                     </Link>
                     <Link href="/dispatch/tracking">
                       <Button variant="outline" size="sm" className="h-7 text-xs px-1.5 text-blue-600">

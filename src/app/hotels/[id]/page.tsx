@@ -75,16 +75,6 @@ export default function HotelDetailPage() {
           { label: "Hotels", href: "/hotels" },
           { label: hotel.code },
         ]}
-        actions={
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => router.push("/hotels")}
-            leftIcon={<ArrowLeft className="w-3.5 h-3.5" />}
-          >
-            Back to Hotels
-          </Button>
-        }
       />
 
       {/* Hotel Detail Header Banner */}

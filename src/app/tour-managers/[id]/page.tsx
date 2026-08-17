@@ -68,16 +68,6 @@ export default function TourManagerDetailPage() {
           { label: "Tour Managers", href: "/tour-managers" },
           { label: tm.code },
         ]}
-        actions={
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => router.push("/tour-managers")}
-            leftIcon={<ArrowLeft className="w-3.5 h-3.5" />}
-          >
-            Back to Tour Managers
-          </Button>
-        }
       />
 
       {/* TM Detail Header Banner */}

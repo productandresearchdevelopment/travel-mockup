@@ -99,25 +99,14 @@ export default function VendorDetailPage() {
           { label: vendor.code },
         ]}
         actions={
-          <div className="flex items-center gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => router.push("/vendors")}
-              leftIcon={<ArrowLeft className="w-3.5 h-3.5" />}
-            >
-              Back to Vendors
-            </Button>
-
-            <Button
-              variant="primary"
-              size="sm"
-              onClick={() => setActiveTab("contracts")}
-              leftIcon={<Plus className="w-3.5 h-3.5" />}
-            >
-              Add Contract
-            </Button>
-          </div>
+          <Button
+            variant="primary"
+            size="sm"
+            onClick={() => setActiveTab("contracts")}
+            leftIcon={<Plus className="w-3.5 h-3.5" />}
+          >
+            Add Contract
+          </Button>
         }
       />
 

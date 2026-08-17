@@ -65,24 +65,13 @@ export default function GuestDetailPage() {
           { label: guest.code },
         ]}
         actions={
-          <div className="flex items-center gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => router.push("/guests")}
-              leftIcon={<ArrowLeft className="w-3.5 h-3.5" />}
-            >
-              Back to Guests
-            </Button>
-
-            {guest.currentBooking && (
-              <Link href={`/dispatch/${guest.currentBooking.assignedDeploymentId || "tr-001"}`}>
-                <Button variant="primary" size="sm" leftIcon={<Compass className="w-3.5 h-3.5" />}>
-                  View Active Deployment
-                </Button>
-              </Link>
-            )}
-          </div>
+          guest.currentBooking ? (
+            <Link href={`/dispatch/${guest.currentBooking.assignedDeploymentId || "tr-001"}`}>
+              <Button variant="primary" size="sm" leftIcon={<Compass className="w-3.5 h-3.5" />}>
+                View Active Tour
+              </Button>
+            </Link>
+          ) : undefined
         }
       />
 

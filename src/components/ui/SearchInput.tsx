@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 
 export interface SearchInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   onClear?: () => void;
+  variant?: "default" | "pill";
   containerClassName?: string;
 }
 
@@ -12,20 +13,22 @@ export function SearchInput({
   onChange,
   onClear,
   placeholder = "Search resources...",
+  variant = "default",
   className,
   containerClassName,
   ...props
 }: SearchInputProps) {
   return (
-    <div className={cn("relative flex items-center min-w-[240px]", containerClassName)}>
-      <Search className="w-4 h-4 absolute left-3 text-slate-400 pointer-events-none" />
+    <div className={cn("relative flex items-center min-w-[220px]", containerClassName)}>
+      <Search className="w-4 h-4 absolute left-3.5 text-slate-400 pointer-events-none" />
       <input
         type="text"
         value={value}
         onChange={onChange}
         placeholder={placeholder}
         className={cn(
-          "w-full pl-9 pr-8 py-1.5 bg-white dark:bg-[#101726] text-slate-900 dark:text-slate-100 placeholder-slate-400 text-xs rounded-lg border border-slate-200 dark:border-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all shadow-xs",
+          "w-full h-9 pl-10 pr-8 text-xs font-semibold text-slate-900 dark:text-slate-100 placeholder:text-slate-400 border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#101726] focus:outline-none focus:ring-2 focus:ring-[#624AE8] focus:border-transparent transition-all shadow-xs",
+          variant === "pill" ? "rounded-full bg-slate-50/50 dark:bg-slate-900/60" : "rounded-xl",
           className
         )}
         {...props}

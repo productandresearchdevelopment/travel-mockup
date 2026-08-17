@@ -87,7 +87,7 @@ export function AppSidebar({ mobileOpen = false, setMobileOpen }: AppSidebarProp
             onClick={() => setMobileOpen && setMobileOpen(false)}
             className={`flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold transition-all ${
               isMainActive("/")
-                ? "bg-blue-50 text-blue-600 dark:bg-blue-950/60 dark:text-blue-400 font-bold"
+                ? "bg-[#F3F0FF] text-[#624AE8] dark:bg-purple-950/60 dark:text-purple-400 font-bold"
                 : "text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-[#162034] hover:text-slate-900 dark:hover:text-slate-200"
             }`}
           >
@@ -106,7 +106,7 @@ export function AppSidebar({ mobileOpen = false, setMobileOpen }: AppSidebarProp
             onClick={() => setMobileOpen && setMobileOpen(false)}
             className={`flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold transition-all ${
               isMainActive("/dispatch") && !isMainActive("/dispatch/tracking") && !isMainActive("/dispatch/trips")
-                ? "bg-blue-50 text-blue-600 dark:bg-blue-950/60 dark:text-blue-400 font-bold"
+                ? "bg-[#F3F0FF] text-[#624AE8] dark:bg-purple-950/60 dark:text-purple-400 font-bold"
                 : "text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-[#162034] hover:text-slate-900 dark:hover:text-slate-200"
             }`}
           >
@@ -119,7 +119,7 @@ export function AppSidebar({ mobileOpen = false, setMobileOpen }: AppSidebarProp
             onClick={() => setMobileOpen && setMobileOpen(false)}
             className={`flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold transition-all ${
               isMainActive("/dispatch/trips")
-                ? "bg-blue-50 text-blue-600 dark:bg-blue-950/60 dark:text-blue-400 font-bold"
+                ? "bg-[#F3F0FF] text-[#624AE8] dark:bg-purple-950/60 dark:text-purple-400 font-bold"
                 : "text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-[#162034] hover:text-slate-900 dark:hover:text-slate-200"
             }`}
           >
@@ -132,7 +132,7 @@ export function AppSidebar({ mobileOpen = false, setMobileOpen }: AppSidebarProp
             onClick={() => setMobileOpen && setMobileOpen(false)}
             className={`flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold transition-all ${
               isMainActive("/dispatch/tracking")
-                ? "bg-blue-50 text-blue-600 dark:bg-blue-950/60 dark:text-blue-400 font-bold"
+                ? "bg-[#F3F0FF] text-[#624AE8] dark:bg-purple-950/60 dark:text-purple-400 font-bold"
                 : "text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-[#162034] hover:text-slate-900 dark:hover:text-slate-200"
             }`}
           >
@@ -151,7 +151,7 @@ export function AppSidebar({ mobileOpen = false, setMobileOpen }: AppSidebarProp
             onClick={() => setMobileOpen && setMobileOpen(false)}
             className={`flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold transition-all ${
               isMainActive("/guests")
-                ? "bg-blue-50 text-blue-600 dark:bg-blue-950/60 dark:text-blue-400 font-bold"
+                ? "bg-[#F3F0FF] text-[#624AE8] dark:bg-purple-950/60 dark:text-purple-400 font-bold"
                 : "text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-[#162034] hover:text-slate-900 dark:hover:text-slate-200"
             }`}
           >
@@ -164,7 +164,7 @@ export function AppSidebar({ mobileOpen = false, setMobileOpen }: AppSidebarProp
             onClick={() => setMobileOpen && setMobileOpen(false)}
             className={`flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold transition-all ${
               isMainActive("/vehicles")
-                ? "bg-blue-50 text-blue-600 dark:bg-blue-950/60 dark:text-blue-400 font-bold"
+                ? "bg-[#F3F0FF] text-[#624AE8] dark:bg-purple-950/60 dark:text-purple-400 font-bold"
                 : "text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-[#162034] hover:text-slate-900 dark:hover:text-slate-200"
             }`}
           >
@@ -177,7 +177,7 @@ export function AppSidebar({ mobileOpen = false, setMobileOpen }: AppSidebarProp
             onClick={() => setMobileOpen && setMobileOpen(false)}
             className={`flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold transition-all ${
               isMainActive("/drivers")
-                ? "bg-blue-50 text-blue-600 dark:bg-blue-950/60 dark:text-blue-400 font-bold"
+                ? "bg-[#F3F0FF] text-[#624AE8] dark:bg-purple-950/60 dark:text-purple-400 font-bold"
                 : "text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-[#162034] hover:text-slate-900 dark:hover:text-slate-200"
             }`}
           >
@@ -190,7 +190,7 @@ export function AppSidebar({ mobileOpen = false, setMobileOpen }: AppSidebarProp
             onClick={() => setMobileOpen && setMobileOpen(false)}
             className={`flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold transition-all ${
               isMainActive("/guides")
-                ? "bg-blue-50 text-blue-600 dark:bg-blue-950/60 dark:text-blue-400 font-bold"
+                ? "bg-[#F3F0FF] text-[#624AE8] dark:bg-purple-950/60 dark:text-purple-400 font-bold"
                 : "text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-[#162034] hover:text-slate-900 dark:hover:text-slate-200"
             }`}
           >
@@ -203,7 +203,7 @@ export function AppSidebar({ mobileOpen = false, setMobileOpen }: AppSidebarProp
             onClick={() => setMobileOpen && setMobileOpen(false)}
             className={`flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold transition-all ${
               isMainActive("/tour-managers")
-                ? "bg-blue-50 text-blue-600 dark:bg-blue-950/60 dark:text-blue-400 font-bold"
+                ? "bg-[#F3F0FF] text-[#624AE8] dark:bg-purple-950/60 dark:text-purple-400 font-bold"
                 : "text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-[#162034] hover:text-slate-900 dark:hover:text-slate-200"
             }`}
           >
@@ -216,7 +216,7 @@ export function AppSidebar({ mobileOpen = false, setMobileOpen }: AppSidebarProp
             onClick={() => setMobileOpen && setMobileOpen(false)}
             className={`flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold transition-all ${
               isMainActive("/hotels")
-                ? "bg-blue-50 text-blue-600 dark:bg-blue-950/60 dark:text-blue-400 font-bold"
+                ? "bg-[#F3F0FF] text-[#624AE8] dark:bg-purple-950/60 dark:text-purple-400 font-bold"
                 : "text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-[#162034] hover:text-slate-900 dark:hover:text-slate-200"
             }`}
           >
@@ -229,7 +229,7 @@ export function AppSidebar({ mobileOpen = false, setMobileOpen }: AppSidebarProp
             onClick={() => setMobileOpen && setMobileOpen(false)}
             className={`flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold transition-all ${
               isMainActive("/destinations")
-                ? "bg-blue-50 text-blue-600 dark:bg-blue-950/60 dark:text-blue-400 font-bold"
+                ? "bg-[#F3F0FF] text-[#624AE8] dark:bg-purple-950/60 dark:text-purple-400 font-bold"
                 : "text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-[#162034] hover:text-slate-900 dark:hover:text-slate-200"
             }`}
           >
@@ -242,7 +242,7 @@ export function AppSidebar({ mobileOpen = false, setMobileOpen }: AppSidebarProp
             onClick={() => setMobileOpen && setMobileOpen(false)}
             className={`flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold transition-all ${
               isMainActive("/tour-packages")
-                ? "bg-blue-50 text-blue-600 dark:bg-blue-950/60 dark:text-blue-400 font-bold"
+                ? "bg-[#F3F0FF] text-[#624AE8] dark:bg-purple-950/60 dark:text-purple-400 font-bold"
                 : "text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-[#162034] hover:text-slate-900 dark:hover:text-slate-200"
             }`}
           >
@@ -255,7 +255,7 @@ export function AppSidebar({ mobileOpen = false, setMobileOpen }: AppSidebarProp
             onClick={() => setMobileOpen && setMobileOpen(false)}
             className={`flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold transition-all ${
               isMainActive("/vendors")
-                ? "bg-blue-50 text-blue-600 dark:bg-blue-950/60 dark:text-blue-400 font-bold"
+                ? "bg-[#F3F0FF] text-[#624AE8] dark:bg-purple-950/60 dark:text-purple-400 font-bold"
                 : "text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-[#162034] hover:text-slate-900 dark:hover:text-slate-200"
             }`}
           >
@@ -274,7 +274,7 @@ export function AppSidebar({ mobileOpen = false, setMobileOpen }: AppSidebarProp
             onClick={() => setMobileOpen && setMobileOpen(false)}
             className={`flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold transition-all ${
               isMainActive("/workforce") && !isMainActive("/workforce/attendance") && !isMainActive("/workforce/payroll")
-                ? "bg-blue-50 text-blue-600 dark:bg-blue-950/60 dark:text-blue-400 font-bold"
+                ? "bg-[#F3F0FF] text-[#624AE8] dark:bg-purple-950/60 dark:text-purple-400 font-bold"
                 : "text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-[#162034] hover:text-slate-900 dark:hover:text-slate-200"
             }`}
           >
@@ -287,7 +287,7 @@ export function AppSidebar({ mobileOpen = false, setMobileOpen }: AppSidebarProp
             onClick={() => setMobileOpen && setMobileOpen(false)}
             className={`flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold transition-all ${
               isMainActive("/workforce/attendance")
-                ? "bg-blue-50 text-blue-600 dark:bg-blue-950/60 dark:text-blue-400 font-bold"
+                ? "bg-[#F3F0FF] text-[#624AE8] dark:bg-purple-950/60 dark:text-purple-400 font-bold"
                 : "text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-[#162034] hover:text-slate-900 dark:hover:text-slate-200"
             }`}
           >
@@ -300,7 +300,7 @@ export function AppSidebar({ mobileOpen = false, setMobileOpen }: AppSidebarProp
             onClick={() => setMobileOpen && setMobileOpen(false)}
             className={`flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold transition-all ${
               isMainActive("/workforce/payroll")
-                ? "bg-blue-50 text-blue-600 dark:bg-blue-950/60 dark:text-blue-400 font-bold"
+                ? "bg-[#F3F0FF] text-[#624AE8] dark:bg-purple-950/60 dark:text-purple-400 font-bold"
                 : "text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-[#162034] hover:text-slate-900 dark:hover:text-slate-200"
             }`}
           >

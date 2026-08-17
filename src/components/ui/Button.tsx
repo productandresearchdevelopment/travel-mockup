@@ -5,8 +5,9 @@ import { cn } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: "primary" | "secondary" | "outline" | "ghost" | "glow" | "danger";
+  variant?: "primary" | "secondary" | "outline" | "ghost" | "glow" | "danger" | "pill";
   size?: "sm" | "md" | "lg" | "icon";
+  rounded?: "default" | "pill" | "full";
   isLoading?: boolean;
   leftIcon?: React.ReactNode;
   rightIcon?: React.ReactNode;
@@ -19,6 +20,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       children,
       variant = "primary",
       size = "md",
+      rounded = "default",
       isLoading = false,
       leftIcon,
       rightIcon,
@@ -29,27 +31,34 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     ref
   ) => {
     const baseStyles =
-      "inline-flex items-center justify-center font-medium rounded-lg transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2563EB] disabled:opacity-50 disabled:pointer-events-none cursor-pointer active:scale-[0.99]";
+      "inline-flex items-center justify-center font-semibold transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#624AE8] disabled:opacity-50 disabled:pointer-events-none cursor-pointer active:scale-[0.99]";
+
+    const borderRadius =
+      rounded === "pill" || rounded === "full" || variant === "pill"
+        ? "rounded-full"
+        : "rounded-lg";
 
     const variants = {
       primary:
-        "bg-[#2563EB] hover:bg-[#1D4ED8] dark:bg-[#4F8CFF] dark:hover:bg-[#6AA1FF] text-white font-semibold shadow-xs border border-transparent",
+        "bg-[#624AE8] hover:bg-[#5338D9] dark:bg-[#7C66DC] dark:hover:bg-[#624AE8] text-white shadow-xs border border-transparent font-semibold",
       secondary:
-        "bg-[#F9FAFB] dark:bg-[#131D28] text-[#172033] dark:text-[#F8FAFC] border border-[#E4E7EC] dark:border-[#202B38] hover:bg-[#F3F4F6] dark:hover:bg-[#1A2634]",
+        "bg-slate-50 dark:bg-[#131D28] text-slate-800 dark:text-slate-100 border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800",
       outline:
-        "border border-[#E4E7EC] dark:border-[#202B38] text-[#172033] dark:text-[#F8FAFC] hover:bg-[#F3F4F6] dark:hover:bg-[#1A2634]",
+        "border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-100 hover:bg-[#F3F0FF] hover:text-[#624AE8] dark:hover:bg-[#162034]",
+      pill:
+        "border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-200 bg-white dark:bg-[#101726] hover:bg-slate-50 dark:hover:bg-[#162034] shadow-xs",
       ghost:
-        "text-[#667085] dark:text-[#A7B1C0] hover:text-[#172033] dark:hover:text-white hover:bg-[#F3F4F6] dark:hover:bg-[#1A2634]",
+        "text-slate-600 dark:text-slate-400 hover:text-[#624AE8] dark:hover:text-white hover:bg-[#F3F0FF] dark:hover:bg-[#162034]",
       glow:
-        "bg-[#2563EB] dark:bg-[#4F8CFF] text-white font-semibold shadow-sm hover:brightness-105 border border-transparent",
+        "bg-[#624AE8] text-white font-semibold shadow-sm hover:brightness-105 border border-transparent",
       danger:
-        "bg-[#DC2626] dark:bg-[#F97066] text-white hover:bg-[#B91C1C] dark:hover:bg-[#E55347] font-semibold shadow-xs",
+        "bg-rose-600 dark:bg-rose-600 text-white hover:bg-rose-700 font-semibold shadow-xs",
     };
 
     const sizes = {
-      sm: "text-xs px-3 py-1.5 gap-1.5",
-      md: "text-xs px-4 py-2 gap-2 font-semibold",
-      lg: "text-sm px-5 py-2.5 gap-2 font-semibold",
+      sm: "text-xs px-3 py-1.5 gap-1.5 h-8",
+      md: "text-xs px-4 py-2 gap-2 h-9 font-semibold",
+      lg: "text-sm px-5 py-2.5 gap-2 h-10 font-semibold",
       icon: "h-8 w-8 p-0 rounded-lg",
     };
 
@@ -57,14 +66,14 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       <button
         ref={ref}
         type={type}
-        className={cn(baseStyles, variants[variant], sizes[size], className)}
+        className={cn(baseStyles, borderRadius, variants[variant], sizes[size], className)}
         disabled={disabled || isLoading}
         {...props}
       >
-        {isLoading && <Loader2 className="w-3.5 h-3.5 animate-spin text-current" />}
-        {!isLoading && leftIcon && <span className="inline-flex shrink-0">{leftIcon}</span>}
-        {children && <span>{children}</span>}
-        {!isLoading && rightIcon && <span className="inline-flex shrink-0">{rightIcon}</span>}
+        {isLoading && <Loader2 className="w-3.5 h-3.5 animate-spin shrink-0" />}
+        {!isLoading && leftIcon && <span className="shrink-0">{leftIcon}</span>}
+        <span>{children}</span>
+        {!isLoading && rightIcon && <span className="shrink-0">{rightIcon}</span>}
       </button>
     );
   }

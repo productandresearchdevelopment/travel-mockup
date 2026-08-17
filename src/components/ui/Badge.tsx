@@ -4,7 +4,21 @@ import { cn } from "@/lib/utils";
 export type OperationalStatus = "Available" | "Assigned" | "On Trip" | "Maintenance" | "Inactive" | string;
 
 export interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
-  variant?: "emerald" | "success" | "warning" | "danger" | "info" | "violet" | "amber" | "blue" | "slate" | "outline" | "glass";
+  variant?:
+    | "emerald"
+    | "success"
+    | "warning"
+    | "danger"
+    | "info"
+    | "violet"
+    | "amber"
+    | "blue"
+    | "slate"
+    | "orange"
+    | "cyan"
+    | "pink"
+    | "outline"
+    | "glass";
   status?: OperationalStatus;
   size?: "sm" | "md";
   icon?: React.ReactNode;
@@ -26,27 +40,45 @@ export function Badge({
       case "available":
       case "active":
       case "ready":
+      case "approved":
+      case "paid":
         effectiveVariant = "emerald";
         break;
       case "assigned":
       case "scheduled":
-        effectiveVariant = "blue";
+      case "driver":
+      case "workforce":
+        effectiveVariant = "violet";
         break;
       case "on trip":
       case "in progress":
       case "deployed":
-        effectiveVariant = "violet";
+      case "vehicle":
+        effectiveVariant = "blue";
         break;
       case "maintenance":
-      case "standby":
+      case "tour manager":
+      case "tm":
+        effectiveVariant = "orange";
+        break;
+      case "pending":
       case "warning":
+      case "standby":
         effectiveVariant = "amber";
+        break;
+      case "hotel":
+        effectiveVariant = "cyan";
+        break;
+      case "destination":
+        effectiveVariant = "pink";
         break;
       case "inactive":
       case "disabled":
       case "offline":
       case "danger":
-        effectiveVariant = "slate";
+      case "absent":
+      case "cancelled":
+        effectiveVariant = "danger";
         break;
       default:
         effectiveVariant = "slate";
@@ -54,25 +86,31 @@ export function Badge({
   }
 
   const baseStyles =
-    "inline-flex items-center gap-1.5 font-medium rounded-md tracking-tight transition-colors duration-150";
+    "inline-flex items-center gap-1.5 font-semibold rounded-full tracking-wide transition-colors duration-150";
 
   const variants = {
     emerald:
-      "bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60",
+      "bg-[#ECFDF5] text-[#10B981] dark:bg-emerald-950/40 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60",
     success:
-      "bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60",
+      "bg-[#ECFDF5] text-[#10B981] dark:bg-emerald-950/40 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60",
     warning:
-      "bg-amber-50 text-amber-700 dark:bg-amber-950/40 dark:text-amber-300 border border-amber-200/80 dark:border-amber-800/60",
+      "bg-[#FFFBEB] text-[#F59E0B] dark:bg-amber-950/40 dark:text-amber-300 border border-amber-200/80 dark:border-amber-800/60",
     amber:
-      "bg-amber-50 text-amber-700 dark:bg-amber-950/40 dark:text-amber-300 border border-amber-200/80 dark:border-amber-800/60",
+      "bg-[#FFFBEB] text-[#F59E0B] dark:bg-amber-950/40 dark:text-amber-300 border border-amber-200/80 dark:border-amber-800/60",
     danger:
-      "bg-rose-50 text-rose-700 dark:bg-rose-950/40 dark:text-rose-300 border border-rose-200/80 dark:border-rose-800/60",
+      "bg-[#FEF2F2] text-[#EF4444] dark:bg-rose-950/40 dark:text-rose-300 border border-rose-200/80 dark:border-rose-800/60",
     info:
-      "bg-blue-50 text-blue-700 dark:bg-blue-950/40 dark:text-blue-300 border border-blue-200/80 dark:border-blue-800/60",
+      "bg-[#EFF6FF] text-[#3B82F6] dark:bg-blue-950/40 dark:text-blue-300 border border-blue-200/80 dark:border-blue-800/60",
     blue:
-      "bg-blue-50 text-blue-700 dark:bg-blue-950/40 dark:text-blue-300 border border-blue-200/80 dark:border-blue-800/60",
+      "bg-[#EFF6FF] text-[#3B82F6] dark:bg-blue-950/40 dark:text-blue-300 border border-blue-200/80 dark:border-blue-800/60",
     violet:
-      "bg-purple-50 text-purple-700 dark:bg-purple-950/40 dark:text-purple-300 border border-purple-200/80 dark:border-purple-800/60",
+      "bg-[#F3F0FF] text-[#624AE8] dark:bg-purple-950/40 dark:text-purple-300 border border-purple-200/80 dark:border-purple-800/60",
+    orange:
+      "bg-[#FFF7ED] text-[#F97316] dark:bg-orange-950/40 dark:text-orange-300 border border-orange-200/80 dark:border-orange-800/60",
+    cyan:
+      "bg-[#ECFEFF] text-[#06B6D4] dark:bg-cyan-950/40 dark:text-cyan-300 border border-cyan-200/80 dark:border-cyan-800/60",
+    pink:
+      "bg-[#FDF2F8] text-[#EC4899] dark:bg-pink-950/40 dark:text-pink-300 border border-pink-200/80 dark:border-pink-800/60",
     slate:
       "bg-slate-100 text-slate-700 dark:bg-slate-800/60 dark:text-slate-300 border border-slate-200 dark:border-slate-700",
     outline:
@@ -82,19 +120,22 @@ export function Badge({
   };
 
   const sizes = {
-    sm: "text-[11px] px-2 py-0.5",
-    md: "text-xs px-2.5 py-1",
+    sm: "text-[10px] px-2 py-0.5 font-mono font-bold",
+    md: "text-xs px-2.5 py-1 font-mono font-bold",
   };
 
   const statusDotColors = {
-    emerald: "bg-emerald-500",
-    success: "bg-emerald-500",
-    warning: "bg-amber-500",
-    amber: "bg-amber-500",
-    danger: "bg-rose-500",
-    info: "bg-blue-500",
-    blue: "bg-blue-500",
-    violet: "bg-purple-500",
+    emerald: "bg-[#10B981]",
+    success: "bg-[#10B981]",
+    warning: "bg-[#F59E0B]",
+    amber: "bg-[#F59E0B]",
+    danger: "bg-[#EF4444]",
+    info: "bg-[#3B82F6]",
+    blue: "bg-[#3B82F6]",
+    violet: "bg-[#624AE8]",
+    orange: "bg-[#F97316]",
+    cyan: "bg-[#06B6D4]",
+    pink: "bg-[#EC4899]",
     slate: "bg-slate-400",
     outline: "bg-slate-400",
     glass: "bg-slate-300",

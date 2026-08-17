@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { DataTable } from "@/components/ui/DataTable";
 import { Modal } from "@/components/ui/Modal";
+import { MetricCard } from "@/components/ui/MetricCard";
 import { SearchInput } from "@/components/ui/SearchInput";
 import { Select } from "@/components/ui/Select";
 import { FormField } from "@/components/ui/FormField";
@@ -28,6 +29,9 @@ import {
   ExternalLink,
   ShieldCheck,
   CheckCircle2,
+  Navigation,
+  UserX,
+  Eye,
 } from "lucide-react";
 
 export default function WorkforceListPage() {
@@ -119,188 +123,190 @@ export default function WorkforceListPage() {
 
       {/* TOP KPI CARDS */}
       <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
-        <Card className="p-4 space-y-1">
-          <span className="text-[10px] font-mono text-slate-400 font-bold uppercase block">TOTAL WORKFORCE</span>
-          <div className="flex items-baseline justify-between">
-            <span className="text-2xl font-extrabold text-slate-900 dark:text-slate-100">{summary.total}</span>
-            <span className="text-[10px] text-blue-600 font-bold font-mono">Workers</span>
-          </div>
-        </Card>
-
-        <Card className="p-4 space-y-1 border-emerald-200 dark:border-emerald-900/60 bg-emerald-50/20 dark:bg-emerald-950/20">
-          <span className="text-[10px] font-mono text-emerald-600 dark:text-emerald-400 font-bold uppercase block">AVAILABLE TODAY</span>
-          <div className="flex items-baseline justify-between">
-            <span className="text-2xl font-extrabold text-emerald-600 dark:text-emerald-400">{summary.availableToday}</span>
-            <Badge variant="emerald">● Available</Badge>
-          </div>
-        </Card>
-
-        <Card className="p-4 space-y-1 border-blue-200 dark:border-blue-900/60 bg-blue-50/20 dark:bg-blue-950/20">
-          <span className="text-[10px] font-mono text-blue-600 dark:text-blue-400 font-bold uppercase block">ASSIGNED TODAY</span>
-          <div className="flex items-baseline justify-between">
-            <span className="text-2xl font-extrabold text-blue-600 dark:text-blue-400">{summary.assignedToday}</span>
-            <Badge variant="blue">Assigned</Badge>
-          </div>
-        </Card>
-
-        <Card className="p-4 space-y-1 border-purple-200 dark:border-purple-900/60 bg-purple-50/20 dark:bg-purple-950/20">
-          <span className="text-[10px] font-mono text-purple-600 dark:text-purple-400 font-bold uppercase block">ON TRIP ON ROAD</span>
-          <div className="flex items-baseline justify-between">
-            <span className="text-2xl font-extrabold text-purple-600 dark:text-purple-400">{summary.onTrip}</span>
-            <Badge variant="violet">● On Trip</Badge>
-          </div>
-        </Card>
-
-        <Card className="p-4 space-y-1">
-          <span className="text-[10px] font-mono text-slate-400 font-bold uppercase block">UNAVAILABLE / LEAVE</span>
-          <div className="flex items-baseline justify-between">
-            <span className="text-2xl font-extrabold text-slate-400">{summary.unavailable}</span>
-            <Badge variant="slate">Unavailable</Badge>
-          </div>
-        </Card>
+        <MetricCard
+          title="TOTAL WORKFORCE"
+          value={summary.total}
+          subtitle="Workers"
+          icon={<Users className="w-4 h-4" />}
+          variant="slate"
+        />
+        <MetricCard
+          title="AVAILABLE TODAY"
+          value={summary.availableToday}
+          icon={<UserCheck className="w-4 h-4" />}
+          variant="emerald"
+          badge="● Available"
+        />
+        <MetricCard
+          title="ASSIGNED TODAY"
+          value={summary.assignedToday}
+          icon={<Briefcase className="w-4 h-4" />}
+          variant="blue"
+          badge="Assigned"
+        />
+        <MetricCard
+          title="ON TRIP ON ROAD"
+          value={summary.onTrip}
+          icon={<Navigation className="w-4 h-4" />}
+          variant="violet"
+          badge="● On Trip"
+        />
+        <MetricCard
+          title="UNAVAILABLE / LEAVE"
+          value={summary.unavailable}
+          icon={<UserX className="w-4 h-4" />}
+          variant="rose"
+          badge="Unavailable"
+        />
       </div>
 
-      {/* FILTER & SEARCH BAR */}
-      <Card className="p-4 space-y-4">
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
-          <div className="w-full sm:w-72">
-            <SearchInput
-              placeholder="Search worker name, code, phone..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-          </div>
-
-          <div className="flex items-center gap-2 flex-wrap">
-            <Select
-              value={roleFilter}
-              onChange={(e) => setRoleFilter(e.target.value)}
-              options={[
-                { value: "All", label: "All Roles" },
-                { value: "Driver", label: "Driver" },
-                { value: "Guide", label: "Guide" },
-                { value: "Tour Manager", label: "Tour Manager" },
-                { value: "Other Operational", label: "Other Operational" },
-              ]}
-              className="w-36"
-            />
-
-            <Select
-              value={employmentFilter}
-              onChange={(e) => setEmploymentFilter(e.target.value)}
-              options={[
-                { value: "All", label: "All Employment" },
-                { value: "Daily Worker", label: "Daily Worker" },
-                { value: "Contract", label: "Contract" },
-                { value: "Freelance", label: "Freelance" },
-                { value: "Permanent", label: "Permanent" },
-              ]}
-              className="w-36"
-            />
-
-            <Select
-              value={availabilityFilter}
-              onChange={(e) => setAvailabilityFilter(e.target.value)}
-              options={[
-                { value: "All", label: "All Availability" },
-                { value: "Available", label: "Available" },
-                { value: "Assigned", label: "Assigned" },
-                { value: "On Trip", label: "On Trip" },
-                { value: "Unavailable", label: "Unavailable" },
-              ]}
-              className="w-36"
-            />
-          </div>
-        </div>
-
-        {/* WORKFORCE DATA TABLE */}
-        <DataTable
-          columns={[
-            {
-              key: "worker",
-              header: "Worker Name & Code",
-              render: (r: WorkerMaster) => (
-                <div className="space-y-0.5">
-                  <Link href={`/workforce/${r.id}`} className="font-bold text-sm text-slate-900 dark:text-slate-100 hover:text-blue-600 dark:hover:text-blue-400">
-                    {r.fullName}
-                  </Link>
-                  <span className="text-[10px] text-slate-400 font-mono block">{r.workerCode}</span>
-                </div>
-              ),
-            },
-            {
-              key: "role",
-              header: "Role",
-              render: (r: WorkerMaster) => (
-                <Badge variant={r.role === "Driver" ? "blue" : r.role === "Guide" ? "emerald" : "violet"}>
-                  {r.role}
-                </Badge>
-              ),
-            },
-            {
-              key: "employment",
-              header: "Employment Type",
-              render: (r: WorkerMaster) => (
-                <span className="font-mono text-xs text-slate-700 dark:text-slate-300 font-bold">
-                  {r.employmentType}
-                </span>
-              ),
-            },
-            { key: "phone", header: "Phone", render: (r: WorkerMaster) => <span className="font-mono text-xs">{r.phone}</span> },
-            { key: "region", header: "Region", render: (r: WorkerMaster) => <span className="font-mono text-xs">📍 {r.region}</span> },
-            {
-              key: "rate",
-              header: "Daily Rate",
-              render: (r: WorkerMaster) => (
-                <span className="font-mono font-bold text-xs text-emerald-600 dark:text-emerald-400">
-                  Rp {r.dailyRateRupiah.toLocaleString("id-ID")} / day
-                </span>
-              ),
-            },
-            {
-              key: "availability",
-              header: "Availability",
-              render: (r: WorkerMaster) => (
-                <Badge
-                  variant={
-                    r.availability === "Available"
-                      ? "emerald"
-                      : r.availability === "Assigned"
-                      ? "blue"
-                      : r.availability === "On Trip"
-                      ? "violet"
-                      : "slate"
-                  }
-                >
-                  ● {r.availability}
-                </Badge>
-              ),
-            },
-            {
-              key: "assignment",
-              header: "Current Assignment",
-              render: (r: WorkerMaster) => (
-                <span className="font-mono text-xs text-slate-600 dark:text-slate-300 truncate max-w-[150px] block">
-                  {r.currentAssignment || "None"}
-                </span>
-              ),
-            },
-            {
-              key: "actions",
-              header: "Actions",
-              render: (r: WorkerMaster) => (
-                <Link href={`/workforce/${r.id}`}>
-                  <Button variant="outline" size="sm" className="h-7 text-xs px-2">
-                    View Detail
-                  </Button>
+      {/* UNIFIED MASTER DATA TABLE */}
+      <DataTable
+        searchQuery={searchQuery}
+        onSearchChange={(e) => setSearchQuery(e.target.value)}
+        searchPlaceholder="Search worker name, code, phone..."
+        filters={[
+          {
+            key: "role",
+            value: roleFilter,
+            onChange: setRoleFilter,
+            options: [
+              { value: "All", label: "All Roles" },
+              { value: "Driver", label: "Driver" },
+              { value: "Guide", label: "Guide" },
+              { value: "Tour Manager", label: "Tour Manager" },
+              { value: "Other Operational", label: "Other Operational" },
+            ],
+          },
+          {
+            key: "employment",
+            value: employmentFilter,
+            onChange: setEmploymentFilter,
+            options: [
+              { value: "All", label: "All Employment" },
+              { value: "Daily Worker", label: "Daily Worker" },
+              { value: "Contract", label: "Contract" },
+              { value: "Freelance", label: "Freelance" },
+              { value: "Permanent", label: "Permanent" },
+            ],
+          },
+          {
+            key: "availability",
+            value: availabilityFilter,
+            onChange: setAvailabilityFilter,
+            options: [
+              { value: "All", label: "All Availability" },
+              { value: "Available", label: "Available" },
+              { value: "Assigned", label: "Assigned" },
+              { value: "On Trip", label: "On Trip" },
+              { value: "Unavailable", label: "Unavailable" },
+            ],
+          },
+        ]}
+        onExport={() => {
+          const headers = "Worker Code,Full Name,Role,Employment Type,Phone,Region,Daily Rate,Availability\n";
+          const rows = filteredWorkers
+            .map((r) => `"${r.workerCode}","${r.fullName}","${r.role}","${r.employmentType}","${r.phone}","${r.region}",${r.dailyRateRupiah},"${r.availability}"`)
+            .join("\n");
+          const blob = new Blob([headers + rows], { type: "text/csv" });
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = "Workforce_Master_Export.csv";
+          a.click();
+        }}
+        exportLabel="Export Workforce"
+        columns={[
+          {
+            key: "worker",
+            header: "Worker Name & Code",
+            render: (r: WorkerMaster) => (
+              <div className="space-y-0.5">
+                <Link href={`/workforce/${r.id}`} className="font-bold text-sm text-slate-900 dark:text-slate-100 hover:text-blue-600 dark:hover:text-blue-400">
+                  {r.fullName}
                 </Link>
-              ),
-            },
-          ]}
-          data={filteredWorkers}
-          keyExtractor={(r) => r.id}
-        />
-      </Card>
+                <span className="text-[10px] text-slate-400 font-mono block">{r.workerCode}</span>
+              </div>
+            ),
+          },
+          {
+            key: "role",
+            header: "Role",
+            render: (r: WorkerMaster) => (
+              <Badge variant={r.role === "Driver" ? "blue" : r.role === "Guide" ? "emerald" : "violet"}>
+                {r.role}
+              </Badge>
+            ),
+          },
+          {
+            key: "employment",
+            header: "Employment Type",
+            render: (r: WorkerMaster) => (
+              <span className="font-mono text-xs text-slate-700 dark:text-slate-300 font-bold">
+                {r.employmentType}
+              </span>
+            ),
+          },
+          { key: "phone", header: "Phone", render: (r: WorkerMaster) => <span className="font-mono text-xs">{r.phone}</span> },
+          { key: "region", header: "Region", render: (r: WorkerMaster) => <span className="font-mono text-xs">📍 {r.region}</span> },
+          {
+            key: "rate",
+            header: "Daily Rate",
+            render: (r: WorkerMaster) => (
+              <span className="font-mono font-bold text-xs text-emerald-600 dark:text-emerald-400">
+                Rp {r.dailyRateRupiah.toLocaleString("id-ID")} / day
+              </span>
+            ),
+          },
+          {
+            key: "availability",
+            header: "Availability",
+            render: (r: WorkerMaster) => (
+              <Badge
+                variant={
+                  r.availability === "Available"
+                    ? "emerald"
+                    : r.availability === "Assigned"
+                    ? "blue"
+                    : r.availability === "On Trip"
+                    ? "violet"
+                    : "slate"
+                }
+              >
+                ● {r.availability}
+              </Badge>
+            ),
+          },
+          {
+            key: "assignment",
+            header: "Current Assignment",
+            render: (r: WorkerMaster) => (
+              <span className="font-mono text-xs text-slate-600 dark:text-slate-300 truncate max-w-[150px] block">
+                {r.currentAssignment || "None"}
+              </span>
+            ),
+          },
+          {
+            key: "actions",
+            header: "Actions",
+            render: (r: WorkerMaster) => (
+              <div className="flex justify-end">
+                <Link href={`/workforce/${r.id}`}>
+                  <button
+                    type="button"
+                    className="w-8 h-8 rounded-full border border-slate-200/90 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-800/60 hover:bg-blue-50 dark:hover:bg-blue-950/60 text-slate-600 dark:text-slate-300 hover:text-blue-600 hover:border-blue-200 dark:hover:border-blue-800 flex items-center justify-center transition-all duration-200 group"
+                    title="View Detail"
+                  >
+                    <Eye className="w-4 h-4 text-slate-500 group-hover:text-blue-600 transition-colors" />
+                  </button>
+                </Link>
+              </div>
+            ),
+          },
+        ]}
+        data={filteredWorkers}
+        keyExtractor={(r) => r.id}
+      />
 
       {/* REGISTER NEW WORKER MODAL */}
       <Modal isOpen={showAddModal} onClose={() => setShowAddModal(false)} title="Register New Field Worker">

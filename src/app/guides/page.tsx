@@ -12,9 +12,10 @@ import { Pagination } from "@/components/ui/Pagination";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { Select } from "@/components/ui/Select";
+import { MetricCard } from "@/components/ui/MetricCard";
 import { mockGuidesData } from "@/data/mockGuides";
 import { GuideMaster } from "@/types/guide";
-import { Plus, Download, Compass, ExternalLink, Globe, MapPin } from "lucide-react";
+import { Plus, Download, Compass, ExternalLink, Globe, MapPin, Award, ShieldCheck, Eye } from "lucide-react";
 
 export default function GuidesPage() {
   const router = useRouter();
@@ -124,18 +125,17 @@ export default function GuidesPage() {
       headerClassName: "text-right",
       className: "text-right",
       render: (g) => (
-        <Button
-          variant="outline"
-          size="sm"
+        <button
+          type="button"
           onClick={(e) => {
             e.stopPropagation();
             router.push(`/guides/${g.id}`);
           }}
-          className="h-7 px-2 text-[11px] gap-1"
+          className="w-8 h-8 rounded-full border border-slate-200/90 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-800/60 hover:bg-blue-50 dark:hover:bg-blue-950/60 text-slate-600 dark:text-slate-300 hover:text-blue-600 hover:border-blue-200 dark:hover:border-blue-800 flex items-center justify-center transition-all duration-200 group"
+          title="View Detail"
         >
-          <span>Detail</span>
-          <ExternalLink className="w-3 h-3 text-slate-400" />
-        </Button>
+          <Eye className="w-4 h-4 text-slate-500 group-hover:text-blue-600 transition-colors" />
+        </button>
       ),
     },
   ];
@@ -168,137 +168,115 @@ export default function GuidesPage() {
 
       {/* Guide Summary Metrics */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#101726]">
-          <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Total Guides</span>
-          <p className="text-xl font-extrabold text-slate-900 dark:text-slate-100 mt-1">{guides.length} Licensed</p>
-        </div>
-        <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#101726]">
-          <span className="text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">Available</span>
-          <p className="text-xl font-extrabold text-emerald-600 dark:text-emerald-400 mt-1">
-            {guides.filter((g) => g.operationalStatus === "Available").length} Active
-          </p>
-        </div>
-        <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#101726]">
-          <span className="text-[11px] font-semibold text-purple-600 dark:text-purple-400 uppercase tracking-wider">On Tour / Assigned</span>
-          <p className="text-xl font-extrabold text-purple-600 dark:text-purple-400 mt-1">
-            {guides.filter((g) => g.operationalStatus === "On Tour" || g.operationalStatus === "Assigned").length} Deployed
-          </p>
-        </div>
-        <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#101726]">
-          <span className="text-[11px] font-semibold text-blue-600 dark:text-blue-400 uppercase tracking-wider">Multilingual Guides</span>
-          <p className="text-xl font-extrabold text-blue-600 dark:text-blue-400 mt-1">
-            {guides.filter((g) => g.languages.length > 2).length} Guides
-          </p>
-        </div>
-      </div>
-
-      {/* Search & Multi-Filters */}
-      <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3 pt-2">
-        <SearchInput
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          onClear={() => setSearch("")}
-          placeholder="Search by name, phone, language, destination..."
-          containerClassName="lg:w-80"
+        <MetricCard
+          title="TOTAL GUIDES"
+          value={guides.length}
+          subtitle="Licensed"
+          icon={<Compass className="w-4 h-4" />}
+          variant="emerald"
         />
-
-        <div className="flex flex-wrap items-center gap-2">
-          {/* Status Filter */}
-          <div className="w-36">
-            <Select
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
-              options={[
-                { value: "ALL", label: "All Statuses" },
-                { value: "Available", label: "Available" },
-                { value: "Assigned", label: "Assigned" },
-                { value: "On Tour", label: "On Tour" },
-                { value: "Unavailable", label: "Unavailable" },
-                { value: "Inactive", label: "Inactive" },
-              ]}
-            />
-          </div>
-
-          {/* Region Filter */}
-          <div className="w-32">
-            <Select
-              value={regionFilter}
-              onChange={(e) => setRegionFilter(e.target.value)}
-              options={[
-                { value: "ALL", label: "All Regions" },
-                { value: "Malang", label: "Malang" },
-                { value: "Batu", label: "Batu" },
-                { value: "Banyuwangi", label: "Banyuwangi" },
-                { value: "Surabaya", label: "Surabaya" },
-              ]}
-            />
-          </div>
-
-          {/* Language Filter */}
-          <div className="w-36">
-            <Select
-              value={languageFilter}
-              onChange={(e) => setLanguageFilter(e.target.value)}
-              options={[
-                { value: "ALL", label: "All Languages" },
-                { value: "English", label: "English" },
-                { value: "Mandarin", label: "Mandarin" },
-                { value: "Japanese", label: "Japanese" },
-                { value: "German", label: "German" },
-                { value: "Dutch", label: "Dutch" },
-              ]}
-            />
-          </div>
-
-          {/* Destination Filter */}
-          <div className="w-36">
-            <Select
-              value={destinationFilter}
-              onChange={(e) => setDestinationFilter(e.target.value)}
-              options={[
-                { value: "ALL", label: "All Destinations" },
-                { value: "Bromo", label: "Bromo" },
-                { value: "Ijen", label: "Ijen" },
-                { value: "Tumpak Sewu", label: "Tumpak Sewu" },
-                { value: "Baluran", label: "Baluran" },
-              ]}
-            />
-          </div>
-
-          {(search || activeFiltersCount > 0) && (
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => {
-                setSearch("");
-                setStatusFilter("ALL");
-                setRegionFilter("ALL");
-                setLanguageFilter("ALL");
-                setDestinationFilter("ALL");
-              }}
-              className="text-xs text-rose-600 hover:text-rose-700"
-            >
-              Reset Filters
-            </Button>
-          )}
-        </div>
+        <MetricCard
+          title="AVAILABLE"
+          value={guides.filter((g) => g.operationalStatus === "Available").length}
+          subtitle="Active"
+          icon={<Compass className="w-4 h-4" />}
+          variant="emerald"
+          badge="● Active"
+        />
+        <MetricCard
+          title="ON TOUR / ASSIGNED"
+          value={guides.filter((g) => g.operationalStatus === "On Tour" || g.operationalStatus === "Assigned").length}
+          subtitle="Deployed"
+          icon={<Award className="w-4 h-4" />}
+          variant="violet"
+          badge="Deployed"
+        />
+        <MetricCard
+          title="MULTILINGUAL GUIDES"
+          value={guides.filter((g) => g.languages.length > 2).length}
+          subtitle="Guides"
+          icon={<Globe className="w-4 h-4" />}
+          variant="blue"
+          badge="Multilingual"
+        />
       </div>
 
-      {/* Data Table */}
+      {/* UNIFIED MASTER DATA TABLE */}
       <DataTable
         columns={columns}
         data={filteredGuides}
         keyExtractor={(row) => row.id}
         onRowClick={(row) => router.push(`/guides/${row.id}`)}
         emptyMessage="No guides match your search and filter criteria."
-      />
-
-      {/* Pagination */}
-      <Pagination
+        searchQuery={search}
+        onSearchChange={(e) => setSearch(e.target.value)}
+        searchPlaceholder="Search by name, phone, language, destination..."
+        filters={[
+          {
+            key: "status",
+            value: statusFilter,
+            onChange: setStatusFilter,
+            options: [
+              { value: "ALL", label: "All Statuses" },
+              { value: "Available", label: "Available" },
+              { value: "Assigned", label: "Assigned" },
+              { value: "On Tour", label: "On Tour" },
+              { value: "Unavailable", label: "Unavailable" },
+            ],
+          },
+          {
+            key: "region",
+            value: regionFilter,
+            onChange: setRegionFilter,
+            options: [
+              { value: "ALL", label: "All Regions" },
+              { value: "Malang", label: "Malang" },
+              { value: "Batu", label: "Batu" },
+              { value: "Banyuwangi", label: "Banyuwangi" },
+              { value: "Surabaya", label: "Surabaya" },
+            ],
+          },
+          {
+            key: "language",
+            value: languageFilter,
+            onChange: setLanguageFilter,
+            options: [
+              { value: "ALL", label: "All Languages" },
+              { value: "English", label: "English" },
+              { value: "Mandarin", label: "Mandarin" },
+              { value: "Japanese", label: "Japanese" },
+              { value: "German", label: "German" },
+            ],
+          },
+          {
+            key: "destination",
+            value: destinationFilter,
+            onChange: setDestinationFilter,
+            options: [
+              { value: "ALL", label: "All Destinations" },
+              { value: "Bromo", label: "Bromo" },
+              { value: "Ijen", label: "Ijen" },
+              { value: "Tumpak Sewu", label: "Tumpak Sewu" },
+            ],
+          },
+        ]}
+        onExport={() => {
+          const headers = "Guide Name,Phone,Languages,Region,Status\n";
+          const rows = filteredGuides
+            .map((g) => `"${g.fullName}","${g.phone}","${g.languages.join(";")}","${g.region}","${g.operationalStatus}"`)
+            .join("\n");
+          const blob = new Blob([headers + rows], { type: "text/csv" });
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = "Guides_Roster_Export.csv";
+          a.click();
+        }}
+        exportLabel="Export Guides"
+        pageSize={10}
         currentPage={currentPage}
         totalPages={1}
         totalItems={filteredGuides.length}
-        pageSize={10}
         onPageChange={(page) => setCurrentPage(page)}
       />
     </AppShell>

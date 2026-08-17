@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { DataTable } from "@/components/ui/DataTable";
 import { Modal } from "@/components/ui/Modal";
+import { MetricCard } from "@/components/ui/MetricCard";
 import { SearchInput } from "@/components/ui/SearchInput";
 import { Select } from "@/components/ui/Select";
 import { FormField } from "@/components/ui/FormField";
@@ -29,6 +30,11 @@ import {
   ShieldCheck,
   TrendingUp,
   Plus,
+  Wallet,
+  Clock,
+  Send,
+  Eye,
+  Check,
 } from "lucide-react";
 
 export default function WorkforcePayrollPage() {
@@ -139,38 +145,34 @@ export default function WorkforcePayrollPage() {
 
       {/* TOP DASHBOARD METRICS */}
       <div className="grid grid-cols-1 sm:grid-cols-5 gap-3 font-sans">
-        <Card className="p-4 bg-slate-900 text-white border-slate-800 space-y-1 col-span-1 sm:col-span-2">
-          <div className="flex items-center justify-between text-[10px] font-mono text-slate-400">
-            <span className="font-bold uppercase tracking-wider">ESTIMATED PAYROLL ({summary.currentPeriod})</span>
-            <span className="text-emerald-400 font-bold">{summary.workersWorked} / {summary.totalWorkers} WORKERS WORKED</span>
-          </div>
-          <div className="flex items-baseline justify-between pt-1">
-            <span className="text-2xl font-extrabold text-emerald-400 font-mono">
-              Rp {summary.estimatedPayroll.toLocaleString("id-ID")}
-            </span>
-            <Badge variant="emerald">● Active Period</Badge>
-          </div>
-        </Card>
+        <div className="col-span-1 sm:col-span-2">
+          <MetricCard
+            title={`ESTIMATED PAYROLL (${summary.currentPeriod})`}
+            value={`Rp ${summary.estimatedPayroll.toLocaleString("id-ID")}`}
+            subtitle={`${summary.workersWorked} / ${summary.totalWorkers} Workers Worked`}
+            icon={<Wallet className="w-4 h-4" />}
+            variant="emerald"
+            badge="● Active Period"
+          />
+        </div>
 
-        <Card className="p-4 space-y-1 border-amber-200 dark:border-amber-900/60 bg-amber-50/20 dark:bg-amber-950/20">
-          <span className="text-[10px] font-mono text-amber-600 dark:text-amber-400 font-bold uppercase block">PENDING REVIEW</span>
-          <div className="flex items-baseline justify-between">
-            <span className="text-xl font-extrabold text-amber-600 dark:text-amber-400 font-mono">
-              Rp {summary.pendingReview.toLocaleString("id-ID")}
-            </span>
-            <Badge variant="amber">Pending</Badge>
-          </div>
-        </Card>
+        <MetricCard
+          title="PENDING REVIEW"
+          value={`Rp ${summary.pendingReview.toLocaleString("id-ID")}`}
+          icon={<Clock className="w-4 h-4" />}
+          variant="amber"
+          badge="Pending"
+        />
 
-        <Card className="p-4 space-y-1 border-emerald-200 dark:border-emerald-900/60 bg-emerald-50/20 dark:bg-emerald-950/20 col-span-1 sm:col-span-2">
-          <span className="text-[10px] font-mono text-emerald-600 dark:text-emerald-400 font-bold uppercase block">APPROVED & PAID PAYOUT</span>
-          <div className="flex items-baseline justify-between">
-            <span className="text-xl font-extrabold text-emerald-600 dark:text-emerald-400 font-mono">
-              Rp {summary.approved.toLocaleString("id-ID")}
-            </span>
-            <Badge variant="emerald">✓ Approved</Badge>
-          </div>
-        </Card>
+        <div className="col-span-1 sm:col-span-2">
+          <MetricCard
+            title="APPROVED & PAID PAYOUT"
+            value={`Rp ${summary.approved.toLocaleString("id-ID")}`}
+            icon={<CheckCircle2 className="w-4 h-4" />}
+            variant="emerald"
+            badge="✓ Approved"
+          />
+        </div>
       </div>
 
       {/* ANOMALY DETECTION SAFETY BANNER */}
@@ -361,24 +363,24 @@ export default function WorkforcePayrollPage() {
               key: "actions",
               header: "Actions",
               render: (r: PayrollRecord) => (
-                <div className="flex items-center gap-1.5">
-                  <Button
-                    variant="outline"
-                    size="sm"
+                <div className="flex items-center gap-1.5 justify-end">
+                  <button
+                    type="button"
                     onClick={() => setSelectedRecord(r)}
-                    className="h-7 text-xs px-2"
+                    className="w-8 h-8 rounded-full border border-slate-200/90 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-800/60 hover:bg-blue-50 dark:hover:bg-blue-950/60 text-slate-600 dark:text-slate-300 hover:text-blue-600 hover:border-blue-200 dark:hover:border-blue-800 flex items-center justify-center transition-all duration-200 group"
+                    title="View Detail"
                   >
-                    View Detail
-                  </Button>
+                    <Eye className="w-4 h-4 text-slate-500 group-hover:text-blue-600 transition-colors" />
+                  </button>
                   {r.status === "Pending Review" && (
-                    <Button
-                      variant="primary"
-                      size="sm"
+                    <button
+                      type="button"
                       onClick={() => handleApproveRecord(r.id)}
-                      className="h-7 text-xs px-2"
+                      className="w-8 h-8 rounded-full border border-emerald-200 dark:border-emerald-800 bg-emerald-50/80 dark:bg-emerald-950/60 hover:bg-emerald-100 text-emerald-600 dark:text-emerald-300 flex items-center justify-center transition-all duration-200 group"
+                      title="Approve Compensation"
                     >
-                      Approve
-                    </Button>
+                      <Check className="w-4 h-4 text-emerald-600" />
+                    </button>
                   )}
                 </div>
               ),

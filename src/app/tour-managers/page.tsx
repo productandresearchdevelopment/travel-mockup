@@ -11,10 +11,11 @@ import { DataTable, Column } from "@/components/ui/DataTable";
 import { Pagination } from "@/components/ui/Pagination";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
+import { MetricCard } from "@/components/ui/MetricCard";
 import { Select } from "@/components/ui/Select";
 import { mockTourManagersData } from "@/data/mockTourManagers";
 import { TourManagerMaster } from "@/types/tourManager";
-import { Plus, Download, Briefcase, ExternalLink, Calendar, MapPin } from "lucide-react";
+import { Plus, Download, Briefcase, ExternalLink, Calendar, MapPin, ShieldCheck, Navigation, Eye } from "lucide-react";
 
 export default function TourManagersPage() {
   const router = useRouter();
@@ -129,18 +130,17 @@ export default function TourManagersPage() {
       headerClassName: "text-right",
       className: "text-right",
       render: (tm) => (
-        <Button
-          variant="outline"
-          size="sm"
+        <button
+          type="button"
           onClick={(e) => {
             e.stopPropagation();
             router.push(`/tour-managers/${tm.id}`);
           }}
-          className="h-7 px-2 text-[11px] gap-1"
+          className="w-8 h-8 rounded-full border border-slate-200/90 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-800/60 hover:bg-blue-50 dark:hover:bg-blue-950/60 text-slate-600 dark:text-slate-300 hover:text-blue-600 hover:border-blue-200 dark:hover:border-blue-800 flex items-center justify-center transition-all duration-200 group"
+          title="View Detail"
         >
-          <span>Detail</span>
-          <ExternalLink className="w-3 h-3 text-slate-400" />
-        </Button>
+          <Eye className="w-4 h-4 text-slate-500 group-hover:text-blue-600 transition-colors" />
+        </button>
       ),
     },
   ];
@@ -170,105 +170,93 @@ export default function TourManagersPage() {
 
       {/* TM Summary Metrics */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#101726]">
-          <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Total Tour Managers</span>
-          <p className="text-xl font-extrabold text-slate-900 dark:text-slate-100 mt-1">{managers.length} Managers</p>
-        </div>
-        <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#101726]">
-          <span className="text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">Available</span>
-          <p className="text-xl font-extrabold text-emerald-600 dark:text-emerald-400 mt-1">
-            {managers.filter((tm) => tm.operationalStatus === "Available").length} Active
-          </p>
-        </div>
-        <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#101726]">
-          <span className="text-[11px] font-semibold text-purple-600 dark:text-purple-400 uppercase tracking-wider">On Tour / Deployed</span>
-          <p className="text-xl font-extrabold text-purple-600 dark:text-purple-400 mt-1">
-            {managers.filter((tm) => tm.operationalStatus === "On Tour" || tm.operationalStatus === "Assigned").length} Deployed
-          </p>
-        </div>
-        <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#101726]">
-          <span className="text-[11px] font-semibold text-blue-600 dark:text-blue-400 uppercase tracking-wider">Active Tours Coordinated</span>
-          <p className="text-xl font-extrabold text-blue-600 dark:text-blue-400 mt-1">
-            {managers.reduce((acc, tm) => acc + tm.activeAssignmentsCount, 0)} Tours
-          </p>
-        </div>
-      </div>
-
-      {/* Search & Filters */}
-      <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3 pt-2">
-        <SearchInput
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          onClear={() => setSearch("")}
-          placeholder="Search by manager name, phone, region, specialization..."
-          containerClassName="lg:w-80"
+        <MetricCard
+          title="TOTAL TOUR MANAGERS"
+          value={managers.length}
+          subtitle="Managers"
+          icon={<Briefcase className="w-4 h-4" />}
+          variant="amber"
         />
-
-        <div className="flex flex-wrap items-center gap-2">
-          {/* Status Filter */}
-          <div className="w-40">
-            <Select
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
-              options={[
-                { value: "ALL", label: "All Statuses" },
-                { value: "Available", label: "Available" },
-                { value: "Assigned", label: "Assigned" },
-                { value: "On Tour", label: "On Tour" },
-                { value: "Unavailable", label: "Unavailable" },
-                { value: "Inactive", label: "Inactive" },
-              ]}
-            />
-          </div>
-
-          {/* Region Filter */}
-          <div className="w-36">
-            <Select
-              value={regionFilter}
-              onChange={(e) => setRegionFilter(e.target.value)}
-              options={[
-                { value: "ALL", label: "All Regions" },
-                { value: "East Java", label: "East Java" },
-                { value: "Malang", label: "Malang" },
-                { value: "Surabaya", label: "Surabaya" },
-                { value: "Batu", label: "Batu" },
-                { value: "Bali", label: "Bali" },
-              ]}
-            />
-          </div>
-
-          {(search || activeFiltersCount > 0) && (
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => {
-                setSearch("");
-                setStatusFilter("ALL");
-                setRegionFilter("ALL");
-              }}
-              className="text-xs text-rose-600 hover:text-rose-700"
-            >
-              Reset Filters
-            </Button>
-          )}
-        </div>
+        <MetricCard
+          title="AVAILABLE"
+          value={managers.filter((tm) => tm.operationalStatus === "Available").length}
+          subtitle="Active"
+          icon={<ShieldCheck className="w-4 h-4" />}
+          variant="emerald"
+          badge="● Active"
+        />
+        <MetricCard
+          title="ON TOUR / DEPLOYED"
+          value={managers.filter((tm) => tm.operationalStatus === "On Tour" || tm.operationalStatus === "Assigned").length}
+          subtitle="Deployed"
+          icon={<Navigation className="w-4 h-4" />}
+          variant="violet"
+          badge="Deployed"
+        />
+        <MetricCard
+          title="ACTIVE TOURS COORDINATED"
+          value={managers.reduce((acc, tm) => acc + tm.activeAssignmentsCount, 0)}
+          subtitle="Tours"
+          icon={<Briefcase className="w-4 h-4" />}
+          variant="blue"
+          badge="Active Tours"
+        />
       </div>
 
-      {/* Data Table */}
+      {/* UNIFIED MASTER DATA TABLE */}
       <DataTable
         columns={columns}
         data={filteredManagers}
         keyExtractor={(row) => row.id}
         onRowClick={(row) => router.push(`/tour-managers/${row.id}`)}
         emptyMessage="No tour managers match your search and filter criteria."
-      />
-
-      {/* Pagination */}
-      <Pagination
+        searchQuery={search}
+        onSearchChange={(e) => setSearch(e.target.value)}
+        searchPlaceholder="Search by manager name, phone, region, specialization..."
+        filters={[
+          {
+            key: "status",
+            value: statusFilter,
+            onChange: setStatusFilter,
+            options: [
+              { value: "ALL", label: "All Statuses" },
+              { value: "Available", label: "Available" },
+              { value: "Assigned", label: "Assigned" },
+              { value: "On Tour", label: "On Tour" },
+              { value: "Unavailable", label: "Unavailable" },
+            ],
+          },
+          {
+            key: "region",
+            value: regionFilter,
+            onChange: setRegionFilter,
+            options: [
+              { value: "ALL", label: "All Regions" },
+              { value: "East Java", label: "East Java" },
+              { value: "Malang", label: "Malang" },
+              { value: "Surabaya", label: "Surabaya" },
+              { value: "Batu", label: "Batu" },
+              { value: "Bali", label: "Bali" },
+            ],
+          },
+        ]}
+        onExport={() => {
+          const headers = "Manager Name,Phone,Specialization,Region,Status\n";
+          const rows = filteredManagers
+            .map((tm) => `"${tm.fullName}","${tm.phone}","${tm.specialization}","${tm.region}","${tm.operationalStatus}"`)
+            .join("\n");
+          const blob = new Blob([headers + rows], { type: "text/csv" });
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = "Tour_Managers_Export.csv";
+          a.click();
+        }}
+        exportLabel="Export Managers"
+        pageSize={10}
         currentPage={currentPage}
         totalPages={1}
         totalItems={filteredManagers.length}
-        pageSize={10}
         onPageChange={(page) => setCurrentPage(page)}
       />
     </AppShell>

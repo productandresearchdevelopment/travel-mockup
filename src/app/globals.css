@@ -7,15 +7,15 @@
 }
 
 :root {
-  /* Modern Expensive SaaS Light Mode Palette */
-  --bg-page: #f8fafc;
+  /* Modern Enterprise SaaS Light Mode Palette 2026 */
+  --bg-page: #ffffff;
   --bg-sidebar: #ffffff;
   --bg-navbar: #ffffff;
   --bg-surface: #ffffff;
-  --bg-surface-nested: #f1f5f9;
+  --bg-surface-nested: #f8fafc;
   --bg-surface-elevated: #ffffff;
-  --bg-surface-hover: #f8fafc;
-  --bg-surface-active: #eff6ff;
+  --bg-surface-hover: #f8f7fe;
+  --bg-surface-active: #f3f0ff;
 
   --border-primary: #e2e8f0;
   --border-input: #cbd5e1;
@@ -25,31 +25,40 @@
   --text-secondary: #475569;
   --text-muted: #94a3b8;
 
-  --action-primary: #2563eb;
-  --action-primary-hover: #1d4ed8;
+  /* Primary Brand Violet #624AE8 */
+  --action-primary: #624ae8;
+  --action-primary-hover: #5338d9;
 
-  --sidebar-active-bg: #eff6ff;
-  --sidebar-active-text: #2563eb;
+  --sidebar-active-bg: #f3f0ff;
+  --sidebar-active-text: #624ae8;
   --sidebar-hover-bg: #f8fafc;
 
   --backdrop-bg: rgba(15, 23, 42, 0.4);
 
-  /* Badges Light */
-  --badge-success-bg: #f0fdf4;
-  --badge-success-text: #15803d;
-  --badge-warning-bg: #fffbeb;
-  --badge-warning-text: #b45309;
+  /* Semantic Badges Light */
+  --badge-emerald-bg: #ecfdf5;
+  --badge-emerald-text: #10b981;
+  --badge-violet-bg: #f3f0ff;
+  --badge-violet-text: #624ae8;
+  --badge-blue-bg: #eff6ff;
+  --badge-blue-text: #3b82f6;
+  --badge-amber-bg: #fffbeb;
+  --badge-amber-text: #f59e0b;
+  --badge-orange-bg: #fff7ed;
+  --badge-orange-text: #f97316;
   --badge-danger-bg: #fef2f2;
-  --badge-danger-text: #b91c1c;
-  --badge-info-bg: #eff6ff;
-  --badge-info-text: #1d4ed8;
+  --badge-danger-text: #ef4444;
+  --badge-cyan-bg: #ecfeff;
+  --badge-cyan-text: #06b6d4;
+  --badge-pink-bg: #fdf2f8;
+  --badge-pink-text: #ec4899;
 
   color-scheme: light;
 }
 
 .dark,
 [data-theme="dark"] {
-  /* Modern Expensive SaaS Dark Mode Palette */
+  /* Modern Enterprise SaaS Dark Mode Palette 2026 */
   --bg-page: #090d16;
   --bg-sidebar: #0f1726;
   --bg-navbar: #0f1726;
@@ -57,145 +66,47 @@
   --bg-surface-nested: #151e30;
   --bg-surface-elevated: #1a263c;
   --bg-surface-hover: #162034;
-  --bg-surface-active: #172a4a;
+  --bg-surface-active: #1e1b4b;
 
   --border-primary: #1e293b;
   --border-input: #334155;
-  --border-subtle: #172033;
+  --border-subtle: #1e293b;
 
   --text-primary: #f8fafc;
-  --text-secondary: #94a3b8;
+  --text-secondary: #cbd5e1;
   --text-muted: #64748b;
 
-  --action-primary: #3b82f6;
-  --action-primary-hover: #60a5fa;
+  --action-primary: #7c66dc;
+  --action-primary-hover: #624ae8;
 
-  --sidebar-active-bg: #172a4a;
-  --sidebar-active-text: #60a5fa;
+  --sidebar-active-bg: #1e1b4b;
+  --sidebar-active-text: #a78bfa;
   --sidebar-hover-bg: #162034;
 
   --backdrop-bg: rgba(0, 0, 0, 0.7);
 
-  /* Badges Dark */
-  --badge-success-bg: rgba(34, 197, 94, 0.14);
-  --badge-success-text: #4ade80;
-  --badge-warning-bg: rgba(245, 158, 11, 0.14);
-  --badge-warning-text: #fbbf24;
-  --badge-danger-bg: rgba(239, 68, 68, 0.14);
-  --badge-danger-text: #f87171;
-  --badge-info-bg: rgba(59, 130, 246, 0.14);
-  --badge-info-text: #60a5fa;
-
   color-scheme: dark;
 }
 
-html, body {
+body {
   background-color: var(--bg-page);
   color: var(--text-primary);
   font-family: var(--font-sans);
   overflow-x: hidden;
-  letter-spacing: -0.011em;
-  -webkit-font-smoothing: antialiased;
-  transition: background-color 0.18s ease, color 0.18s ease;
 }
 
-/* Global Theme Transition for Surface Elements */
-.saas-card,
-.saas-table-row,
-header,
-aside,
-nav,
-input,
-select,
-textarea,
-button {
-  transition: background-color 0.18s ease, border-color 0.18s ease, color 0.18s ease, box-shadow 0.18s ease;
-}
-
-/* Surface Utility Cards with Expensive SaaS Micro Shadows */
-.saas-card {
-  background-color: var(--bg-surface);
-  border: 1px solid var(--border-primary);
-  border-radius: 14px;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04), 0 1px 2px -1px rgba(0, 0, 0, 0.02);
-}
-
-.saas-card:hover {
-  border-color: rgba(37, 99, 235, 0.35);
-  box-shadow: 0 4px 12px -2px rgba(37, 99, 235, 0.08);
-}
-
-.dark .saas-card:hover,
-[data-theme="dark"] .saas-card:hover {
-  border-color: rgba(79, 140, 255, 0.4);
-  box-shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.4);
-}
-
-/* Compact Table Row Styling */
-.saas-table-row {
-  transition: background-color 0.12s ease;
-  border-bottom: 1px solid var(--border-subtle);
-  background-color: var(--bg-surface);
-}
-
-.saas-table-row:hover {
-  background-color: var(--bg-surface-hover);
-}
-
-/* Ultra Slim Elegant Scrollbars */
+/* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
-
 ::-webkit-scrollbar-track {
   background: transparent;
 }
-
 ::-webkit-scrollbar-thumb {
   background: #cbd5e1;
-  border-radius: 9999px;
+  border-radius: 4px;
 }
-
-.dark ::-webkit-scrollbar-thumb,
-[data-theme="dark"] ::-webkit-scrollbar-thumb {
+.dark ::-webkit-scrollbar-thumb {
   background: #334155;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
-}
-
-.scrollbar-none::-webkit-scrollbar {
-  display: none;
-}
-.scrollbar-none {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-
-/* Application Shell Layout Classes */
-.app-fixed-sidebar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  height: 100vh;
-  z-index: 30;
-  transition: width 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.app-fixed-navbar {
-  position: fixed;
-  top: 0;
-  right: 0;
-  height: 64px;
-  z-index: 20;
-  transition: left 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.app-main-content {
-  padding-top: 78px;
-  min-height: 100vh;
-  transition: margin-left 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }

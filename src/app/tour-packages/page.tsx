@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { DataTable } from "@/components/ui/DataTable";
+import { MetricCard } from "@/components/ui/MetricCard";
 import { SearchInput } from "@/components/ui/SearchInput";
 import { Select } from "@/components/ui/Select";
 import { mockTourPackagesData } from "@/data/mockTourPackagesData";
@@ -22,8 +23,10 @@ import {
   DollarSign,
   Calendar,
   ExternalLink,
-  Copy,
   CheckCircle2,
+  Compass,
+  Eye,
+  Copy,
 } from "lucide-react";
 
 export default function TourPackagesListPage() {
@@ -94,183 +97,184 @@ export default function TourPackagesListPage() {
 
       {/* TOP KPI CARDS */}
       <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
-        <Card className="p-4 space-y-1">
-          <span className="text-[10px] font-mono text-slate-400 font-bold uppercase block">TOTAL TOUR PACKAGES</span>
-          <div className="flex items-baseline justify-between">
-            <span className="text-2xl font-extrabold text-slate-900 dark:text-slate-100">{summary.total}</span>
-            <span className="text-[10px] text-blue-600 font-bold font-mono">Catalog</span>
-          </div>
-        </Card>
-
-        <Card className="p-4 space-y-1 border-emerald-200 dark:border-emerald-900/60 bg-emerald-50/20 dark:bg-emerald-950/20">
-          <span className="text-[10px] font-mono text-emerald-600 dark:text-emerald-400 font-bold uppercase block">ACTIVE PACKAGES</span>
-          <div className="flex items-baseline justify-between">
-            <span className="text-2xl font-extrabold text-emerald-600 dark:text-emerald-400">{summary.active}</span>
-            <Badge variant="emerald">● Active</Badge>
-          </div>
-        </Card>
-
-        <Card className="p-4 space-y-1">
-          <span className="text-[10px] font-mono text-slate-400 font-bold uppercase block">INACTIVE PACKAGES</span>
-          <div className="flex items-baseline justify-between">
-            <span className="text-2xl font-extrabold text-slate-400">{summary.inactive}</span>
-            <Badge variant="slate">Inactive</Badge>
-          </div>
-        </Card>
-
-        <Card className="p-4 space-y-1 border-blue-200 dark:border-blue-900/60 bg-blue-50/20 dark:bg-blue-950/20">
-          <span className="text-[10px] font-mono text-blue-600 dark:text-blue-400 font-bold uppercase block">MULTI DESTINATION</span>
-          <div className="flex items-baseline justify-between">
-            <span className="text-2xl font-extrabold text-blue-600 dark:text-blue-400">{summary.multiDestination}</span>
-            <span className="text-[10px] text-blue-600 font-mono">Packages</span>
-          </div>
-        </Card>
-
-        <Card className="p-4 space-y-1">
-          <span className="text-[10px] font-mono text-slate-400 font-bold uppercase block">DAY TOURS</span>
-          <div className="flex items-baseline justify-between">
-            <span className="text-2xl font-extrabold text-slate-800 dark:text-slate-200">{summary.dayTour}</span>
-            <span className="text-[10px] text-slate-400 font-mono">1 Day</span>
-          </div>
-        </Card>
+        <MetricCard
+          title="TOTAL TOUR PACKAGES"
+          value={summary.total}
+          subtitle="Catalog"
+          icon={<Package className="w-4 h-4" />}
+          variant="violet"
+        />
+        <MetricCard
+          title="ACTIVE PACKAGES"
+          value={summary.active}
+          icon={<CheckCircle2 className="w-4 h-4" />}
+          variant="emerald"
+          badge="● Active"
+        />
+        <MetricCard
+          title="INACTIVE PACKAGES"
+          value={summary.inactive}
+          icon={<Package className="w-4 h-4" />}
+          variant="slate"
+          badge="Inactive"
+        />
+        <MetricCard
+          title="MULTI DESTINATION"
+          value={summary.multiDestination}
+          subtitle="Packages"
+          icon={<Compass className="w-4 h-4" />}
+          variant="blue"
+          badge="Multi-Spot"
+        />
+        <MetricCard
+          title="DAY TOURS"
+          value={summary.dayTour}
+          subtitle="1 Day"
+          icon={<Calendar className="w-4 h-4" />}
+          variant="amber"
+          badge="Day Tour"
+        />
       </div>
 
-      {/* FILTER & SEARCH BAR */}
-      <Card className="p-4 space-y-4">
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
-          <div className="w-full sm:w-72">
-            <SearchInput
-              placeholder="Search package name, code, destination..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-          </div>
-
-          <div className="flex items-center gap-2 flex-wrap">
-            <Select
-              value={typeFilter}
-              onChange={(e) => setTypeFilter(e.target.value)}
-              options={[
-                { value: "All", label: "All Package Types" },
-                { value: "Day Tour", label: "Day Tour" },
-                { value: "Multi Destination", label: "Multi Destination" },
-                { value: "Overland", label: "Overland" },
-              ]}
-              className="w-40"
-            />
-
-            <Select
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
-              options={[
-                { value: "All", label: "All Statuses" },
-                { value: "Active", label: "Active" },
-                { value: "Inactive", label: "Inactive" },
-                { value: "Draft", label: "Draft" },
-              ]}
-              className="w-32"
-            />
-
-            <Select
-              value={durationFilter}
-              onChange={(e) => setDurationFilter(e.target.value)}
-              options={[
-                { value: "All", label: "All Durations" },
-                { value: "1 Day", label: "1 Day" },
-                { value: "2D1N", label: "2D1N" },
-                { value: "3D2N", label: "3D2N" },
-                { value: "4D3N", label: "4D3N" },
-                { value: "5D4N", label: "5D4N" },
-              ]}
-              className="w-32"
-            />
-          </div>
-        </div>
-
-        {/* TOUR PACKAGES DATA TABLE */}
-        <DataTable
-          columns={[
-            {
-              key: "package",
-              header: "Package Name & Code",
-              render: (r: TourPackageMaster) => (
-                <div className="space-y-0.5">
-                  <Link href={`/tour-packages/${r.id}`} className="font-bold text-sm text-slate-900 dark:text-slate-100 hover:text-blue-600 dark:hover:text-blue-400">
-                    {r.name}
-                  </Link>
-                  <span className="text-[10px] text-slate-400 font-mono block">{r.code}</span>
-                </div>
-              ),
-            },
-            {
-              key: "type",
-              header: "Package Type",
-              render: (r: TourPackageMaster) => (
-                <Badge variant={r.type === "Day Tour" ? "slate" : r.type === "Multi Destination" ? "blue" : "emerald"}>
-                  {r.type}
-                </Badge>
-              ),
-            },
-            { key: "duration", header: "Duration", render: (r: TourPackageMaster) => <span className="font-mono text-xs font-bold">{r.duration}</span> },
-            {
-              key: "destinations",
-              header: "Included Destinations",
-              render: (r: TourPackageMaster) => (
-                <div className="flex items-center gap-1 flex-wrap text-[10px] font-mono">
-                  {r.destinations.map((d, i) => (
-                    <span key={i} className="px-2 py-0.5 rounded bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-900/40">
-                      📍 {d.destinationName}
-                    </span>
-                  ))}
-                </div>
-              ),
-            },
-            {
-              key: "cost",
-              header: "Operational Cost",
-              render: (r: TourPackageMaster) => (
-                <span className="font-mono font-bold text-xs text-slate-900 dark:text-slate-100">
-                  Rp {r.totalOperationalCostRupiah.toLocaleString("id-ID")}
-                </span>
-              ),
-            },
-            {
-              key: "status",
-              header: "Status",
-              render: (r: TourPackageMaster) => (
-                <Badge variant={r.status === "Active" ? "emerald" : r.status === "Draft" ? "amber" : "slate"}>
-                  ● {r.status}
-                </Badge>
-              ),
-            },
-            { key: "updated", header: "Updated", render: (r: TourPackageMaster) => <span className="font-mono text-xs">{r.updatedAt}</span> },
-            {
-              key: "actions",
-              header: "Actions",
-              render: (r: TourPackageMaster) => (
-                <div className="flex items-center gap-1.5">
-                  <Link href={`/tour-packages/${r.id}`}>
-                    <Button variant="outline" size="sm" className="h-7 text-xs px-2">
-                      View Detail
-                    </Button>
-                  </Link>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handleDuplicate(r)}
-                    className="h-7 text-xs px-1.5 text-slate-500"
-                    title="Duplicate Package"
+      {/* UNIFIED MASTER DATA TABLE */}
+      <DataTable
+        searchQuery={searchQuery}
+        onSearchChange={(e) => setSearchQuery(e.target.value)}
+        searchPlaceholder="Search package name, code, destination..."
+        filters={[
+          {
+            key: "status",
+            value: statusFilter,
+            onChange: setStatusFilter,
+            options: [
+              { value: "All", label: "All Statuses" },
+              { value: "Active", label: "Active Packages" },
+              { value: "Draft", label: "Draft Packages" },
+              { value: "Inactive", label: "Inactive Packages" },
+            ],
+          },
+          {
+            key: "type",
+            value: typeFilter,
+            onChange: setTypeFilter,
+            options: [
+              { value: "All", label: "All Package Types" },
+              { value: "Day Tour", label: "Day Tour" },
+              { value: "Multi Destination", label: "Multi Destination" },
+              { value: "Custom Group", label: "Custom Group" },
+            ],
+          },
+          {
+            key: "duration",
+            value: durationFilter,
+            onChange: setDurationFilter,
+            options: [
+              { value: "All", label: "All Durations" },
+              { value: "1 Day", label: "1 Day" },
+              { value: "2D1N", label: "2D1N" },
+              { value: "3D2N", label: "3D2N" },
+              { value: "4D3N", label: "4D3N" },
+              { value: "5D4N", label: "5D4N" },
+            ],
+          },
+        ]}
+        onExport={() => {
+          const headers = "Package Code,Package Name,Type,Duration,Operational Cost,Status,Updated At\n";
+          const rows = filteredPackages
+            .map((r) => `"${r.code}","${r.name}","${r.type}","${r.duration}",${r.totalOperationalCostRupiah},"${r.status}","${r.updatedAt}"`)
+            .join("\n");
+          const blob = new Blob([headers + rows], { type: "text/csv" });
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = "Tour_Packages_Master_Export.csv";
+          a.click();
+        }}
+        exportLabel="Export Packages"
+        columns={[
+          {
+            key: "package",
+            header: "Package Name & Code",
+            render: (r: TourPackageMaster) => (
+              <div className="space-y-0.5">
+                <Link href={`/tour-packages/${r.id}`} className="font-bold text-sm text-slate-900 dark:text-slate-100 hover:text-blue-600 dark:hover:text-blue-400">
+                  {r.name}
+                </Link>
+                <span className="text-[10px] text-slate-400 font-mono block">{r.code}</span>
+              </div>
+            ),
+          },
+          {
+            key: "type",
+            header: "Package Type",
+            render: (r: TourPackageMaster) => (
+              <Badge variant={r.type === "Day Tour" ? "slate" : r.type === "Multi Destination" ? "blue" : "emerald"}>
+                {r.type}
+              </Badge>
+            ),
+          },
+          { key: "duration", header: "Duration", render: (r: TourPackageMaster) => <span className="font-mono text-xs font-bold">{r.duration}</span> },
+          {
+            key: "destinations",
+            header: "Included Destinations",
+            render: (r: TourPackageMaster) => (
+              <div className="flex items-center gap-1 flex-wrap text-[10px] font-mono">
+                {r.destinations.map((d, i) => (
+                  <span key={i} className="px-2 py-0.5 rounded bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-900/40">
+                    📍 {d.destinationName}
+                  </span>
+                ))}
+              </div>
+            ),
+          },
+          {
+            key: "cost",
+            header: "Operational Cost",
+            render: (r: TourPackageMaster) => (
+              <span className="font-mono font-bold text-xs text-slate-900 dark:text-slate-100">
+                Rp {r.totalOperationalCostRupiah.toLocaleString("id-ID")}
+              </span>
+            ),
+          },
+          {
+            key: "status",
+            header: "Status",
+            render: (r: TourPackageMaster) => (
+              <Badge variant={r.status === "Active" ? "emerald" : r.status === "Draft" ? "amber" : "slate"}>
+                ● {r.status}
+              </Badge>
+            ),
+          },
+          { key: "updated", header: "Updated", render: (r: TourPackageMaster) => <span className="font-mono text-xs">{r.updatedAt}</span> },
+          {
+            key: "actions",
+            header: "Actions",
+            render: (r: TourPackageMaster) => (
+              <div className="flex items-center gap-1.5 justify-end">
+                <Link href={`/tour-packages/${r.id}`}>
+                  <button
+                    type="button"
+                    className="w-8 h-8 rounded-full border border-slate-200/90 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-800/60 hover:bg-blue-50 dark:hover:bg-blue-950/60 text-slate-600 dark:text-slate-300 hover:text-blue-600 hover:border-blue-200 dark:hover:border-blue-800 flex items-center justify-center transition-all duration-200 group"
+                    title="View Detail"
                   >
-                    <Copy className="w-3.5 h-3.5" />
-                  </Button>
-                </div>
-              ),
-            },
-          ]}
-          data={filteredPackages}
-          keyExtractor={(r) => r.id}
-        />
-      </Card>
+                    <Eye className="w-4 h-4 text-slate-500 group-hover:text-blue-600 transition-colors" />
+                  </button>
+                </Link>
+                <button
+                  type="button"
+                  onClick={() => handleDuplicate(r)}
+                  className="w-8 h-8 rounded-full border border-slate-200/90 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-800/60 hover:bg-purple-50 dark:hover:bg-purple-950/60 text-slate-600 dark:text-slate-300 hover:text-purple-600 hover:border-purple-200 dark:hover:border-purple-800 flex items-center justify-center transition-all duration-200 group"
+                  title="Duplicate Package"
+                >
+                  <Copy className="w-3.5 h-3.5 text-slate-500 group-hover:text-purple-600 transition-colors" />
+                </button>
+              </div>
+            ),
+          },
+        ]}
+        data={filteredPackages}
+        keyExtractor={(r) => r.id}
+      />
     </AppShell>
   );
 }

@@ -60,19 +60,9 @@ export default function WorkerDetailPage() {
           { label: worker.workerCode },
         ]}
         actions={
-          <div className="flex items-center gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => router.push("/workforce")}
-              leftIcon={<ArrowLeft className="w-3.5 h-3.5" />}
-            >
-              Back to Workforce
-            </Button>
-            <Button variant="primary" size="sm">
-              Edit Worker Profile
-            </Button>
-          </div>
+          <Button variant="primary" size="sm">
+            Edit Worker Profile
+          </Button>
         }
       />
 

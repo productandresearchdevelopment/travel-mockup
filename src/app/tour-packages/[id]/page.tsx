@@ -62,14 +62,6 @@ export default function TourPackageDetailPage() {
             <Button
               variant="outline"
               size="sm"
-              onClick={() => router.push("/tour-packages")}
-              leftIcon={<ArrowLeft className="w-3.5 h-3.5" />}
-            >
-              Back to Catalog
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
               onClick={() => router.push("/tour-packages/create")}
               leftIcon={<Copy className="w-3.5 h-3.5" />}
             >

@@ -183,16 +183,7 @@ export default function TripOperationsDetailPage() {
           { label: "TRP-2026-00421" },
         ]}
         actions={
-          <div className="flex items-center gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => router.push("/dispatch/trips")}
-              leftIcon={<ArrowLeft className="w-3.5 h-3.5" />}
-            >
-              Back to Trips
-            </Button>
-
+          <div className="flex items-center gap-2 flex-wrap">
             <Link href="/dispatch/tracking">
               <Button variant="outline" size="sm" leftIcon={<Compass className="w-3.5 h-3.5 text-blue-600" />}>
                 View Live Telemetry Map

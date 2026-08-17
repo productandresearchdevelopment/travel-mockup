@@ -12,9 +12,10 @@ import { Pagination } from "@/components/ui/Pagination";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { Select } from "@/components/ui/Select";
+import { MetricCard } from "@/components/ui/MetricCard";
 import { mockDriversData } from "@/data/mockDrivers";
 import { DriverMaster } from "@/types/driver";
-import { Plus, Download, UserCheck, ExternalLink, AlertTriangle } from "lucide-react";
+import { Plus, Download, Phone, MapPin, UserCheck, ShieldCheck, ExternalLink, Users, AlertTriangle, Eye } from "lucide-react";
 
 export default function DriversPage() {
   const router = useRouter();
@@ -112,18 +113,17 @@ export default function DriversPage() {
       headerClassName: "text-right",
       className: "text-right",
       render: (d) => (
-        <Button
-          variant="outline"
-          size="sm"
+        <button
+          type="button"
           onClick={(e) => {
             e.stopPropagation();
             router.push(`/drivers/${d.id}`);
           }}
-          className="h-7 px-2 text-[11px] gap-1"
+          className="w-8 h-8 rounded-full border border-slate-200/90 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-800/60 hover:bg-blue-50 dark:hover:bg-blue-950/60 text-slate-600 dark:text-slate-300 hover:text-blue-600 hover:border-blue-200 dark:hover:border-blue-800 flex items-center justify-center transition-all duration-200 group"
+          title="View Detail"
         >
-          <span>Detail</span>
-          <ExternalLink className="w-3 h-3 text-slate-400" />
-        </Button>
+          <Eye className="w-4 h-4 text-slate-500 group-hover:text-blue-600 transition-colors" />
+        </button>
       ),
     },
   ];
@@ -153,104 +153,92 @@ export default function DriversPage() {
 
       {/* Driver Summary Metrics */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#101726]">
-          <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Total Drivers</span>
-          <p className="text-xl font-extrabold text-slate-900 dark:text-slate-100 mt-1">{drivers.length} Drivers</p>
-        </div>
-        <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#101726]">
-          <span className="text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">Available</span>
-          <p className="text-xl font-extrabold text-emerald-600 dark:text-emerald-400 mt-1">
-            {drivers.filter((d) => d.operationalStatus === "Available").length} Active
-          </p>
-        </div>
-        <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#101726]">
-          <span className="text-[11px] font-semibold text-purple-600 dark:text-purple-400 uppercase tracking-wider">Deployed / Assigned</span>
-          <p className="text-xl font-extrabold text-purple-600 dark:text-purple-400 mt-1">
-            {drivers.filter((d) => d.operationalStatus === "On Trip" || d.operationalStatus === "Assigned").length} Deployed
-          </p>
-        </div>
-        <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#101726]">
-          <span className="text-[11px] font-semibold text-amber-600 dark:text-amber-400 uppercase tracking-wider">License Expiry Warning</span>
-          <p className="text-xl font-extrabold text-amber-600 dark:text-amber-400 mt-1">
-            {drivers.filter((d) => d.license.status === "Expiring Soon" || d.license.status === "Expired").length} Alerts
-          </p>
-        </div>
-      </div>
-
-      {/* Search & Filters */}
-      <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3 pt-2">
-        <SearchInput
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          onClear={() => setSearch("")}
-          placeholder="Search by driver name, phone, license, region..."
-          containerClassName="lg:w-80"
+        <MetricCard
+          title="TOTAL DRIVERS"
+          value={drivers.length}
+          subtitle="Drivers"
+          icon={<Users className="w-4 h-4" />}
+          variant="slate"
         />
-
-        <div className="flex flex-wrap items-center gap-2">
-          {/* Status Filter */}
-          <div className="w-40">
-            <Select
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
-              options={[
-                { value: "ALL", label: "All Statuses" },
-                { value: "Available", label: "Available" },
-                { value: "Assigned", label: "Assigned" },
-                { value: "On Trip", label: "On Trip" },
-                { value: "Unavailable", label: "Unavailable" },
-                { value: "Inactive", label: "Inactive" },
-              ]}
-            />
-          </div>
-
-          {/* Region Filter */}
-          <div className="w-36">
-            <Select
-              value={regionFilter}
-              onChange={(e) => setRegionFilter(e.target.value)}
-              options={[
-                { value: "ALL", label: "All Regions" },
-                { value: "Surabaya", label: "Surabaya" },
-                { value: "Malang", label: "Malang" },
-                { value: "Batu", label: "Batu" },
-                { value: "East Java", label: "East Java" },
-              ]}
-            />
-          </div>
-
-          {(search || activeFiltersCount > 0) && (
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => {
-                setSearch("");
-                setStatusFilter("ALL");
-                setRegionFilter("ALL");
-              }}
-              className="text-xs text-rose-600 hover:text-rose-700"
-            >
-              Reset Filters
-            </Button>
-          )}
-        </div>
+        <MetricCard
+          title="AVAILABLE"
+          value={drivers.filter((d) => d.operationalStatus === "Available").length}
+          subtitle="Active"
+          icon={<UserCheck className="w-4 h-4" />}
+          variant="emerald"
+          badge="● Active"
+        />
+        <MetricCard
+          title="DEPLOYED / ASSIGNED"
+          value={drivers.filter((d) => d.operationalStatus === "On Trip" || d.operationalStatus === "Assigned").length}
+          subtitle="Deployed"
+          icon={<ShieldCheck className="w-4 h-4" />}
+          variant="violet"
+          badge="Deployed"
+        />
+        <MetricCard
+          title="LICENSE EXPIRY WARNING"
+          value={drivers.filter((d) => d.license.status === "Expiring Soon" || d.license.status === "Expired").length}
+          subtitle="Alerts"
+          icon={<AlertTriangle className="w-4 h-4" />}
+          variant="amber"
+          badge="Alerts"
+        />
       </div>
 
-      {/* Data Table */}
+      {/* UNIFIED MASTER DATA TABLE */}
       <DataTable
         columns={columns}
         data={filteredDrivers}
         keyExtractor={(row) => row.id}
         onRowClick={(row) => router.push(`/drivers/${row.id}`)}
         emptyMessage="No drivers match your search and filter criteria."
-      />
-
-      {/* Pagination */}
-      <Pagination
+        searchQuery={search}
+        onSearchChange={(e) => setSearch(e.target.value)}
+        searchPlaceholder="Search by driver name, phone, license, region..."
+        filters={[
+          {
+            key: "status",
+            value: statusFilter,
+            onChange: setStatusFilter,
+            options: [
+              { value: "ALL", label: "All Statuses" },
+              { value: "Available", label: "Available" },
+              { value: "Assigned", label: "Assigned" },
+              { value: "On Trip", label: "On Trip" },
+              { value: "Unavailable", label: "Unavailable" },
+            ],
+          },
+          {
+            key: "region",
+            value: regionFilter,
+            onChange: setRegionFilter,
+            options: [
+              { value: "ALL", label: "All Regions" },
+              { value: "Surabaya", label: "Surabaya" },
+              { value: "Malang", label: "Malang" },
+              { value: "Batu", label: "Batu" },
+              { value: "East Java", label: "East Java" },
+            ],
+          },
+        ]}
+        onExport={() => {
+          const headers = "Driver Name,Phone,License Number,Region,Status\n";
+          const rows = filteredDrivers
+            .map((d) => `"${d.fullName}","${d.phone}","${d.license.licenseNumber}","${d.region}","${d.operationalStatus}"`)
+            .join("\n");
+          const blob = new Blob([headers + rows], { type: "text/csv" });
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = "Drivers_Roster_Export.csv";
+          a.click();
+        }}
+        exportLabel="Export Drivers"
+        pageSize={10}
         currentPage={currentPage}
         totalPages={1}
         totalItems={filteredDrivers.length}
-        pageSize={10}
         onPageChange={(page) => setCurrentPage(page)}
       />
     </AppShell>

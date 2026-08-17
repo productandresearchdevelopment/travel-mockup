@@ -16,9 +16,9 @@ export function Card({
   return (
     <div
       className={cn(
-        "rounded-xl border border-[#E4E7EC] dark:border-[#202B38] bg-white dark:bg-[#101822] text-[#172033] dark:text-[#F8FAFC] shadow-xs transition-all duration-150 overflow-hidden",
+        "rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#101726] text-slate-900 dark:text-slate-100 shadow-xs transition-all duration-150 overflow-hidden",
         hoverEffect &&
-          "hover:border-[#2563EB]/40 dark:hover:border-[#4F8CFF]/40 hover:shadow-sm",
+          "hover:border-[#624AE8]/40 dark:hover:border-[#7C66DC]/40 hover:shadow-xs",
         className
       )}
       {...props}
@@ -47,7 +47,7 @@ export function CardTitle({
 }: React.HTMLAttributes<HTMLHeadingElement>) {
   return (
     <h3
-      className={cn("text-base sm:text-lg font-bold tracking-tight text-[#172033] dark:text-white", className)}
+      className={cn("text-base sm:text-lg font-bold tracking-tight text-slate-900 dark:text-white", className)}
       {...props}
     >
       {children}
@@ -61,7 +61,7 @@ export function CardDescription({
   ...props
 }: React.HTMLAttributes<HTMLParagraphElement>) {
   return (
-    <p className={cn("text-xs sm:text-sm text-[#667085] dark:text-[#A7B1C0] leading-relaxed", className)} {...props}>
+    <p className={cn("text-xs sm:text-sm text-slate-500 dark:text-slate-400", className)} {...props}>
       {children}
     </p>
   );
@@ -73,7 +73,7 @@ export function CardContent({
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) {
   return (
-    <div className={cn("px-4 sm:px-5 pb-4 sm:pb-5 pt-0", className)} {...props}>
+    <div className={cn("p-4 sm:p-5 pt-0 sm:pt-0", className)} {...props}>
       {children}
     </div>
   );
@@ -86,10 +86,7 @@ export function CardFooter({
 }: React.HTMLAttributes<HTMLDivElement>) {
   return (
     <div
-      className={cn(
-        "px-4 sm:px-5 py-3 bg-[#F9FAFB] dark:bg-[#131D28] border-t border-[#E4E7EC] dark:border-[#202B38] flex items-center justify-between text-xs text-[#667085] dark:text-[#A7B1C0]",
-        className
-      )}
+      className={cn("p-4 sm:p-5 pt-0 sm:pt-0 flex items-center justify-between", className)}
       {...props}
     >
       {children}

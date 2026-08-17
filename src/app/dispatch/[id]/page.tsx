@@ -47,22 +47,11 @@ export default function DeploymentDetailPage() {
           { label: "DEP-2026-00421" },
         ]}
         actions={
-          <div className="flex items-center gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => router.push("/dispatch")}
-              leftIcon={<ArrowLeft className="w-3.5 h-3.5" />}
-            >
-              Back to Dispatcher
+          <Link href="/dispatch/trips/trip-001">
+            <Button variant="primary" size="sm" leftIcon={<PlaySquare className="w-3.5 h-3.5" />}>
+              Handoff to Trip Operations
             </Button>
-
-            <Link href="/dispatch/trips/trip-001">
-              <Button variant="primary" size="sm" leftIcon={<PlaySquare className="w-3.5 h-3.5" />}>
-                Handoff to Trip Operations
-              </Button>
-            </Link>
-          </div>
+          </Link>
         }
       />
 

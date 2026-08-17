@@ -12,9 +12,10 @@ import { Pagination } from "@/components/ui/Pagination";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { Select } from "@/components/ui/Select";
+import { MetricCard } from "@/components/ui/MetricCard";
 import { mockDestinationsData } from "@/data/mockDestinations";
 import { DestinationMaster } from "@/types/destination";
-import { Plus, Download, MapPin, ExternalLink, Compass, AlertTriangle, ShieldCheck } from "lucide-react";
+import { Plus, Download, MapPin, ExternalLink, Compass, AlertTriangle, ShieldCheck, Eye } from "lucide-react";
 
 export default function DestinationsPage() {
   const router = useRouter();
@@ -136,18 +137,17 @@ export default function DestinationsPage() {
       headerClassName: "text-right",
       className: "text-right",
       render: (d) => (
-        <Button
-          variant="outline"
-          size="sm"
+        <button
+          type="button"
           onClick={(e) => {
             e.stopPropagation();
             router.push(`/destinations/${d.id}`);
           }}
-          className="h-7 px-2 text-[11px] gap-1"
+          className="w-8 h-8 rounded-full border border-slate-200/90 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-800/60 hover:bg-blue-50 dark:hover:bg-blue-950/60 text-slate-600 dark:text-slate-300 hover:text-blue-600 hover:border-blue-200 dark:hover:border-blue-800 flex items-center justify-center transition-all duration-200 group"
+          title="View Detail"
         >
-          <span>Detail</span>
-          <ExternalLink className="w-3 h-3 text-slate-400" />
-        </Button>
+          <Eye className="w-4 h-4 text-slate-500 group-hover:text-blue-600 transition-colors" />
+        </button>
       ),
     },
   ];
@@ -181,133 +181,110 @@ export default function DestinationsPage() {
 
       {/* Destination Summary Metrics */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#101726]">
-          <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Total Destinations</span>
-          <p className="text-xl font-extrabold text-slate-900 dark:text-slate-100 mt-1">{destinations.length} Locations</p>
-        </div>
-        <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#101726]">
-          <span className="text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">East Java Destinations</span>
-          <p className="text-xl font-extrabold text-emerald-600 dark:text-emerald-400 mt-1">
-            {destinations.filter((d) => d.region === "East Java").length} Spots
-          </p>
-        </div>
-        <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#101726]">
-          <span className="text-[11px] font-semibold text-teal-600 dark:text-teal-400 uppercase tracking-wider">Bali Destinations</span>
-          <p className="text-xl font-extrabold text-teal-600 dark:text-teal-400 mt-1">
-            {destinations.filter((d) => d.region === "Bali").length} Spots
-          </p>
-        </div>
-        <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#101726]">
-          <span className="text-[11px] font-semibold text-rose-600 dark:text-rose-400 uppercase tracking-wider">Guide Required</span>
-          <p className="text-xl font-extrabold text-rose-600 dark:text-rose-400 mt-1">
-            {destinations.filter((d) => d.guideRequirement === "Required").length} Mandatory
-          </p>
-        </div>
-      </div>
-
-      {/* Search & Multi-Filters */}
-      <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3 pt-2">
-        <SearchInput
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          onClear={() => setSearch("")}
-          placeholder="Search by name, region, city, type..."
-          containerClassName="lg:w-80"
+        <MetricCard
+          title="TOTAL DESTINATIONS"
+          value={destinations.length}
+          subtitle="Locations"
+          icon={<MapPin className="w-4 h-4" />}
+          variant="pink"
         />
-
-        <div className="flex flex-wrap items-center gap-2">
-          {/* Master Status Filter */}
-          <div className="w-32">
-            <Select
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
-              options={[
-                { value: "ALL", label: "All Statuses" },
-                { value: "Active", label: "Active" },
-                { value: "Inactive", label: "Inactive" },
-              ]}
-            />
-          </div>
-
-          {/* Region Filter */}
-          <div className="w-32">
-            <Select
-              value={regionFilter}
-              onChange={(e) => setRegionFilter(e.target.value)}
-              options={[
-                { value: "ALL", label: "All Regions" },
-                { value: "East Java", label: "East Java" },
-                { value: "Bali", label: "Bali" },
-              ]}
-            />
-          </div>
-
-          {/* Type Filter */}
-          <div className="w-36">
-            <Select
-              value={typeFilter}
-              onChange={(e) => setTypeFilter(e.target.value)}
-              options={[
-                { value: "ALL", label: "All Types" },
-                { value: "Nature", label: "Nature" },
-                { value: "Culture", label: "Culture" },
-                { value: "Adventure", label: "Adventure" },
-                { value: "Beach", label: "Beach" },
-                { value: "Religious", label: "Religious" },
-                { value: "Entertainment", label: "Entertainment" },
-              ]}
-            />
-          </div>
-
-          {/* Guide Requirement Filter */}
-          <div className="w-36">
-            <Select
-              value={guideFilter}
-              onChange={(e) => setGuideFilter(e.target.value)}
-              options={[
-                { value: "ALL", label: "All Guide Rules" },
-                { value: "Required", label: "Guide Required" },
-                { value: "Recommended", label: "Recommended" },
-                { value: "Not Required", label: "Not Required" },
-              ]}
-            />
-          </div>
-
-          {(search || activeFiltersCount > 0) && (
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => {
-                setSearch("");
-                setStatusFilter("ALL");
-                setTypeFilter("ALL");
-                setRegionFilter("ALL");
-                setCityFilter("ALL");
-                setGuideFilter("ALL");
-              }}
-              className="text-xs text-rose-600 hover:text-rose-700"
-            >
-              Reset Filters
-            </Button>
-          )}
-        </div>
+        <MetricCard
+          title="EAST JAVA SPOTS"
+          value={destinations.filter((d) => d.region === "East Java").length}
+          subtitle="Spots"
+          icon={<Compass className="w-4 h-4" />}
+          variant="emerald"
+          badge="East Java"
+        />
+        <MetricCard
+          title="BALI SPOTS"
+          value={destinations.filter((d) => d.region === "Bali").length}
+          subtitle="Spots"
+          icon={<MapPin className="w-4 h-4" />}
+          variant="cyan"
+          badge="Bali"
+        />
+        <MetricCard
+          title="GUIDE REQUIRED"
+          value={destinations.filter((d) => d.guideRequirement === "Required").length}
+          subtitle="Mandatory"
+          icon={<ShieldCheck className="w-4 h-4" />}
+          variant="violet"
+          badge="Mandatory"
+        />
       </div>
 
-      {/* Data Table */}
+      {/* UNIFIED MASTER DATA TABLE */}
       <DataTable
         columns={columns}
         data={filteredDestinations}
         keyExtractor={(row) => row.id}
         onRowClick={(row) => router.push(`/destinations/${row.id}`)}
         emptyMessage="No destinations match your search and filter criteria."
-      />
-
-      {/* Pagination */}
-      <Pagination
+        searchQuery={search}
+        onSearchChange={(e) => setSearch(e.target.value)}
+        searchPlaceholder="Search by name, region, city, type..."
+        filters={[
+          {
+            key: "status",
+            value: statusFilter,
+            onChange: setStatusFilter,
+            options: [
+              { value: "ALL", label: "All Statuses" },
+              { value: "Active", label: "Active" },
+              { value: "Inactive", label: "Inactive" },
+            ],
+          },
+          {
+            key: "region",
+            value: regionFilter,
+            onChange: setRegionFilter,
+            options: [
+              { value: "ALL", label: "All Regions" },
+              { value: "East Java", label: "East Java" },
+              { value: "Bali", label: "Bali" },
+            ],
+          },
+          {
+            key: "type",
+            value: typeFilter,
+            onChange: setTypeFilter,
+            options: [
+              { value: "ALL", label: "All Types" },
+              { value: "Nature", label: "Nature" },
+              { value: "Culture", label: "Culture" },
+              { value: "Adventure", label: "Adventure" },
+              { value: "Beach", label: "Beach" },
+            ],
+          },
+          {
+            key: "guide",
+            value: guideFilter,
+            onChange: setGuideFilter,
+            options: [
+              { value: "ALL", label: "All Guide Rules" },
+              { value: "Required", label: "Guide Required" },
+              { value: "Recommended", label: "Recommended" },
+            ],
+          },
+        ]}
+        onExport={() => {
+          const headers = "Destination Name,Type,Region,City\n";
+          const rows = filteredDestinations
+            .map((d) => `"${d.name}","${d.type}","${d.region}","${d.city}"`)
+            .join("\n");
+          const blob = new Blob([headers + rows], { type: "text/csv" });
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = "Destinations_Master_Export.csv";
+          a.click();
+        }}
+        exportLabel="Export Destinations"
+        pageSize={10}
         currentPage={currentPage}
         totalPages={1}
         totalItems={filteredDestinations.length}
-        pageSize={15}
         onPageChange={(page) => setCurrentPage(page)}
       />
     </AppShell>

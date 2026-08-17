@@ -14,6 +14,7 @@ import { Modal } from "@/components/ui/Modal";
 import { FormField } from "@/components/ui/FormField";
 import { Input } from "@/components/ui/Input";
 import { Textarea } from "@/components/ui/Textarea";
+import { MetricCard } from "@/components/ui/MetricCard";
 import { mockVendorsData } from "@/data/mockVendorsData";
 import { VendorMaster } from "@/types/vendor";
 import {
@@ -31,6 +32,9 @@ import {
   ShieldCheck,
   AlertTriangle,
   Lock,
+  FileCheck,
+  Wallet,
+  Eye,
 } from "lucide-react";
 
 export default function VendorsListPage() {
@@ -175,51 +179,47 @@ export default function VendorsListPage() {
 
       {/* TOP SUMMARY KPI CARDS */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-        <Card className="p-4 space-y-1">
-          <span className="text-[10px] font-mono text-slate-400 font-bold uppercase block">TOTAL VENDORS</span>
-          <div className="flex items-baseline justify-between">
-            <span className="text-2xl font-extrabold text-slate-900 dark:text-slate-100">{summary.total}</span>
-            <span className="text-[10px] text-emerald-600 font-bold font-mono">15 Active</span>
-          </div>
-        </Card>
-
-        <Card className="p-4 space-y-1">
-          <span className="text-[10px] font-mono text-slate-400 font-bold uppercase block">VEHICLES SUPPLIED</span>
-          <div className="flex items-baseline justify-between">
-            <span className="text-2xl font-extrabold text-blue-600 dark:text-blue-400">{summary.vehiclesSupplied}</span>
-            <span className="text-[10px] text-slate-400 font-mono">Units</span>
-          </div>
-        </Card>
-
-        <Card className="p-4 space-y-1">
-          <span className="text-[10px] font-mono text-slate-400 font-bold uppercase block">ACTIVE CONTRACTS</span>
-          <div className="flex items-baseline justify-between">
-            <span className="text-2xl font-extrabold text-slate-800 dark:text-slate-200">{summary.activeContracts}</span>
-            <Badge variant="emerald">Active</Badge>
-          </div>
-        </Card>
-
-        <Card className="p-4 space-y-1">
-          <span className="text-[10px] font-mono text-slate-400 font-bold uppercase block">ESTIMATED RENTAL (MONTH)</span>
-          <div className="flex items-baseline justify-between">
-            <span className="text-base font-extrabold text-slate-900 dark:text-slate-100">Rp {summary.monthlyEstimated.toLocaleString("id-ID")}</span>
-          </div>
-        </Card>
-
-        <Card className="p-4 space-y-1 border-amber-200 dark:border-amber-900/60 bg-amber-50/20 dark:bg-amber-950/20">
-          <span className="text-[10px] font-mono text-amber-600 dark:text-amber-400 font-bold uppercase block">ACTUAL RENTAL SPENT</span>
-          <div className="flex items-baseline justify-between">
-            <span className="text-base font-extrabold text-amber-600 dark:text-amber-400">Rp {summary.monthlyActual.toLocaleString("id-ID")}</span>
-          </div>
-        </Card>
-
-        <Card className="p-4 space-y-1 border-amber-200 dark:border-amber-900/60 bg-amber-50/20 dark:bg-amber-950/20">
-          <span className="text-[10px] font-mono text-amber-600 dark:text-amber-400 font-bold uppercase block">COST VARIANCE</span>
-          <div className="flex items-baseline justify-between">
-            <span className="text-base font-extrabold text-amber-600 dark:text-amber-400">+Rp {summary.monthlyVariance.toLocaleString("id-ID")}</span>
-            <span className="text-[10px] font-mono text-amber-600 font-bold">+3.5%</span>
-          </div>
-        </Card>
+        <MetricCard
+          title="TOTAL VENDORS"
+          value={summary.total}
+          subtitle="Partners"
+          icon={<Building className="w-4 h-4" />}
+          variant="slate"
+        />
+        <MetricCard
+          title="VEHICLES SUPPLIED"
+          value={summary.vehiclesSupplied}
+          subtitle="Units"
+          icon={<Truck className="w-4 h-4" />}
+          variant="blue"
+          badge="Fleet"
+        />
+        <MetricCard
+          title="ACTIVE CONTRACTS"
+          value={summary.activeContracts}
+          icon={<FileCheck className="w-4 h-4" />}
+          variant="emerald"
+          badge="● Active"
+        />
+        <MetricCard
+          title="EST. RENTAL (MONTH)"
+          value={`Rp ${summary.monthlyEstimated.toLocaleString("id-ID")}`}
+          icon={<Wallet className="w-4 h-4" />}
+          variant="violet"
+        />
+        <MetricCard
+          title="ACTUAL RENTAL SPENT"
+          value={`Rp ${summary.monthlyActual.toLocaleString("id-ID")}`}
+          icon={<DollarSign className="w-4 h-4" />}
+          variant="amber"
+        />
+        <MetricCard
+          title="COST VARIANCE"
+          value={`+Rp ${summary.monthlyVariance.toLocaleString("id-ID")}`}
+          icon={<AlertTriangle className="w-4 h-4" />}
+          variant="amber"
+          trend={{ value: "+3.5%", isPositive: false }}
+        />
       </div>
 
       {/* RENTAL CONTROL BANNER */}
@@ -235,139 +235,145 @@ export default function VendorsListPage() {
         </p>
       </Card>
 
-      {/* FILTER & SEARCH BAR */}
-      <Card className="p-4 space-y-4">
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
-          <div className="w-full sm:w-72">
-            <SearchInput
-              placeholder="Search vendor, contact, city..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-          </div>
-
-          <div className="flex items-center gap-2 flex-wrap">
-            <Select
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
-              options={[
-                { value: "All", label: "All Statuses" },
-                { value: "Active", label: "Active Vendors" },
-                { value: "Inactive", label: "Inactive Vendors" },
-              ]}
-              className="w-36"
-            />
-
-            <Select
-              value={regionFilter}
-              onChange={(e) => setRegionFilter(e.target.value)}
-              options={[
-                { value: "All", label: "All Regions" },
-                { value: "East Java", label: "East Java" },
-                { value: "Banyuwangi", label: "Banyuwangi" },
-                { value: "Bali", label: "Bali" },
-              ]}
-              className="w-36"
-            />
-
-            <Select
-              value={contractFilter}
-              onChange={(e) => setContractFilter(e.target.value)}
-              options={[
-                { value: "All", label: "All Contracts" },
-                { value: "Active", label: "Active Contracts" },
-                { value: "Expiring", label: "Expiring Soon" },
-              ]}
-              className="w-36"
-            />
-          </div>
-        </div>
-
-        {/* VENDORS DATA TABLE */}
-        <DataTable
-          columns={[
-            {
-              key: "name",
-              header: "Vendor Partner",
-              render: (r: VendorMaster) => (
-                <div className="space-y-0.5">
-                  <Link href={`/vendors/${r.id}`} className="font-bold text-sm text-slate-900 dark:text-slate-100 hover:text-blue-600 dark:hover:text-blue-400">
-                    {r.name}
-                  </Link>
-                  <span className="text-[10px] text-slate-400 font-mono block">{r.code} · {r.legalName}</span>
-                </div>
-              ),
-            },
-            {
-              key: "contact",
-              header: "Contact Person",
-              render: (r: VendorMaster) => (
-                <div className="text-xs space-y-0.5">
-                  <span className="font-bold text-slate-800 dark:text-slate-200 block">{r.contactPerson}</span>
-                  <span className="text-[10px] text-slate-400 font-mono block">{r.phone}</span>
-                </div>
-              ),
-            },
-            {
-              key: "region",
-              header: "Region",
-              render: (r: VendorMaster) => (
-                <span className="font-mono text-xs font-semibold text-slate-700 dark:text-slate-300">{r.city}, {r.region}</span>
-              ),
-            },
-            {
-              key: "vehicles",
-              header: "Vehicles Supplied",
-              render: (r: VendorMaster) => (
-                <span className="font-mono font-bold text-blue-600">{r.suppliedVehiclesCount} Units</span>
-              ),
-            },
-            {
-              key: "contracts",
-              header: "Active Contracts",
-              render: (r: VendorMaster) => (
-                <Badge variant={r.activeContractsCount > 0 ? "emerald" : "amber"}>
-                  {r.activeContractsCount} Active
-                </Badge>
-              ),
-            },
-            {
-              key: "monthlySpent",
-              header: "Monthly Rental Spent",
-              render: (r: VendorMaster) => (
-                <div className="font-mono text-xs">
-                  <span className="font-extrabold text-slate-900 dark:text-slate-100 block">Rp {r.actualMonthlyCostRupiah.toLocaleString("id-ID")}</span>
-                  {r.varianceRupiah > 0 && (
-                    <span className="text-[10px] font-bold text-amber-600 block">+Rp {r.varianceRupiah.toLocaleString("id-ID")} (+{r.variancePercent}%)</span>
-                  )}
-                </div>
-              ),
-            },
-            {
-              key: "status",
-              header: "Status",
-              render: (r: VendorMaster) => (
-                <Badge variant={r.status === "Active" ? "emerald" : "slate"}>
-                  ● {r.status}
-                </Badge>
-              ),
-            },
-            {
-              key: "actions",
-              header: "Actions",
-              render: (r: VendorMaster) => (
-                <Link href={`/vendors/${r.id}`}>
-                  <Button variant="outline" size="sm" className="h-7 text-xs px-2">
-                    View Detail
-                  </Button>
+      {/* UNIFIED MASTER DATA TABLE */}
+      <DataTable
+        searchQuery={searchQuery}
+        onSearchChange={(e) => setSearchQuery(e.target.value)}
+        searchPlaceholder="Search vendor, contact, city..."
+        filters={[
+          {
+            key: "status",
+            value: statusFilter,
+            onChange: setStatusFilter,
+            options: [
+              { value: "All", label: "All Statuses" },
+              { value: "Active", label: "Active Vendors" },
+              { value: "Inactive", label: "Inactive Vendors" },
+            ],
+          },
+          {
+            key: "region",
+            value: regionFilter,
+            onChange: setRegionFilter,
+            options: [
+              { value: "All", label: "All Regions" },
+              { value: "East Java", label: "East Java" },
+              { value: "Banyuwangi", label: "Banyuwangi" },
+              { value: "Bali", label: "Bali" },
+            ],
+          },
+          {
+            key: "contract",
+            value: contractFilter,
+            onChange: setContractFilter,
+            options: [
+              { value: "All", label: "All Contracts" },
+              { value: "Active", label: "Active Contracts" },
+              { value: "Expiring", label: "Expiring Soon" },
+            ],
+          },
+        ]}
+        onExport={() => {
+          const headers = "Vendor Code,Vendor Name,Contact Person,Phone,Region,Vehicles Supplied,Active Contracts,Monthly Spent,Status\n";
+          const rows = filteredVendors
+            .map((r) => `"${r.code}","${r.name}","${r.contactPerson}","${r.phone}","${r.city}, ${r.region}",${r.suppliedVehiclesCount},${r.activeContractsCount},${r.actualMonthlyCostRupiah},"${r.status}"`)
+            .join("\n");
+          const blob = new Blob([headers + rows], { type: "text/csv" });
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = "Vendors_Export.csv";
+          a.click();
+        }}
+        exportLabel="Export Vendors"
+        columns={[
+          {
+            key: "name",
+            header: "Vendor Partner",
+            render: (r: VendorMaster) => (
+              <div className="space-y-0.5">
+                <Link href={`/vendors/${r.id}`} className="font-bold text-sm text-slate-900 dark:text-slate-100 hover:text-blue-600 dark:hover:text-blue-400">
+                  {r.name}
                 </Link>
-              ),
-            },
-          ]}
-          data={filteredVendors}
-          keyExtractor={(r) => r.id}
-        />
-      </Card>
+                <span className="text-[10px] text-slate-400 font-mono block">{r.code} · {r.legalName}</span>
+              </div>
+            ),
+          },
+          {
+            key: "contact",
+            header: "Contact Person",
+            render: (r: VendorMaster) => (
+              <div className="text-xs space-y-0.5">
+                <span className="font-bold text-slate-800 dark:text-slate-200 block">{r.contactPerson}</span>
+                <span className="text-[10px] text-slate-400 font-mono block">{r.phone}</span>
+              </div>
+            ),
+          },
+          {
+            key: "region",
+            header: "Region",
+            render: (r: VendorMaster) => (
+              <span className="font-mono text-xs font-semibold text-slate-700 dark:text-slate-300">{r.city}, {r.region}</span>
+            ),
+          },
+          {
+            key: "vehicles",
+            header: "Vehicles Supplied",
+            render: (r: VendorMaster) => (
+              <span className="font-mono font-bold text-blue-600">{r.suppliedVehiclesCount} Units</span>
+            ),
+          },
+          {
+            key: "contracts",
+            header: "Active Contracts",
+            render: (r: VendorMaster) => (
+              <Badge variant={r.activeContractsCount > 0 ? "emerald" : "amber"}>
+                {r.activeContractsCount} Active
+              </Badge>
+            ),
+          },
+          {
+            key: "monthlySpent",
+            header: "Monthly Rental Spent",
+            render: (r: VendorMaster) => (
+              <div className="font-mono text-xs">
+                <span className="font-extrabold text-slate-900 dark:text-slate-100 block">Rp {r.actualMonthlyCostRupiah.toLocaleString("id-ID")}</span>
+                {r.varianceRupiah > 0 && (
+                  <span className="text-[10px] font-bold text-amber-600 block">+Rp {r.varianceRupiah.toLocaleString("id-ID")} (+{r.variancePercent}%)</span>
+                )}
+              </div>
+            ),
+          },
+          {
+            key: "status",
+            header: "Status",
+            render: (r: VendorMaster) => (
+              <Badge variant={r.status === "Active" ? "emerald" : "slate"}>
+                ● {r.status}
+              </Badge>
+            ),
+          },
+          {
+            key: "actions",
+            header: "Actions",
+            render: (r: VendorMaster) => (
+              <div className="flex justify-end">
+                <Link href={`/vendors/${r.id}`}>
+                  <button
+                    type="button"
+                    className="w-8 h-8 rounded-full border border-slate-200/90 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-800/60 hover:bg-blue-50 dark:hover:bg-blue-950/60 text-slate-600 dark:text-slate-300 hover:text-blue-600 hover:border-blue-200 dark:hover:border-blue-800 flex items-center justify-center transition-all duration-200 group"
+                    title="View Detail"
+                  >
+                    <Eye className="w-4 h-4 text-slate-500 group-hover:text-blue-600 transition-colors" />
+                  </button>
+                </Link>
+              </div>
+            ),
+          },
+        ]}
+        data={filteredVendors}
+        keyExtractor={(r) => r.id}
+      />
 
       {/* MODAL 1: ADD VENDOR */}
       <Modal isOpen={showAddVendorModal} onClose={() => setShowAddVendorModal(false)} title="Create Master Vendor Partner">

@@ -66,16 +66,6 @@ export default function DriverDetailPage() {
           { label: "Drivers", href: "/drivers" },
           { label: driver.code },
         ]}
-        actions={
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => router.push("/drivers")}
-            leftIcon={<ArrowLeft className="w-3.5 h-3.5" />}
-          >
-            Back to Drivers
-          </Button>
-        }
       />
 
       {/* Driver Detail Header Banner */}

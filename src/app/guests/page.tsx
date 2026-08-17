@@ -14,6 +14,7 @@ import { Modal } from "@/components/ui/Modal";
 import { FormField } from "@/components/ui/FormField";
 import { Input } from "@/components/ui/Input";
 import { Textarea } from "@/components/ui/Textarea";
+import { MetricCard } from "@/components/ui/MetricCard";
 import { mockGuestsData } from "@/data/mockGuestsData";
 import { GuestMaster } from "@/types/guest";
 import {
@@ -31,6 +32,7 @@ import {
   ShieldCheck,
   Calendar,
   UserCheck,
+  Eye,
 } from "lucide-react";
 
 export default function GuestsListPage() {
@@ -154,172 +156,154 @@ export default function GuestsListPage() {
 
       {/* TOP SUMMARY KPI CARDS */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <Card className="p-4 space-y-1">
-          <span className="text-[10px] font-mono text-slate-400 font-bold uppercase block">TOTAL GUEST MASTER</span>
-          <div className="flex items-baseline justify-between">
-            <span className="text-2xl font-extrabold text-slate-900 dark:text-slate-100">{summary.total}</span>
-            <span className="text-[10px] text-emerald-600 font-bold font-mono">Travelers</span>
-          </div>
-        </Card>
-
-        <Card className="p-4 space-y-1 border-blue-200 dark:border-blue-900/60 bg-blue-50/20 dark:bg-blue-950/20">
-          <span className="text-[10px] font-mono text-blue-600 dark:text-blue-400 font-bold uppercase block">ACTIVE ON TOUR TODAY</span>
-          <div className="flex items-baseline justify-between">
-            <span className="text-2xl font-extrabold text-blue-600 dark:text-blue-400">{summary.active}</span>
-            <Badge variant="emerald">● Active</Badge>
-          </div>
-        </Card>
-
-        <Card className="p-4 space-y-1">
-          <span className="text-[10px] font-mono text-slate-400 font-bold uppercase block">INTERNATIONAL COUNTRIES</span>
-          <div className="flex items-baseline justify-between">
-            <span className="text-2xl font-extrabold text-slate-800 dark:text-slate-200">{summary.nationalities}</span>
-            <span className="text-[10px] text-slate-400 font-mono">Nationalities</span>
-          </div>
-        </Card>
-
-        <Card className="p-4 space-y-1">
-          <span className="text-[10px] font-mono text-slate-400 font-bold uppercase block">COMPLETED TOURS</span>
-          <div className="flex items-baseline justify-between">
-            <span className="text-2xl font-extrabold text-emerald-600 dark:text-emerald-400">{summary.completedTours}</span>
-            <Badge variant="emerald">✓ History</Badge>
-          </div>
-        </Card>
+        <MetricCard
+          title="TOTAL GUEST MASTER"
+          value={summary.total}
+          subtitle="Travelers"
+          icon={<Users className="w-4 h-4" />}
+          variant="violet"
+        />
+        <MetricCard
+          title="ACTIVE ON TOUR TODAY"
+          value={summary.active}
+          icon={<UserCheck className="w-4 h-4" />}
+          variant="blue"
+          badge="● Active"
+        />
+        <MetricCard
+          title="INTERNATIONAL COUNTRIES"
+          value={summary.nationalities}
+          subtitle="Nationalities"
+          icon={<Globe className="w-4 h-4" />}
+          variant="cyan"
+          badge="Global"
+        />
+        <MetricCard
+          title="COMPLETED TOURS"
+          value={summary.completedTours}
+          icon={<Calendar className="w-4 h-4" />}
+          variant="emerald"
+          badge="✓ History"
+        />
       </div>
 
-      {/* FILTER & SEARCH BAR */}
-      <Card className="p-4 space-y-4">
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
-          <div className="w-full sm:w-72">
-            <SearchInput
-              placeholder="Search guest name, passport, phone, email..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-          </div>
-
-          <div className="flex items-center gap-2 flex-wrap">
-            <Select
-              value={nationalityFilter}
-              onChange={(e) => setNationalityFilter(e.target.value)}
-              options={[
-                { value: "All", label: "All Nationalities" },
-                { value: "Italy", label: "Italy" },
-                { value: "United Kingdom", label: "United Kingdom" },
-                { value: "Thailand", label: "Thailand" },
-                { value: "United States", label: "United States" },
-                { value: "Australia", label: "Australia" },
-                { value: "Germany", label: "Germany" },
-              ]}
-              className="w-40"
-            />
-
-            <Select
-              value={genderFilter}
-              onChange={(e) => setGenderFilter(e.target.value)}
-              options={[
-                { value: "All", label: "All Genders" },
-                { value: "Female", label: "Female" },
-                { value: "Male", label: "Male" },
-              ]}
-              className="w-32"
-            />
-
-            <Select
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
-              options={[
-                { value: "All", label: "All Statuses" },
-                { value: "Active", label: "Active" },
-                { value: "Completed", label: "Completed" },
-              ]}
-              className="w-32"
-            />
-          </div>
-        </div>
-
-        {/* GUESTS DATA TABLE */}
-        <DataTable
-          columns={[
-            {
-              key: "guest",
-              header: "Guest Name",
-              render: (r: GuestMaster) => (
-                <div className="space-y-0.5">
-                  <Link href={`/guests/${r.id}`} className="font-bold text-sm text-slate-900 dark:text-slate-100 hover:text-blue-600 dark:hover:text-blue-400">
-                    {r.fullName}
-                  </Link>
-                  <span className="text-[10px] text-slate-400 font-mono block">{r.code}</span>
-                </div>
-              ),
-            },
-            {
-              key: "nationality",
-              header: "Nationality & Residence",
-              render: (r: GuestMaster) => (
-                <div className="text-xs font-mono">
-                  <span className="font-bold text-slate-800 dark:text-slate-200 block">🇮🇹 {r.nationality}</span>
-                  <span className="text-[10px] text-slate-400 block">Resides in {r.countryOfResidence}</span>
-                </div>
-              ),
-            },
-            { key: "gender", header: "Gender", render: (r: GuestMaster) => <span>{r.gender}</span> },
-            {
-              key: "passport",
-              header: "Passport Number",
-              render: (r: GuestMaster) => (
-                <span className="font-mono font-bold text-slate-800 dark:text-slate-200">{r.passportNumber}</span>
-              ),
-            },
-            {
-              key: "contact",
-              header: "Contact Details",
-              render: (r: GuestMaster) => (
-                <div className="text-xs space-y-0.5 font-mono">
-                  <span className="font-bold text-slate-800 dark:text-slate-200 block">{r.phone}</span>
-                  <span className="text-[10px] text-slate-400 block">{r.email}</span>
-                </div>
-              ),
-            },
-            {
-              key: "trips",
-              header: "Trips History",
-              render: (r: GuestMaster) => (
-                <span className="font-mono font-bold text-blue-600">{r.totalTripsCount} Trips</span>
-              ),
-            },
-            {
-              key: "lastTrip",
-              header: "Last Travel Date",
-              render: (r: GuestMaster) => (
-                <span className="font-mono text-xs">{r.lastTripDate}</span>
-              ),
-            },
-            {
-              key: "status",
-              header: "Status",
-              render: (r: GuestMaster) => (
-                <Badge variant={r.status === "Active" ? "emerald" : "slate"}>
-                  ● {r.status}
-                </Badge>
-              ),
-            },
-            {
-              key: "actions",
-              header: "Actions",
-              render: (r: GuestMaster) => (
-                <Link href={`/guests/${r.id}`}>
-                  <Button variant="outline" size="sm" className="h-7 text-xs px-2">
-                    View Profile
-                  </Button>
+      {/* UNIFIED MASTER DATA TABLE */}
+      <DataTable
+        searchQuery={searchQuery}
+        onSearchChange={(e) => setSearchQuery(e.target.value)}
+        searchPlaceholder="Search guest name, passport, phone, email..."
+        filters={[
+          {
+            key: "nationality",
+            value: nationalityFilter,
+            onChange: setNationalityFilter,
+            options: [
+              { value: "All", label: "All Nationalities" },
+              { value: "Italy", label: "Italy" },
+              { value: "United Kingdom", label: "United Kingdom" },
+              { value: "Thailand", label: "Thailand" },
+              { value: "United States", label: "United States" },
+              { value: "Australia", label: "Australia" },
+              { value: "Germany", label: "Germany" },
+            ],
+          },
+          {
+            key: "gender",
+            value: genderFilter,
+            onChange: setGenderFilter,
+            options: [
+              { value: "All", label: "All Genders" },
+              { value: "Female", label: "Female" },
+              { value: "Male", label: "Male" },
+            ],
+          },
+          {
+            key: "status",
+            value: statusFilter,
+            onChange: setStatusFilter,
+            options: [
+              { value: "All", label: "All Statuses" },
+              { value: "Active", label: "Active" },
+              { value: "Completed", label: "Completed" },
+            ],
+          },
+        ]}
+        onExport={() => {
+          const headers = "Guest Code,Full Name,Nationality,Passport Number,Gender,Phone,Email,Status\n";
+          const rows = filteredGuests
+            .map((r) => `"${r.code}","${r.fullName}","${r.nationality}","${r.passportNumber}","${r.gender}","${r.phone}","${r.email}","${r.status}"`)
+            .join("\n");
+          const blob = new Blob([headers + rows], { type: "text/csv" });
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = "Guests_Master_Export.csv";
+          a.click();
+        }}
+        exportLabel="Export Guests"
+        columns={[
+          {
+            key: "name",
+            header: "Guest Name & Code",
+            render: (r: GuestMaster) => (
+              <div className="space-y-0.5">
+                <Link href={`/guests/${r.id}`} className="font-bold text-sm text-slate-900 dark:text-slate-100 hover:text-blue-600 dark:hover:text-blue-400">
+                  {r.fullName}
                 </Link>
-              ),
-            },
-          ]}
-          data={filteredGuests}
-          keyExtractor={(r) => r.id}
-        />
-      </Card>
+                <span className="text-[10px] text-slate-400 font-mono block">{r.code}</span>
+              </div>
+            ),
+          },
+          {
+            key: "nationality",
+            header: "Nationality & Country",
+            render: (r: GuestMaster) => (
+              <span className="font-mono text-xs font-semibold text-slate-700 dark:text-slate-300">
+                🌐 {r.nationality}
+              </span>
+            ),
+          },
+          {
+            key: "passport",
+            header: "Passport Number",
+            render: (r: GuestMaster) => (
+              <span className="font-mono font-bold text-xs text-slate-800 dark:text-slate-200">
+                {r.passportNumber}
+              </span>
+            ),
+          },
+          { key: "gender", header: "Gender", render: (r: GuestMaster) => <span className="font-mono text-xs">{r.gender}</span> },
+          { key: "phone", header: "Phone / WhatsApp", render: (r: GuestMaster) => <span className="font-mono text-xs">{r.phone}</span> },
+          {
+            key: "status",
+            header: "Tour Status",
+            render: (r: GuestMaster) => (
+              <Badge variant={r.status === "Active" ? "emerald" : "slate"}>
+                ● {r.status}
+              </Badge>
+            ),
+          },
+          {
+            key: "actions",
+            header: "Actions",
+            render: (r: GuestMaster) => (
+              <div className="flex justify-end">
+                <Link href={`/guests/${r.id}`}>
+                  <button
+                    type="button"
+                    className="w-8 h-8 rounded-full border border-slate-200/90 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-800/60 hover:bg-blue-50 dark:hover:bg-blue-950/60 text-slate-600 dark:text-slate-300 hover:text-blue-600 hover:border-blue-200 dark:hover:border-blue-800 flex items-center justify-center transition-all duration-200 group"
+                    title="View Detail"
+                  >
+                    <Eye className="w-4 h-4 text-slate-500 group-hover:text-blue-600 transition-colors" />
+                  </button>
+                </Link>
+              </div>
+            ),
+          },
+        ]}
+        data={filteredGuests}
+        keyExtractor={(r) => r.id}
+      />
 
       {/* ADD GUEST MODAL */}
       <Modal isOpen={showAddGuestModal} onClose={() => setShowAddGuestModal(false)} title="Create Guest / Traveler Profile">

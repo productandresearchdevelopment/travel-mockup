@@ -20,7 +20,7 @@ export function Tabs({ items, tabs, activeTab, onChange, className }: TabsProps)
   const tabList = items || tabs || [];
 
   return (
-    <div className={cn("flex items-center space-x-1 border-b border-slate-200 dark:border-slate-800 text-xs font-medium overflow-x-auto scrollbar-none", className)}>
+    <div className={cn("flex items-center space-x-1 border-b border-slate-200 dark:border-slate-800 text-xs font-semibold overflow-x-auto scrollbar-none", className)}>
       {tabList.map((tab) => {
         const isActive = tab.id === activeTab;
         const displayBadge = tab.count !== undefined ? tab.count : tab.badge;
@@ -30,19 +30,19 @@ export function Tabs({ items, tabs, activeTab, onChange, className }: TabsProps)
             type="button"
             onClick={() => onChange(tab.id)}
             className={cn(
-              "flex items-center gap-2 py-2.5 px-3 border-b-2 font-medium whitespace-nowrap transition-colors cursor-pointer",
+              "flex items-center gap-2 py-2.5 px-3.5 border-b-2 font-bold whitespace-nowrap transition-all duration-150 cursor-pointer rounded-t-lg",
               isActive
-                ? "border-blue-600 text-blue-600 dark:text-blue-400 font-semibold"
-                : "border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200"
+                ? "border-[#624AE8] text-[#624AE8] bg-[#F3F0FF]/60 dark:bg-purple-950/40 dark:text-purple-400 font-extrabold"
+                : "border-transparent text-slate-500 dark:text-slate-400 hover:text-[#624AE8] hover:bg-slate-50 dark:hover:bg-[#162034]"
             )}
           >
             <span>{tab.label}</span>
             {displayBadge !== undefined && (
               <span
                 className={cn(
-                  "px-1.5 py-0.5 rounded-full text-[10px] font-bold",
+                  "px-1.5 py-0.5 rounded-full text-[10px] font-mono font-bold",
                   isActive
-                    ? "bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300"
+                    ? "bg-[#624AE8] text-white"
                     : "bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400"
                 )}
               >

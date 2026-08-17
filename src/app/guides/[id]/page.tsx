@@ -65,16 +65,6 @@ export default function GuideDetailPage() {
           { label: "Guides", href: "/guides" },
           { label: guide.code },
         ]}
-        actions={
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => router.push("/guides")}
-            leftIcon={<ArrowLeft className="w-3.5 h-3.5" />}
-          >
-            Back to Guides
-          </Button>
-        }
       />
 
       {/* Guide Detail Header Banner */}
