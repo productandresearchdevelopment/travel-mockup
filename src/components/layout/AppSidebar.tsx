@@ -46,13 +46,30 @@ export function AppSidebar({ mobileOpen = false, setMobileOpen }: AppSidebarProp
   const pathname = usePathname();
 
   const isMainActive = (href: string) => {
-    if (href === "/") return pathname === "/" || pathname === "/dashboard";
-    if (href === "/dispatcher") return pathname === "/dispatcher" || pathname === "/dispatch";
-    if (href === "/trip-operations") return pathname.startsWith("/trip-operations") || pathname.startsWith("/dispatch/trips");
-    if (href === "/live-tracking") return pathname === "/live-tracking" || pathname === "/dispatch/tracking";
-    if (href === "/workforce") return pathname === "/workforce" || (pathname.startsWith("/workforce/") && !pathname.startsWith("/workforce/attendance") && !pathname.startsWith("/workforce/payroll"));
-    if (href === "/attendance") return pathname === "/attendance" || pathname === "/workforce/attendance";
-    if (href === "/payroll") return pathname === "/payroll" || pathname === "/workforce/payroll";
+    if (href === "/") return pathname === "/" || pathname.startsWith("/dashboard");
+    if (href === "/dispatcher")
+      return (
+        pathname === "/dispatcher" ||
+        (pathname.startsWith("/dispatch") &&
+          !pathname.startsWith("/dispatch/trips") &&
+          !pathname.startsWith("/dispatch/tracking"))
+      );
+    if (href === "/trip-operations")
+      return (
+        pathname.startsWith("/trip-operations") ||
+        pathname.startsWith("/dispatch/trips") ||
+        pathname.startsWith("/operations")
+      );
+    if (href === "/live-tracking")
+      return pathname === "/live-tracking" || pathname.startsWith("/dispatch/tracking");
+    if (href === "/workforce")
+      return (
+        pathname.startsWith("/workforce") &&
+        !pathname.startsWith("/workforce/attendance") &&
+        !pathname.startsWith("/workforce/payroll")
+      );
+    if (href === "/attendance") return pathname.startsWith("/attendance") || pathname.startsWith("/workforce/attendance");
+    if (href === "/payroll") return pathname.startsWith("/payroll") || pathname.startsWith("/workforce/payroll");
     if (href === "/financials") return pathname.startsWith("/financials") || pathname.startsWith("/finance");
     return pathname === href || pathname.startsWith(href + "/");
   };
@@ -95,7 +112,7 @@ export function AppSidebar({ mobileOpen = false, setMobileOpen }: AppSidebarProp
             onClick={() => setMobileOpen && setMobileOpen(false)}
             className={`flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold transition-all ${
               isMainActive("/")
-                ? "bg-[#F3F0FF] text-[#624AE8] dark:bg-purple-950/60 dark:text-purple-400 font-bold"
+                ? "bg-blue-50 text-blue-600 dark:bg-blue-950/60 dark:text-blue-400 font-bold"
                 : "text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-[#162034] hover:text-slate-900 dark:hover:text-slate-200"
             }`}
           >
@@ -114,7 +131,7 @@ export function AppSidebar({ mobileOpen = false, setMobileOpen }: AppSidebarProp
             onClick={() => setMobileOpen && setMobileOpen(false)}
             className={`flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold transition-all ${
               isMainActive("/dispatcher")
-                ? "bg-[#F3F0FF] text-[#624AE8] dark:bg-purple-950/60 dark:text-purple-400 font-bold"
+                ? "bg-blue-50 text-blue-600 dark:bg-blue-950/60 dark:text-blue-400 font-bold"
                 : "text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-[#162034] hover:text-slate-900 dark:hover:text-slate-200"
             }`}
           >
@@ -127,7 +144,7 @@ export function AppSidebar({ mobileOpen = false, setMobileOpen }: AppSidebarProp
             onClick={() => setMobileOpen && setMobileOpen(false)}
             className={`flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold transition-all ${
               isMainActive("/trip-operations")
-                ? "bg-[#F3F0FF] text-[#624AE8] dark:bg-purple-950/60 dark:text-purple-400 font-bold"
+                ? "bg-blue-50 text-blue-600 dark:bg-blue-950/60 dark:text-blue-400 font-bold"
                 : "text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-[#162034] hover:text-slate-900 dark:hover:text-slate-200"
             }`}
           >
@@ -140,7 +157,7 @@ export function AppSidebar({ mobileOpen = false, setMobileOpen }: AppSidebarProp
             onClick={() => setMobileOpen && setMobileOpen(false)}
             className={`flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold transition-all ${
               isMainActive("/live-tracking")
-                ? "bg-[#F3F0FF] text-[#624AE8] dark:bg-purple-950/60 dark:text-purple-400 font-bold"
+                ? "bg-blue-50 text-blue-600 dark:bg-blue-950/60 dark:text-blue-400 font-bold"
                 : "text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-[#162034] hover:text-slate-900 dark:hover:text-slate-200"
             }`}
           >
@@ -159,7 +176,7 @@ export function AppSidebar({ mobileOpen = false, setMobileOpen }: AppSidebarProp
             onClick={() => setMobileOpen && setMobileOpen(false)}
             className={`flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold transition-all ${
               isMainActive("/guests")
-                ? "bg-[#F3F0FF] text-[#624AE8] dark:bg-purple-950/60 dark:text-purple-400 font-bold"
+                ? "bg-blue-50 text-blue-600 dark:bg-blue-950/60 dark:text-blue-400 font-bold"
                 : "text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-[#162034] hover:text-slate-900 dark:hover:text-slate-200"
             }`}
           >
@@ -172,7 +189,7 @@ export function AppSidebar({ mobileOpen = false, setMobileOpen }: AppSidebarProp
             onClick={() => setMobileOpen && setMobileOpen(false)}
             className={`flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold transition-all ${
               isMainActive("/vehicles")
-                ? "bg-[#F3F0FF] text-[#624AE8] dark:bg-purple-950/60 dark:text-purple-400 font-bold"
+                ? "bg-blue-50 text-blue-600 dark:bg-blue-950/60 dark:text-blue-400 font-bold"
                 : "text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-[#162034] hover:text-slate-900 dark:hover:text-slate-200"
             }`}
           >
@@ -185,7 +202,7 @@ export function AppSidebar({ mobileOpen = false, setMobileOpen }: AppSidebarProp
             onClick={() => setMobileOpen && setMobileOpen(false)}
             className={`flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold transition-all ${
               isMainActive("/drivers")
-                ? "bg-[#F3F0FF] text-[#624AE8] dark:bg-purple-950/60 dark:text-purple-400 font-bold"
+                ? "bg-blue-50 text-blue-600 dark:bg-blue-950/60 dark:text-blue-400 font-bold"
                 : "text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-[#162034] hover:text-slate-900 dark:hover:text-slate-200"
             }`}
           >
@@ -198,7 +215,7 @@ export function AppSidebar({ mobileOpen = false, setMobileOpen }: AppSidebarProp
             onClick={() => setMobileOpen && setMobileOpen(false)}
             className={`flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold transition-all ${
               isMainActive("/guides")
-                ? "bg-[#F3F0FF] text-[#624AE8] dark:bg-purple-950/60 dark:text-purple-400 font-bold"
+                ? "bg-blue-50 text-blue-600 dark:bg-blue-950/60 dark:text-blue-400 font-bold"
                 : "text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-[#162034] hover:text-slate-900 dark:hover:text-slate-200"
             }`}
           >
@@ -211,7 +228,7 @@ export function AppSidebar({ mobileOpen = false, setMobileOpen }: AppSidebarProp
             onClick={() => setMobileOpen && setMobileOpen(false)}
             className={`flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold transition-all ${
               isMainActive("/tour-managers")
-                ? "bg-[#F3F0FF] text-[#624AE8] dark:bg-purple-950/60 dark:text-purple-400 font-bold"
+                ? "bg-blue-50 text-blue-600 dark:bg-blue-950/60 dark:text-blue-400 font-bold"
                 : "text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-[#162034] hover:text-slate-900 dark:hover:text-slate-200"
             }`}
           >
@@ -224,7 +241,7 @@ export function AppSidebar({ mobileOpen = false, setMobileOpen }: AppSidebarProp
             onClick={() => setMobileOpen && setMobileOpen(false)}
             className={`flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold transition-all ${
               isMainActive("/hotels")
-                ? "bg-[#F3F0FF] text-[#624AE8] dark:bg-purple-950/60 dark:text-purple-400 font-bold"
+                ? "bg-blue-50 text-blue-600 dark:bg-blue-950/60 dark:text-blue-400 font-bold"
                 : "text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-[#162034] hover:text-slate-900 dark:hover:text-slate-200"
             }`}
           >
@@ -237,7 +254,7 @@ export function AppSidebar({ mobileOpen = false, setMobileOpen }: AppSidebarProp
             onClick={() => setMobileOpen && setMobileOpen(false)}
             className={`flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold transition-all ${
               isMainActive("/destinations")
-                ? "bg-[#F3F0FF] text-[#624AE8] dark:bg-purple-950/60 dark:text-purple-400 font-bold"
+                ? "bg-blue-50 text-blue-600 dark:bg-blue-950/60 dark:text-blue-400 font-bold"
                 : "text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-[#162034] hover:text-slate-900 dark:hover:text-slate-200"
             }`}
           >
@@ -250,7 +267,7 @@ export function AppSidebar({ mobileOpen = false, setMobileOpen }: AppSidebarProp
             onClick={() => setMobileOpen && setMobileOpen(false)}
             className={`flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold transition-all ${
               isMainActive("/tour-packages")
-                ? "bg-[#F3F0FF] text-[#624AE8] dark:bg-purple-950/60 dark:text-purple-400 font-bold"
+                ? "bg-blue-50 text-blue-600 dark:bg-blue-950/60 dark:text-blue-400 font-bold"
                 : "text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-[#162034] hover:text-slate-900 dark:hover:text-slate-200"
             }`}
           >
@@ -263,7 +280,7 @@ export function AppSidebar({ mobileOpen = false, setMobileOpen }: AppSidebarProp
             onClick={() => setMobileOpen && setMobileOpen(false)}
             className={`flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold transition-all ${
               isMainActive("/vendors")
-                ? "bg-[#F3F0FF] text-[#624AE8] dark:bg-purple-950/60 dark:text-purple-400 font-bold"
+                ? "bg-blue-50 text-blue-600 dark:bg-blue-950/60 dark:text-blue-400 font-bold"
                 : "text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-[#162034] hover:text-slate-900 dark:hover:text-slate-200"
             }`}
           >
@@ -282,7 +299,7 @@ export function AppSidebar({ mobileOpen = false, setMobileOpen }: AppSidebarProp
             onClick={() => setMobileOpen && setMobileOpen(false)}
             className={`flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold transition-all ${
               isMainActive("/workforce")
-                ? "bg-[#F3F0FF] text-[#624AE8] dark:bg-purple-950/60 dark:text-purple-400 font-bold"
+                ? "bg-blue-50 text-blue-600 dark:bg-blue-950/60 dark:text-blue-400 font-bold"
                 : "text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-[#162034] hover:text-slate-900 dark:hover:text-slate-200"
             }`}
           >
@@ -295,7 +312,7 @@ export function AppSidebar({ mobileOpen = false, setMobileOpen }: AppSidebarProp
             onClick={() => setMobileOpen && setMobileOpen(false)}
             className={`flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold transition-all ${
               isMainActive("/attendance")
-                ? "bg-[#F3F0FF] text-[#624AE8] dark:bg-purple-950/60 dark:text-purple-400 font-bold"
+                ? "bg-blue-50 text-blue-600 dark:bg-blue-950/60 dark:text-blue-400 font-bold"
                 : "text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-[#162034] hover:text-slate-900 dark:hover:text-slate-200"
             }`}
           >
@@ -308,7 +325,7 @@ export function AppSidebar({ mobileOpen = false, setMobileOpen }: AppSidebarProp
             onClick={() => setMobileOpen && setMobileOpen(false)}
             className={`flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold transition-all ${
               isMainActive("/payroll")
-                ? "bg-[#F3F0FF] text-[#624AE8] dark:bg-purple-950/60 dark:text-purple-400 font-bold"
+                ? "bg-blue-50 text-blue-600 dark:bg-blue-950/60 dark:text-blue-400 font-bold"
                 : "text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-[#162034] hover:text-slate-900 dark:hover:text-slate-200"
             }`}
           >
@@ -321,7 +338,7 @@ export function AppSidebar({ mobileOpen = false, setMobileOpen }: AppSidebarProp
             onClick={() => setMobileOpen && setMobileOpen(false)}
             className={`flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold transition-all ${
               isMainActive("/financials")
-                ? "bg-[#F3F0FF] text-[#624AE8] dark:bg-purple-950/60 dark:text-purple-400 font-bold"
+                ? "bg-blue-50 text-blue-600 dark:bg-blue-950/60 dark:text-blue-400 font-bold"
                 : "text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-[#162034] hover:text-slate-900 dark:hover:text-slate-200"
             }`}
           >
@@ -340,7 +357,7 @@ export function AppSidebar({ mobileOpen = false, setMobileOpen }: AppSidebarProp
             onClick={() => setMobileOpen && setMobileOpen(false)}
             className={`flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold transition-all ${
               isMainActive("/settings")
-                ? "bg-[#F3F0FF] text-[#624AE8] dark:bg-purple-950/60 dark:text-purple-400 font-bold"
+                ? "bg-blue-50 text-blue-600 dark:bg-blue-950/60 dark:text-blue-400 font-bold"
                 : "text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-[#162034] hover:text-slate-900 dark:hover:text-slate-200"
             }`}
           >
@@ -350,20 +367,6 @@ export function AppSidebar({ mobileOpen = false, setMobileOpen }: AppSidebarProp
         </div>
       </nav>
 
-      {/* User Footer */}
-      <div className="p-3 border-t border-slate-200 dark:border-slate-800">
-        <div className="p-2.5 rounded-lg bg-slate-50 dark:bg-[#162034] flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-full bg-blue-600 text-white font-bold text-xs flex items-center justify-center">
-              OP
-            </div>
-            <div>
-              <p className="text-xs font-bold text-slate-800 dark:text-slate-200 leading-none">Ops Dispatcher</p>
-              <p className="text-[10px] text-slate-400">Head Dispatcher</p>
-            </div>
-          </div>
-        </div>
-      </div>
     </aside>
   );
 }

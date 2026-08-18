@@ -17,28 +17,21 @@ import { mockVehiclesData } from "@/data/mockVehicles";
 import { mockDriversData } from "@/data/mockDrivers";
 import { mockGuidesData } from "@/data/mockGuides";
 import { mockTourManagersData } from "@/data/mockTourManagers";
-import { mockHotelsData } from "@/data/mockHotels";
-import { mockDestinationsData } from "@/data/mockDestinations";
 import {
   CalendarCheck,
   Users,
   MapPin,
   Truck,
-  UserCheck,
-  Compass,
-  Briefcase,
   Hotel,
   Train,
   CheckCircle2,
   AlertTriangle,
-  ArrowLeft,
-  Lock,
   ExternalLink,
   ShieldCheck,
-  ChevronRight,
   Ticket,
-  Clock,
   Edit3,
+  Check,
+  FileText,
 } from "lucide-react";
 
 interface PickupDropoffGroupConfig {
@@ -67,6 +60,9 @@ interface PickupDropoffGroupConfig {
 
 export default function CreateDeploymentPage() {
   const router = useRouter();
+
+  // Active step state for smooth navigation
+  const [activeStep, setActiveStep] = useState<number>(1);
 
   // Step 1: Booking Selection State
   const [selectedBookingCode, setSelectedBookingCode] = useState("BKG-2026-00821");
@@ -247,8 +243,28 @@ export default function CreateDeploymentPage() {
     };
   }, [activeBooking, isStep4Valid, selectedVehicleId, selectedDriverId, driverConflict, selectedGuideId, selectedTMId]);
 
+  // Stepper items list
+  const stepsList = [
+    { step: 1, label: "Booking", icon: CalendarCheck, targetId: "step-1" },
+    { step: 2, label: "Summary", icon: FileText, targetId: "step-2" },
+    { step: 3, label: "Manifest", icon: Users, targetId: "step-3" },
+    { step: 4, label: "Pickup/Drop", icon: MapPin, targetId: "step-4" },
+    { step: 5, label: "Route", icon: Hotel, targetId: "step-5" },
+    { step: 6, label: "Resources", icon: Truck, targetId: "step-6" },
+    { step: 7, label: "Review", icon: ShieldCheck, targetId: "step-7" },
+  ];
+
+  const scrollToStep = (stepNumber: number, targetId: string) => {
+    setActiveStep(stepNumber);
+    const el = document.getElementById(targetId);
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   return (
     <AppShell>
+      {/* PAGE HEADER (Cancel Button Removed per user request) */}
       <PageHeader
         title="Create Operational Deployment"
         description="Convert an existing Tour Booking into an operational deployment with assigned resources, pickup/drop-off requirements, and conflict validation."
@@ -257,22 +273,60 @@ export default function CreateDeploymentPage() {
           { label: "Dispatcher", href: "/dispatch" },
           { label: "New Deployment" },
         ]}
-        actions={
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => router.push("/dispatch")}
-            leftIcon={<ArrowLeft className="w-3.5 h-3.5" />}
-          >
-            Cancel
-          </Button>
-        }
       />
 
+      {/* INTERACTIVE STEPPER NAVIGATION BAR */}
+      <Card className="p-3 sm:p-4 bg-white dark:bg-[#101726] border border-slate-200/80 dark:border-slate-800 shadow-xs">
+        <div className="flex items-center justify-between overflow-x-auto scrollbar-none gap-2 px-1">
+          {stepsList.map((st, idx) => {
+            const Icon = st.icon;
+            const isActive = activeStep === st.step;
+            const isCompleted = activeStep > st.step;
+
+            return (
+              <React.Fragment key={st.step}>
+                <button
+                  type="button"
+                  onClick={() => scrollToStep(st.step, st.targetId)}
+                  className={`flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-bold transition-all shrink-0 cursor-pointer ${
+                    isActive
+                      ? "bg-blue-600 text-white shadow-xs"
+                      : isCompleted
+                      ? "bg-blue-50 text-blue-600 dark:bg-blue-950/60 dark:text-blue-400"
+                      : "bg-slate-50 text-slate-500 hover:bg-slate-100 dark:bg-slate-800/60 dark:text-slate-400"
+                  }`}
+                >
+                  <span
+                    className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-extrabold ${
+                      isActive
+                        ? "bg-white text-blue-600"
+                        : isCompleted
+                        ? "bg-blue-600 text-white"
+                        : "bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300"
+                    }`}
+                  >
+                    {isCompleted ? <Check className="w-3 h-3 stroke-[3]" /> : st.step}
+                  </span>
+                  <span className="whitespace-nowrap">{st.label}</span>
+                </button>
+
+                {idx < stepsList.length - 1 && (
+                  <div
+                    className={`h-0.5 w-6 sm:w-10 rounded-full shrink-0 transition-colors ${
+                      activeStep > st.step ? "bg-blue-600" : "bg-slate-200 dark:bg-slate-800"
+                    }`}
+                  />
+                )}
+              </React.Fragment>
+            );
+          })}
+        </div>
+      </Card>
+
       {/* STEP 1: SELECT BOOKING / TOUR */}
-      <Card className="p-6 space-y-4 border-blue-200 dark:border-blue-900/60 bg-blue-50/20 dark:bg-blue-950/20">
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center font-bold text-sm">
+      <Card id="step-1" className="p-5 sm:p-6 space-y-4 border-blue-200 dark:border-blue-900/60 bg-blue-50/20 dark:bg-blue-950/20">
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 rounded-xl bg-blue-600 text-white flex items-center justify-center font-bold text-sm shadow-xs">
             1
           </div>
           <div>
@@ -301,10 +355,10 @@ export default function CreateDeploymentPage() {
       </Card>
 
       {/* STEP 2: BOOKING SUMMARY (READ-ONLY) */}
-      <Card className="p-6 space-y-4">
+      <Card id="step-2" className="p-5 sm:p-6 space-y-4">
         <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-slate-800 text-white flex items-center justify-center font-bold text-sm">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-xl bg-slate-800 text-white flex items-center justify-center font-bold text-sm shadow-xs">
               2
             </div>
             <div>
@@ -330,10 +384,10 @@ export default function CreateDeploymentPage() {
       </Card>
 
       {/* STEP 3: GUEST MANIFEST */}
-      <Card className="p-6 space-y-4">
+      <Card id="step-3" className="p-5 sm:p-6 space-y-4">
         <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-slate-800 text-white flex items-center justify-center font-bold text-sm">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-xl bg-slate-800 text-white flex items-center justify-center font-bold text-sm shadow-xs">
               3
             </div>
             <div>
@@ -367,11 +421,11 @@ export default function CreateDeploymentPage() {
         </div>
       </Card>
 
-      {/* NEW STEP 4: PICKUP & DROP-OFF PLANNING */}
-      <Card id="step-4-pickup-dropoff" className="p-6 space-y-5 border-indigo-200 dark:border-indigo-900/60 bg-indigo-50/10 dark:bg-indigo-950/10">
+      {/* STEP 4: PICKUP & DROP-OFF PLANNING */}
+      <Card id="step-4" className="p-5 sm:p-6 space-y-5 border-blue-200 dark:border-blue-900/60 bg-blue-50/10 dark:bg-blue-950/10">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pb-3 border-b border-slate-200 dark:border-slate-800">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center font-bold text-sm">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-xl bg-blue-600 text-white flex items-center justify-center font-bold text-sm shadow-xs">
               4
             </div>
             <div>
@@ -390,24 +444,24 @@ export default function CreateDeploymentPage() {
 
         {/* STEP 4 COMPACT SUMMARY BAR */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 font-mono text-xs">
-          <div className="p-3 rounded-xl bg-slate-900 text-white space-y-1">
-            <span className="text-[10px] text-slate-400 block font-bold">TOTAL GUESTS</span>
-            <strong className="text-xl font-extrabold text-white">{step4Summary.totalGuests} Pax</strong>
+          <div className="p-3.5 rounded-xl bg-white dark:bg-[#101726] border border-slate-200/90 dark:border-slate-800 shadow-2xs space-y-1">
+            <span className="text-[10px] text-slate-500 dark:text-slate-400 block font-bold uppercase tracking-wider">TOTAL GUESTS</span>
+            <strong className="text-xl font-extrabold text-slate-900 dark:text-white block">{step4Summary.totalGuests} Pax</strong>
           </div>
 
-          <div className="p-3 rounded-xl bg-slate-900 text-white space-y-1">
-            <span className="text-[10px] text-slate-400 block font-bold">PICKUP PLANNED</span>
-            <strong className="text-xl font-extrabold text-emerald-400">{step4Summary.pickupGuests} Guests</strong>
+          <div className="p-3.5 rounded-xl bg-white dark:bg-[#101726] border border-emerald-200/90 dark:border-emerald-900/60 shadow-2xs space-y-1">
+            <span className="text-[10px] text-emerald-600 dark:text-emerald-400 block font-bold uppercase tracking-wider">PICKUP PLANNED</span>
+            <strong className="text-xl font-extrabold text-emerald-600 dark:text-emerald-400 block">{step4Summary.pickupGuests} Guests</strong>
           </div>
 
-          <div className="p-3 rounded-xl bg-slate-900 text-white space-y-1 border-blue-900/80 bg-blue-950/20">
-            <span className="text-[10px] text-blue-400 block font-bold">VEHICLE DROP-OFF</span>
-            <strong className="text-xl font-extrabold text-blue-400">{step4Summary.vehicleDropoffGuests} Guests</strong>
+          <div className="p-3.5 rounded-xl bg-white dark:bg-[#101726] border border-blue-200/90 dark:border-blue-900/60 shadow-2xs space-y-1">
+            <span className="text-[10px] text-blue-600 dark:text-blue-400 block font-bold uppercase tracking-wider">VEHICLE DROP-OFF</span>
+            <strong className="text-xl font-extrabold text-blue-600 dark:text-blue-400 block">{step4Summary.vehicleDropoffGuests} Guests</strong>
           </div>
 
-          <div className="p-3 rounded-xl bg-slate-900 text-white space-y-1 border-purple-900/80 bg-purple-950/20">
-            <span className="text-[10px] text-purple-400 block font-bold">TICKET DROP-OFF</span>
-            <strong className="text-xl font-extrabold text-purple-400">{step4Summary.ticketDropoffGuests} Guests</strong>
+          <div className="p-3.5 rounded-xl bg-white dark:bg-[#101726] border border-purple-200/90 dark:border-purple-900/60 shadow-2xs space-y-1">
+            <span className="text-[10px] text-purple-600 dark:text-purple-400 block font-bold uppercase tracking-wider">TICKET DROP-OFF</span>
+            <strong className="text-xl font-extrabold text-purple-600 dark:text-purple-400 block">{step4Summary.ticketDropoffGuests} Guests</strong>
           </div>
         </div>
 
@@ -421,7 +475,7 @@ export default function CreateDeploymentPage() {
               {/* GROUP HEADER */}
               <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800 font-mono text-xs">
                 <div className="flex items-center gap-2">
-                  <Badge variant={idx === 0 ? "violet" : "blue"}>
+                  <Badge variant={idx === 0 ? "blue" : "slate"}>
                     {config.groupName}
                   </Badge>
                   <span className="font-extrabold text-slate-900 dark:text-slate-100 text-sm">
@@ -484,7 +538,7 @@ export default function CreateDeploymentPage() {
                     <span className="font-bold text-amber-600 dark:text-amber-400 text-xs block flex items-center gap-1.5">
                       <Truck className="w-4 h-4" /> DROP-OFF CONFIGURATION
                     </span>
-                    <Badge variant={config.dropoffMethod === "Vehicle" ? "blue" : "violet"}>
+                    <Badge variant={config.dropoffMethod === "Vehicle" ? "blue" : "slate"}>
                       {config.dropoffMethod === "Vehicle" ? "🚌 Vehicle" : "🎫 Ticket"}
                     </Badge>
                   </div>
@@ -498,7 +552,7 @@ export default function CreateDeploymentPage() {
                           value="Vehicle"
                           checked={config.dropoffMethod === "Vehicle"}
                           onChange={() => updateGroupConfig(idx, "dropoffMethod", "Vehicle")}
-                          className="w-4 h-4 text-indigo-600"
+                          className="w-4 h-4 text-blue-600"
                         />
                         <span>Company Vehicle</span>
                       </label>
@@ -509,7 +563,7 @@ export default function CreateDeploymentPage() {
                           value="Ticket"
                           checked={config.dropoffMethod === "Ticket"}
                           onChange={() => updateGroupConfig(idx, "dropoffMethod", "Ticket")}
-                          className="w-4 h-4 text-purple-600"
+                          className="w-4 h-4 text-blue-600"
                         />
                         <span>Purchased Ticket (Train / Bus / Flight / Ferry)</span>
                       </label>
@@ -549,8 +603,8 @@ export default function CreateDeploymentPage() {
                       </span>
                     </>
                   ) : (
-                    <div className="p-3 rounded-xl border border-purple-200 dark:border-purple-900/60 bg-purple-50/40 dark:bg-purple-950/20 space-y-3 font-mono">
-                      <span className="font-bold text-purple-700 dark:text-purple-300 block text-xs flex items-center gap-1">
+                    <div className="p-3 rounded-xl border border-blue-200 dark:border-blue-900/60 bg-blue-50/40 dark:bg-blue-950/20 space-y-3 font-mono">
+                      <span className="font-bold text-blue-700 dark:text-blue-300 block text-xs flex items-center gap-1">
                         <Ticket className="w-3.5 h-3.5" /> TICKET SPECIFICATIONS
                       </span>
 
@@ -620,9 +674,9 @@ export default function CreateDeploymentPage() {
       </Card>
 
       {/* STEP 5: OVERLAND JOURNEY ROUTE & HOTELS */}
-      <Card className="p-6 space-y-4">
-        <div className="flex items-center gap-2 pb-3 border-b border-slate-100 dark:border-slate-800">
-          <div className="w-8 h-8 rounded-lg bg-slate-800 text-white flex items-center justify-center font-bold text-sm">
+      <Card id="step-5" className="p-5 sm:p-6 space-y-4">
+        <div className="flex items-center gap-3 pb-3 border-b border-slate-100 dark:border-slate-800">
+          <div className="w-8 h-8 rounded-xl bg-slate-800 text-white flex items-center justify-center font-bold text-sm shadow-xs">
             5
           </div>
           <div>
@@ -647,7 +701,7 @@ export default function CreateDeploymentPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 font-mono text-xs pt-2">
           <div className="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 space-y-1">
             <span className="font-bold text-slate-900 dark:text-slate-100 flex items-center gap-1.5">
-              <Hotel className="w-4 h-4 text-indigo-600" /> Hotel Allocations ({activeBooking.hotels.length})
+              <Hotel className="w-4 h-4 text-blue-600" /> Hotel Allocations ({activeBooking.hotels.length})
             </span>
             {activeBooking.hotels.map((h) => (
               <span key={h.id} className="text-slate-600 dark:text-slate-400 block text-[11px]">
@@ -658,7 +712,7 @@ export default function CreateDeploymentPage() {
 
           <div className="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 space-y-1">
             <span className="font-bold text-slate-900 dark:text-slate-100 flex items-center gap-1.5">
-              <Train className="w-4 h-4 text-teal-600" /> Transport Bookings ({activeBooking.transports.length})
+              <Train className="w-4 h-4 text-blue-600" /> Transport Bookings ({activeBooking.transports.length})
             </span>
             {activeBooking.transports.map((t) => (
               <span key={t.id} className="text-slate-600 dark:text-slate-400 block text-[11px]">
@@ -670,10 +724,10 @@ export default function CreateDeploymentPage() {
       </Card>
 
       {/* STEP 6: RESOURCE ASSIGNMENT & CONFLICT DETECTION */}
-      <Card className="p-6 space-y-5">
+      <Card id="step-6" className="p-5 sm:p-6 space-y-5">
         <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center font-bold text-sm">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-xl bg-blue-600 text-white flex items-center justify-center font-bold text-sm shadow-xs">
               6
             </div>
             <div>
@@ -778,14 +832,19 @@ export default function CreateDeploymentPage() {
         </div>
       </Card>
 
-      {/* STEP 7: DEPLOYMENT READINESS PANEL & FINAL REVIEW */}
-      <Card className="p-6 space-y-5 bg-gradient-to-r from-slate-900 via-slate-900 to-blue-950 border-slate-800 text-white">
-        <div className="flex items-center justify-between pb-3 border-b border-slate-800">
-          <div className="flex items-center gap-2">
-            <ShieldCheck className="w-5 h-5 text-emerald-400" />
-            <h2 className="text-sm font-extrabold uppercase tracking-wider text-white">
-              STEP 7: DEPLOYMENT READINESS & FINAL REVIEW
-            </h2>
+      {/* STEP 7: DEPLOYMENT READINESS PANEL & FINAL REVIEW (Adapted Theme Color) */}
+      <Card id="step-7" className="p-5 sm:p-6 space-y-5 bg-white dark:bg-[#101726] border border-slate-200/90 dark:border-slate-800 text-slate-900 dark:text-white shadow-xs">
+        <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-xl bg-blue-600 text-white flex items-center justify-center font-bold text-sm shadow-xs">
+              7
+            </div>
+            <div>
+              <h2 className="text-sm font-extrabold uppercase tracking-wider text-slate-900 dark:text-white">
+                STEP 7: DEPLOYMENT READINESS & FINAL REVIEW
+              </h2>
+              <span className="text-xs text-slate-400 font-mono">Final verification before deployment dispatch</span>
+            </div>
           </div>
           <Badge variant={readinessCheck.isAllReady ? "emerald" : "danger"}>
             {readinessCheck.isAllReady ? "READY FOR DEPLOYMENT" : "NOT READY — MISSING RESOURCE"}
@@ -793,52 +852,39 @@ export default function CreateDeploymentPage() {
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 font-mono text-xs">
-          <div className="p-2.5 rounded-lg bg-slate-800/80 border border-slate-700">
-            <span className="text-[10px] text-slate-400 block">BOOKING</span>
-            <span className="font-bold text-emerald-400 flex items-center gap-1">✓ Confirmed</span>
+          <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+            <span className="text-[10px] text-slate-400 block font-bold uppercase">BOOKING</span>
+            <span className="font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-1 pt-0.5">✓ Confirmed</span>
           </div>
 
-          <div className="p-2.5 rounded-lg bg-slate-800/80 border border-slate-700">
-            <span className="text-[10px] text-slate-400 block">MANIFEST</span>
-            <span className="font-bold text-emerald-400 flex items-center gap-1">✓ 12 Guests</span>
+          <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+            <span className="text-[10px] text-slate-400 block font-bold uppercase">VEHICLE</span>
+            <span className="font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1 pt-0.5">✓ Hiace B 1234</span>
           </div>
 
-          <div className="p-2.5 rounded-lg bg-slate-800/80 border border-slate-700">
-            <span className="text-[10px] text-slate-400 block">PICKUP/DROPOFF</span>
-            <span className="font-bold text-emerald-400 flex items-center gap-1">✓ Step 4 Ready</span>
-          </div>
-
-          <div className="p-2.5 rounded-lg bg-slate-800/80 border border-slate-700">
-            <span className="text-[10px] text-slate-400 block">VEHICLE</span>
-            <span className="font-bold text-emerald-400 flex items-center gap-1">✓ Hiace B 1234</span>
-          </div>
-
-          <div className="p-2.5 rounded-lg bg-slate-800/80 border border-slate-700">
-            <span className="text-[10px] text-slate-400 block">DRIVER</span>
-            <span className={readinessCheck.driverAssigned ? "font-bold text-emerald-400" : "font-bold text-rose-400"}>
+          <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+            <span className="text-[10px] text-slate-400 block font-bold uppercase">DRIVER</span>
+            <span className={readinessCheck.driverAssigned ? "font-bold text-emerald-600 dark:text-emerald-400 pt-0.5 block" : "font-bold text-rose-600 dark:text-rose-400 pt-0.5 block"}>
               {readinessCheck.driverAssigned ? "✓ Agus Santoso" : "✕ Conflict"}
             </span>
           </div>
 
-          <div className="p-2.5 rounded-lg bg-slate-800/80 border border-slate-700">
-            <span className="text-[10px] text-slate-400 block">CREW</span>
-            <span className="font-bold text-emerald-400 flex items-center gap-1">✓ Guide & TM</span>
+          <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+            <span className="text-[10px] text-slate-400 block font-bold uppercase">CREW</span>
+            <span className="font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-1 pt-0.5">✓ Guide & TM</span>
           </div>
         </div>
 
         {/* FINAL REVIEW — PICKUP & DROP-OFF SUMMARY */}
-        <div className="p-4 rounded-xl bg-slate-800/90 border border-slate-700 space-y-3 font-mono text-xs">
-          <div className="flex items-center justify-between pb-2 border-b border-slate-700">
-            <span className="font-bold text-indigo-400 flex items-center gap-1.5 uppercase text-xs">
+        <div className="p-4 rounded-xl bg-slate-50/70 dark:bg-[#162034] border border-slate-200 dark:border-slate-800 space-y-3 font-mono text-xs">
+          <div className="flex items-center justify-between pb-2 border-b border-slate-200 dark:border-slate-800">
+            <span className="font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5 uppercase text-xs">
               <MapPin className="w-4 h-4" /> PLANNED PICKUP & DROP-OFF SUMMARY
             </span>
             <button
               type="button"
-              onClick={() => {
-                const el = document.getElementById("step-4-pickup-dropoff");
-                if (el) el.scrollIntoView({ behavior: "smooth" });
-              }}
-              className="text-xs text-indigo-400 hover:text-indigo-300 font-bold flex items-center gap-1 underline"
+              onClick={() => scrollToStep(4, "step-4")}
+              className="text-xs text-blue-600 dark:text-blue-400 hover:underline font-bold flex items-center gap-1 cursor-pointer"
             >
               <Edit3 className="w-3.5 h-3.5" /> Edit Step 4
             </button>
@@ -849,10 +895,10 @@ export default function CreateDeploymentPage() {
             <div className="space-y-2">
               <span className="text-[10px] text-slate-400 font-bold block uppercase">PICKUP CONFIGURATION</span>
               {step4Configs.map((cfg, i) => (
-                <div key={i} className="p-2.5 rounded bg-slate-900/80 border border-slate-700 space-y-0.5">
-                  <span className="font-bold text-emerald-400 block">{cfg.groupName} ({cfg.pax} Guests)</span>
-                  <span className="text-slate-300 text-[11px] block">• Location: {cfg.pickupLocation}</span>
-                  <span className="text-slate-400 text-[10px] block">• Time: {cfg.pickupDate} @ {cfg.pickupTime} WIB</span>
+                <div key={i} className="p-3 rounded-lg bg-white dark:bg-[#101726] border border-slate-200/80 dark:border-slate-800 space-y-0.5">
+                  <span className="font-bold text-emerald-600 dark:text-emerald-400 block">{cfg.groupName} ({cfg.pax} Guests)</span>
+                  <span className="text-slate-700 dark:text-slate-300 text-[11px] block">• Location: {cfg.pickupLocation}</span>
+                  <span className="text-slate-500 text-[10px] block">• Time: {cfg.pickupDate} @ {cfg.pickupTime} WIB</span>
                 </div>
               ))}
             </div>
@@ -861,59 +907,59 @@ export default function CreateDeploymentPage() {
             <div className="space-y-2">
               <span className="text-[10px] text-slate-400 font-bold block uppercase">DROP-OFF CONFIGURATION</span>
               {step4Configs.map((cfg, i) => (
-                <div key={i} className="p-2.5 rounded bg-slate-900/80 border border-slate-700 space-y-0.5">
-                  <span className="font-bold text-amber-400 block">{cfg.groupName} ({cfg.pax} Guests)</span>
-                  <span className="text-slate-300 text-[11px] block">• Method: {cfg.dropoffMethod} ({cfg.dropoffMethod === "Ticket" ? cfg.ticketTransportType : "Company Vehicle"})</span>
-                  <span className="text-slate-300 text-[11px] block">• Destination: {cfg.dropoffDestination}</span>
-                  <span className="text-slate-400 text-[10px] block">• Schedule: {cfg.dropoffDate} @ {cfg.dropoffTime} WIB</span>
+                <div key={i} className="p-3 rounded-lg bg-white dark:bg-[#101726] border border-slate-200/80 dark:border-slate-800 space-y-0.5">
+                  <span className="font-bold text-amber-600 dark:text-amber-400 block">{cfg.groupName} ({cfg.pax} Guests)</span>
+                  <span className="text-slate-700 dark:text-slate-300 text-[11px] block">• Method: {cfg.dropoffMethod} ({cfg.dropoffMethod === "Ticket" ? cfg.ticketTransportType : "Company Vehicle"})</span>
+                  <span className="text-slate-700 dark:text-slate-300 text-[11px] block">• Destination: {cfg.dropoffDestination}</span>
+                  <span className="text-slate-500 text-[10px] block">• Schedule: {cfg.dropoffDate} @ {cfg.dropoffTime} WIB</span>
                 </div>
               ))}
             </div>
           </div>
         </div>
 
-        {/* FINAL REVIEW — TRANSPORT SEGMENTS & VEHICLE CHANGE SUMMARY (REQUIREMENT 25) */}
-        <div className="p-4 rounded-xl bg-slate-800/90 border border-slate-700 space-y-3 font-mono text-xs">
-          <div className="flex items-center justify-between pb-2 border-b border-slate-700">
-            <span className="font-bold text-blue-400 flex items-center gap-1.5 uppercase text-xs">
+        {/* FINAL REVIEW — TRANSPORT SEGMENTS & VEHICLE CHANGE SUMMARY */}
+        <div className="p-4 rounded-xl bg-slate-50/70 dark:bg-[#162034] border border-slate-200 dark:border-slate-800 space-y-3 font-mono text-xs">
+          <div className="flex items-center justify-between pb-2 border-b border-slate-200 dark:border-slate-800">
+            <span className="font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5 uppercase text-xs">
               <Truck className="w-4 h-4" /> PLANNED TRANSPORT SEGMENTS & VEHICLE CHANGES
             </span>
-            <Badge variant="violet">3 Segments Planned</Badge>
+            <Badge variant="blue">3 Segments Planned</Badge>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-[11px]">
-            <div className="p-2.5 rounded bg-slate-900/80 border border-slate-700 space-y-1">
-              <span className="font-bold text-blue-400 block">SEGMENT 1: Yogyakarta → Probolinggo</span>
-              <span className="text-slate-300 block">• Vehicle: HiAce #01 (B 1234 XYZ)</span>
-              <span className="text-slate-300 block">• Driver: Agus Santoso (8 Pax)</span>
-              <span className="text-slate-400 text-[10px] block">• Time: 08:00 → 15:00 WIB</span>
+            <div className="p-3 rounded-lg bg-white dark:bg-[#101726] border border-slate-200/80 dark:border-slate-800 space-y-1">
+              <span className="font-bold text-blue-600 dark:text-blue-400 block">SEGMENT 1: Yogyakarta → Probolinggo</span>
+              <span className="text-slate-700 dark:text-slate-300 block">• Vehicle: HiAce #01 (B 1234 XYZ)</span>
+              <span className="text-slate-700 dark:text-slate-300 block">• Driver: Agus Santoso (8 Pax)</span>
+              <span className="text-slate-500 text-[10px] block">• Time: 08:00 → 15:00 WIB</span>
             </div>
 
-            <div className="p-2.5 rounded bg-slate-900/80 border border-indigo-700 space-y-1">
-              <span className="font-bold text-indigo-400 block">SEGMENT 2: Probolinggo → Bali</span>
-              <span className="text-slate-300 block">• Vehicle: HiAce #02 (B 5678 ABC) 🔄</span>
-              <span className="text-slate-300 block">• Driver: Budi Pratama (10 Pax)</span>
-              <span className="text-slate-400 text-[10px] block">• Swap at Probolinggo (15:30 WIB)</span>
+            <div className="p-3 rounded-lg bg-white dark:bg-[#101726] border border-slate-200/80 dark:border-slate-800 space-y-1">
+              <span className="font-bold text-blue-600 dark:text-blue-400 block">SEGMENT 2: Probolinggo → Bali</span>
+              <span className="text-slate-700 dark:text-slate-300 block">• Vehicle: HiAce #02 (B 5678 ABC) 🔄</span>
+              <span className="text-slate-700 dark:text-slate-300 block">• Driver: Budi Pratama (10 Pax)</span>
+              <span className="text-slate-500 text-[10px] block">• Swap at Probolinggo (15:30 WIB)</span>
             </div>
 
-            <div className="p-2.5 rounded bg-slate-900/80 border border-purple-700 space-y-1">
-              <span className="font-bold text-purple-400 block">SEGMENT 3: Probolinggo → Banyuwangi</span>
-              <span className="text-slate-300 block">• Transport: KAI Train Ticket 🎫</span>
-              <span className="text-slate-300 block">• Assigned: 2 Guests (Rail Drop-off)</span>
-              <span className="text-slate-400 text-[10px] block">• Departure: 19:30 WIB</span>
+            <div className="p-3 rounded-lg bg-white dark:bg-[#101726] border border-slate-200/80 dark:border-slate-800 space-y-1">
+              <span className="font-bold text-blue-600 dark:text-blue-400 block">SEGMENT 3: Probolinggo → Banyuwangi</span>
+              <span className="text-slate-700 dark:text-slate-300 block">• Transport: KAI Train Ticket 🎫</span>
+              <span className="text-slate-700 dark:text-slate-300 block">• Assigned: 2 Guests (Rail Drop-off)</span>
+              <span className="text-slate-500 text-[10px] block">• Departure: 19:30 WIB</span>
             </div>
           </div>
         </div>
 
         <div className="pt-2 flex justify-end gap-2">
-          <Button variant="outline" className="bg-slate-800 border-slate-700 text-white" onClick={() => router.push("/dispatch")}>
+          <Button variant="outline" onClick={() => router.push("/dispatch")}>
             Save Draft
           </Button>
           <Button
             variant="primary"
             disabled={!readinessCheck.isAllReady}
             onClick={() => router.push("/dispatch/dep-001")}
-            className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-6"
+            className="px-6 font-bold"
           >
             Create Operational Deployment
           </Button>

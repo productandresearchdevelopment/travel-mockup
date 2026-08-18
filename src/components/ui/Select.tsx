@@ -37,7 +37,7 @@ export function Select({
         value={value}
         onChange={onChange}
         className={cn(
-          "w-full h-9 bg-white dark:bg-[#101726] text-slate-900 dark:text-slate-100 text-xs font-semibold border border-slate-200 dark:border-slate-800 focus:outline-none focus:ring-2 focus:ring-[#624AE8] focus:border-transparent transition-all shadow-xs appearance-none pr-8 cursor-pointer",
+          "w-full h-9 bg-white dark:bg-[#101726] text-slate-900 dark:text-slate-100 text-xs font-semibold border border-slate-200 dark:border-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all shadow-xs appearance-none pr-8 cursor-pointer",
           icon ? "pl-9" : "pl-3.5",
           variant === "pill" ? "rounded-full bg-slate-50/50 dark:bg-slate-900/60" : "rounded-xl",
           className

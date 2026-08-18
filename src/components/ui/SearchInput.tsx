@@ -27,7 +27,7 @@ export function SearchInput({
         onChange={onChange}
         placeholder={placeholder}
         className={cn(
-          "w-full h-9 pl-10 pr-8 text-xs font-semibold text-slate-900 dark:text-slate-100 placeholder:text-slate-400 border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#101726] focus:outline-none focus:ring-2 focus:ring-[#624AE8] focus:border-transparent transition-all shadow-xs",
+          "w-full h-9 pl-10 pr-8 text-xs font-semibold text-slate-900 dark:text-slate-100 placeholder:text-slate-400 border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#101726] focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all shadow-xs",
           variant === "pill" ? "rounded-full bg-slate-50/50 dark:bg-slate-900/60" : "rounded-xl",
           className
         )}

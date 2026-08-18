@@ -31,7 +31,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     ref
   ) => {
     const baseStyles =
-      "inline-flex items-center justify-center font-semibold transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#624AE8] disabled:opacity-50 disabled:pointer-events-none cursor-pointer active:scale-[0.99]";
+      "inline-flex items-center justify-center font-semibold transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 disabled:opacity-50 disabled:pointer-events-none cursor-pointer active:scale-[0.99] whitespace-nowrap shrink-0";
 
     const borderRadius =
       rounded === "pill" || rounded === "full" || variant === "pill"
@@ -40,17 +40,17 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 
     const variants = {
       primary:
-        "bg-[#624AE8] hover:bg-[#5338D9] dark:bg-[#7C66DC] dark:hover:bg-[#624AE8] text-white shadow-xs border border-transparent font-semibold",
+        "bg-blue-600 hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-500 text-white shadow-xs border border-transparent font-semibold",
       secondary:
         "bg-slate-50 dark:bg-[#131D28] text-slate-800 dark:text-slate-100 border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800",
       outline:
-        "border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-100 hover:bg-[#F3F0FF] hover:text-[#624AE8] dark:hover:bg-[#162034]",
+        "border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-100 hover:bg-blue-50 hover:text-blue-600 dark:hover:bg-[#162034]",
       pill:
         "border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-200 bg-white dark:bg-[#101726] hover:bg-slate-50 dark:hover:bg-[#162034] shadow-xs",
       ghost:
-        "text-slate-600 dark:text-slate-400 hover:text-[#624AE8] dark:hover:text-white hover:bg-[#F3F0FF] dark:hover:bg-[#162034]",
+        "text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-white hover:bg-blue-50 dark:hover:bg-[#162034]",
       glow:
-        "bg-[#624AE8] text-white font-semibold shadow-sm hover:brightness-105 border border-transparent",
+        "bg-blue-600 text-white font-semibold shadow-sm hover:brightness-105 border border-transparent",
       danger:
         "bg-rose-600 dark:bg-rose-600 text-white hover:bg-rose-700 font-semibold shadow-xs",
     };

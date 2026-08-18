@@ -8,6 +8,7 @@ import { PageHeader } from "@/components/ui/PageHeader";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
+import { Select } from "@/components/ui/Select";
 import { mockTripsData } from "@/data/mockTripsData";
 import { mockVehiclesData } from "@/data/mockVehicles";
 import { mockTrackingVehicles } from "@/data/mockTrackingData";
@@ -77,88 +78,133 @@ export default function OperationalOverviewDashboard() {
         description="Monitor today's operations, resources, trips, and fleet status."
         breadcrumbItems={[{ label: "Operational Hub", href: "/" }, { label: "Overview" }]}
         actions={
-          <div className="flex items-center gap-2">
-            <span className="text-xs font-mono font-bold text-slate-500 hidden sm:inline flex items-center gap-1">
+          <div className="flex items-center gap-2.5">
+            <span className="text-xs font-mono font-bold text-slate-500 hidden sm:flex items-center gap-1.5 bg-slate-100 dark:bg-[#162034] px-3 py-1.5 rounded-xl border border-slate-200/80 dark:border-slate-800">
               <Calendar className="w-3.5 h-3.5 text-blue-600" /> Tuesday, 18 August 2026
             </span>
-            <Button variant="outline" size="sm" leftIcon={<RefreshCw className="w-3.5 h-3.5" />}>
-              Refresh
-            </Button>
+            <div className="w-36 sm:w-40">
+              <Select
+                value={regionFilter}
+                onChange={(e) => setRegionFilter(e.target.value)}
+                options={[
+                  { value: "All", label: "All Regions" },
+                  { value: "East Java", label: "East Java" },
+                  { value: "Banyuwangi", label: "Banyuwangi" },
+                  { value: "Bali", label: "Bali" },
+                ]}
+              />
+            </div>
           </div>
         }
       />
 
-      {/* REGIONAL FILTER PILLS BAR */}
-      <div className="p-3 rounded-xl bg-white dark:bg-[#101726] border border-slate-200 dark:border-slate-800 flex items-center justify-between gap-3 shadow-xs">
-        <div className="flex items-center gap-1.5 overflow-x-auto">
-          <span className="text-xs font-bold text-slate-400 font-mono uppercase mr-1">REGION:</span>
-          {["All Regions", "East Java", "Banyuwangi", "Bali"].map((r) => (
-            <button
-              key={r}
-              onClick={() => setRegionFilter(r === "All Regions" ? "All" : r)}
-              className={`px-3 py-1 rounded-lg text-xs font-bold transition-all ${
-                (regionFilter === "All" && r === "All Regions") || regionFilter === r
-                  ? "bg-blue-600 text-white shadow-xs"
-                  : "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
-              }`}
-            >
-              {r}
-            </button>
-          ))}
-        </div>
-
-        <div className="flex items-center gap-2 text-xs font-mono shrink-0">
-          <Badge variant="emerald">● 94% Operational Health</Badge>
-        </div>
-      </div>
-
       {/* TOP KPI CARDS */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-        <Card className="p-4 space-y-1">
-          <span className="text-[10px] font-mono text-slate-400 font-bold uppercase block">TOTAL TRIPS TODAY</span>
-          <div className="flex items-baseline justify-between">
-            <span className="text-2xl font-extrabold text-slate-900 dark:text-slate-100">{kpiData.total}</span>
-            <span className="text-[10px] font-mono text-blue-600 font-bold">100% Scheduled</span>
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3.5">
+        <Card className="p-4 space-y-2 border-indigo-200/80 dark:border-indigo-900/60 bg-gradient-to-b from-indigo-50/70 via-indigo-50/20 to-white dark:from-indigo-950/40 dark:via-indigo-950/10 dark:to-[#101726] shadow-xs hover:-translate-y-0.5 transition-all duration-200">
+          <div className="flex items-center justify-between">
+            <span className="text-[10px] font-mono text-indigo-700 dark:text-indigo-300 font-extrabold uppercase tracking-wider">
+              TOTAL TRIPS
+            </span>
+            <div className="w-6 h-6 rounded-lg bg-indigo-100 dark:bg-indigo-900/60 text-indigo-600 dark:text-indigo-300 flex items-center justify-center">
+              <Compass className="w-3.5 h-3.5" />
+            </div>
+          </div>
+          <div className="flex items-baseline justify-between pt-0.5">
+            <span className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-slate-100">
+              {kpiData.total}
+            </span>
+            <span className="text-[10px] font-mono font-bold text-indigo-600 dark:text-indigo-400 bg-indigo-100/80 dark:bg-indigo-950/80 px-2 py-0.5 rounded-full">
+              100% Scheduled
+            </span>
           </div>
         </Card>
 
-        <Card className="p-4 space-y-1 border-blue-200 dark:border-blue-900/60 bg-blue-50/20 dark:bg-blue-950/20">
-          <span className="text-[10px] font-mono text-blue-600 dark:text-blue-400 font-bold uppercase block">ACTIVE TRIPS</span>
-          <div className="flex items-baseline justify-between">
-            <span className="text-2xl font-extrabold text-blue-600 dark:text-blue-400">{kpiData.active}</span>
+        <Card className="p-4 space-y-2 border-blue-200/90 dark:border-blue-900/60 bg-gradient-to-b from-blue-50/80 via-blue-50/20 to-white dark:from-blue-950/50 dark:via-blue-950/10 dark:to-[#101726] shadow-xs hover:-translate-y-0.5 transition-all duration-200">
+          <div className="flex items-center justify-between">
+            <span className="text-[10px] font-mono text-blue-700 dark:text-blue-300 font-extrabold uppercase tracking-wider">
+              ACTIVE TRIPS
+            </span>
+            <div className="w-6 h-6 rounded-lg bg-blue-100 dark:bg-blue-900/60 text-blue-600 dark:text-blue-300 flex items-center justify-center">
+              <Radio className="w-3.5 h-3.5 animate-pulse text-blue-600" />
+            </div>
+          </div>
+          <div className="flex items-baseline justify-between pt-0.5">
+            <span className="text-2xl sm:text-3xl font-extrabold text-blue-600 dark:text-blue-400">
+              {kpiData.active}
+            </span>
             <Badge variant="blue">● In Progress</Badge>
           </div>
         </Card>
 
-        <Card className="p-4 space-y-1">
-          <span className="text-[10px] font-mono text-slate-400 font-bold uppercase block">UPCOMING DEPARTURES</span>
-          <div className="flex items-baseline justify-between">
-            <span className="text-2xl font-extrabold text-slate-800 dark:text-slate-200">{kpiData.upcoming}</span>
-            <span className="text-[10px] font-mono text-slate-400">Ready</span>
+        <Card className="p-4 space-y-2 border-purple-200/80 dark:border-purple-900/60 bg-gradient-to-b from-purple-50/70 via-purple-50/20 to-white dark:from-purple-950/40 dark:via-purple-950/10 dark:to-[#101726] shadow-xs hover:-translate-y-0.5 transition-all duration-200">
+          <div className="flex items-center justify-between">
+            <span className="text-[10px] font-mono text-purple-700 dark:text-purple-300 font-extrabold uppercase tracking-wider">
+              UPCOMING
+            </span>
+            <div className="w-6 h-6 rounded-lg bg-purple-100 dark:bg-purple-900/60 text-purple-600 dark:text-purple-300 flex items-center justify-center">
+              <Clock className="w-3.5 h-3.5" />
+            </div>
+          </div>
+          <div className="flex items-baseline justify-between pt-0.5">
+            <span className="text-2xl sm:text-3xl font-extrabold text-purple-700 dark:text-purple-300">
+              {kpiData.upcoming}
+            </span>
+            <span className="text-[10px] font-mono font-bold text-purple-600 dark:text-purple-400 bg-purple-100/80 dark:bg-purple-950/80 px-2 py-0.5 rounded-full">
+              Ready
+            </span>
           </div>
         </Card>
 
-        <Card className="p-4 space-y-1">
-          <span className="text-[10px] font-mono text-slate-400 font-bold uppercase block">COMPLETED TRIPS</span>
-          <div className="flex items-baseline justify-between">
-            <span className="text-2xl font-extrabold text-emerald-600 dark:text-emerald-400">{kpiData.completed}</span>
+        <Card className="p-4 space-y-2 border-emerald-200/90 dark:border-emerald-900/60 bg-gradient-to-b from-emerald-50/80 via-emerald-50/20 to-white dark:from-emerald-950/50 dark:via-emerald-950/10 dark:to-[#101726] shadow-xs hover:-translate-y-0.5 transition-all duration-200">
+          <div className="flex items-center justify-between">
+            <span className="text-[10px] font-mono text-emerald-700 dark:text-emerald-300 font-extrabold uppercase tracking-wider">
+              COMPLETED
+            </span>
+            <div className="w-6 h-6 rounded-lg bg-emerald-100 dark:bg-emerald-900/60 text-emerald-600 dark:text-emerald-300 flex items-center justify-center">
+              <CheckCircle2 className="w-3.5 h-3.5" />
+            </div>
+          </div>
+          <div className="flex items-baseline justify-between pt-0.5">
+            <span className="text-2xl sm:text-3xl font-extrabold text-emerald-600 dark:text-emerald-400">
+              {kpiData.completed}
+            </span>
             <Badge variant="emerald">✓ Released</Badge>
           </div>
         </Card>
 
-        <Card className="p-4 space-y-1 border-amber-200 dark:border-amber-900/60 bg-amber-50/20 dark:bg-amber-950/20">
-          <span className="text-[10px] font-mono text-amber-600 dark:text-amber-400 font-bold uppercase block">DELAYED OPERATIONS</span>
-          <div className="flex items-baseline justify-between">
-            <span className="text-2xl font-extrabold text-amber-600 dark:text-amber-400">{kpiData.delayed}</span>
+        <Card className="p-4 space-y-2 border-amber-200/90 dark:border-amber-900/60 bg-gradient-to-b from-amber-50/80 via-amber-50/20 to-white dark:from-amber-950/50 dark:via-amber-950/10 dark:to-[#101726] shadow-xs hover:-translate-y-0.5 transition-all duration-200">
+          <div className="flex items-center justify-between">
+            <span className="text-[10px] font-mono text-amber-700 dark:text-amber-300 font-extrabold uppercase tracking-wider">
+              DELAYED
+            </span>
+            <div className="w-6 h-6 rounded-lg bg-amber-100 dark:bg-amber-900/60 text-amber-600 dark:text-amber-300 flex items-center justify-center">
+              <AlertTriangle className="w-3.5 h-3.5" />
+            </div>
+          </div>
+          <div className="flex items-baseline justify-between pt-0.5">
+            <span className="text-2xl sm:text-3xl font-extrabold text-amber-600 dark:text-amber-400">
+              {kpiData.delayed}
+            </span>
             <Badge variant="amber">⚠ +42 min</Badge>
           </div>
         </Card>
 
-        <Card className="p-4 space-y-1">
-          <span className="text-[10px] font-mono text-slate-400 font-bold uppercase block">TOTAL PASSENGERS</span>
-          <div className="flex items-baseline justify-between">
-            <span className="text-2xl font-extrabold text-slate-900 dark:text-slate-100">{kpiData.pax}</span>
-            <span className="text-[10px] text-slate-400 font-mono">Pax On-Board</span>
+        <Card className="p-4 space-y-2 border-cyan-200/80 dark:border-cyan-900/60 bg-gradient-to-b from-cyan-50/70 via-cyan-50/20 to-white dark:from-cyan-950/40 dark:via-cyan-950/10 dark:to-[#101726] shadow-xs hover:-translate-y-0.5 transition-all duration-200">
+          <div className="flex items-center justify-between">
+            <span className="text-[10px] font-mono text-cyan-700 dark:text-cyan-300 font-extrabold uppercase tracking-wider">
+              PASSENGERS
+            </span>
+            <div className="w-6 h-6 rounded-lg bg-cyan-100 dark:bg-cyan-900/60 text-cyan-600 dark:text-cyan-300 flex items-center justify-center">
+              <Users className="w-3.5 h-3.5" />
+            </div>
+          </div>
+          <div className="flex items-baseline justify-between pt-0.5">
+            <span className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-slate-100">
+              {kpiData.pax}
+            </span>
+            <span className="text-[10px] font-mono font-bold text-cyan-600 dark:text-cyan-400 bg-cyan-100/80 dark:bg-cyan-950/80 px-2 py-0.5 rounded-full">
+              On-Board
+            </span>
           </div>
         </Card>
       </div>

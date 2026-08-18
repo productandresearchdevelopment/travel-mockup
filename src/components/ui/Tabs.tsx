@@ -32,8 +32,8 @@ export function Tabs({ items, tabs, activeTab, onChange, className }: TabsProps)
             className={cn(
               "flex items-center gap-2 py-2.5 px-3.5 border-b-2 font-bold whitespace-nowrap transition-all duration-150 cursor-pointer rounded-t-lg",
               isActive
-                ? "border-[#624AE8] text-[#624AE8] bg-[#F3F0FF]/60 dark:bg-purple-950/40 dark:text-purple-400 font-extrabold"
-                : "border-transparent text-slate-500 dark:text-slate-400 hover:text-[#624AE8] hover:bg-slate-50 dark:hover:bg-[#162034]"
+                ? "border-blue-600 text-blue-600 bg-blue-50/70 dark:bg-blue-950/40 dark:text-blue-400 font-extrabold"
+                : "border-transparent text-slate-500 dark:text-slate-400 hover:text-blue-600 hover:bg-slate-50 dark:hover:bg-[#162034]"
             )}
           >
             <span>{tab.label}</span>
@@ -42,7 +42,7 @@ export function Tabs({ items, tabs, activeTab, onChange, className }: TabsProps)
                 className={cn(
                   "px-1.5 py-0.5 rounded-full text-[10px] font-mono font-bold",
                   isActive
-                    ? "bg-[#624AE8] text-white"
+                    ? "bg-blue-600 text-white"
                     : "bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400"
                 )}
               >

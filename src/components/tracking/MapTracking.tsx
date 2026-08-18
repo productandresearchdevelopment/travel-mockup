@@ -63,12 +63,13 @@ export default function MapTracking({
       minZoom: 7,
       maxZoom: 16,
       zoomControl: false,
+      attributionControl: false,
     });
 
     L.control.zoom({ position: "bottomright" }).addTo(map);
 
     const tileLayer = L.tileLayer(tileUrl, {
-      attribution,
+      attribution: "",
       maxZoom: 19,
       subdomains: "abcd",
     }).addTo(map);

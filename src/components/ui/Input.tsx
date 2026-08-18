@@ -36,7 +36,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             id={inputId}
             ref={ref}
             className={cn(
-              "w-full h-9 bg-white dark:bg-[#101726] border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 rounded-xl py-2 text-xs font-medium transition-colors duration-150 focus:outline-none focus:border-[#624AE8] dark:focus:border-[#7C66DC] focus:ring-1 focus:ring-[#624AE8] disabled:opacity-50 disabled:cursor-not-allowed shadow-xs",
+              "w-full h-9 bg-white dark:bg-[#101726] border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 rounded-xl py-2 text-xs font-medium transition-colors duration-150 focus:outline-none focus:border-blue-600 dark:focus:border-blue-500 focus:ring-1 focus:ring-blue-600 disabled:opacity-50 disabled:cursor-not-allowed shadow-xs",
               leftIcon ? "pl-10" : "pl-3.5",
               rightIcon ? "pr-10" : "pr-3.5",
               error && "border-rose-500 focus:border-rose-500",

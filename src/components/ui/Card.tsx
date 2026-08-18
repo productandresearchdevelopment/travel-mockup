@@ -16,9 +16,9 @@ export function Card({
   return (
     <div
       className={cn(
-        "rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#101726] text-slate-900 dark:text-slate-100 shadow-xs transition-all duration-150 overflow-hidden",
+        "rounded-2xl border border-slate-200/90 dark:border-slate-800/90 bg-white dark:bg-[#101726] text-slate-900 dark:text-slate-100 shadow-xs transition-all duration-200 overflow-hidden",
         hoverEffect &&
-          "hover:border-[#624AE8]/40 dark:hover:border-[#7C66DC]/40 hover:shadow-xs",
+          "hover:border-blue-500/40 dark:hover:border-blue-400/40 hover:shadow-sm",
         className
       )}
       {...props}
@@ -47,7 +47,7 @@ export function CardTitle({
 }: React.HTMLAttributes<HTMLHeadingElement>) {
   return (
     <h3
-      className={cn("text-base sm:text-lg font-bold tracking-tight text-slate-900 dark:text-white", className)}
+      className={cn("text-sm sm:text-base font-bold tracking-tight text-slate-900 dark:text-white", className)}
       {...props}
     >
       {children}

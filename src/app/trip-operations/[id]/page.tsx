@@ -10,13 +10,6 @@ import { Badge } from "@/components/ui/Badge";
 import { Tabs } from "@/components/ui/Tabs";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
-import { DataTable } from "@/components/ui/DataTable";
-import { Modal } from "@/components/ui/Modal";
-import { FormField } from "@/components/ui/FormField";
-import { Input } from "@/components/ui/Input";
-import { Select } from "@/components/ui/Select";
-import { Textarea } from "@/components/ui/Textarea";
-import { mockGuestsData } from "@/data/mockGuestsData";
 import TripCostsTab from "@/components/trips/TripCostsTab";
 import TripGuestsTab from "@/components/trips/TripGuestsTab";
 import PickupDropoffTab from "@/components/trips/PickupDropoffTab";
@@ -99,9 +92,11 @@ export default function TripOperationDetailPage() {
         ]}
       />
 
+      {/* HIGHLIGHTED HERO DETAIL BANNER */}
       <DetailHeader
         title={trip.code}
         subtitle={`${trip.tourPackageName} (${trip.startDate} – ${trip.endDate})`}
+        status={trip.status}
         metrics={[
           { label: "Primary Guest", value: trip.primaryGuestName },
           { label: "Total Pax", value: `${trip.totalGuestsCount} Guests (${trip.originalGuestCount} Original + ${trip.joinedMidTripCount} Joined)` },
@@ -116,31 +111,31 @@ export default function TripOperationDetailPage() {
       {/* TAB CONTENTS */}
       {activeTab === "overview" && (
         <div className="space-y-6 font-mono text-xs">
-          {/* LATEST ACTIVITY & OPERATIONAL STATUS BANNER */}
-          <Card className="p-5 border-indigo-200 dark:border-indigo-900/60 bg-gradient-to-r from-indigo-50/40 via-purple-50/20 to-white dark:from-indigo-950/30 dark:via-purple-950/20 dark:to-[#101726] space-y-3">
-            <div className="flex justify-between items-center pb-2 border-b border-indigo-100 dark:border-indigo-900/50">
-              <span className="font-extrabold text-indigo-600 dark:text-indigo-400 uppercase tracking-wider text-xs flex items-center gap-1.5">
-                <Activity className="w-4 h-4" /> LIVE OPERATIONAL STATUS & LATEST TIMELINE EVENT
+          {/* LIVE OPERATIONAL STATUS & LATEST TIMELINE BANNER */}
+          <Card className="p-5 border-blue-200 dark:border-blue-900/60 bg-blue-50/20 dark:bg-blue-950/20 space-y-4">
+            <div className="flex justify-between items-center pb-3 border-b border-blue-100 dark:border-blue-900/50">
+              <span className="font-extrabold text-blue-600 dark:text-blue-400 uppercase tracking-wider text-xs flex items-center gap-1.5 font-sans">
+                <Activity className="w-4 h-4 text-blue-600" /> LIVE OPERATIONAL STATUS & PROGRESS
               </span>
-              <Badge variant="violet">Progress: {trip.progressPercent}% Completed</Badge>
+              <Badge variant="blue">Progress: {trip.progressPercent}% Completed</Badge>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-              <div className="p-3 rounded-xl bg-white dark:bg-[#101726] border border-slate-200 dark:border-slate-800 space-y-0.5">
-                <span className="text-[10px] text-slate-400 font-bold block uppercase">CURRENT LOCATION</span>
-                <strong className="text-sm font-extrabold text-slate-900 dark:text-slate-100 block">📍 {trip.currentLocation}</strong>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5">
+              <div className="p-3.5 rounded-xl bg-white dark:bg-[#101726] border border-slate-200/90 dark:border-slate-800 space-y-1 shadow-2xs">
+                <span className="text-[10px] text-slate-500 dark:text-slate-400 font-bold block uppercase tracking-wider">CURRENT LOCATION</span>
+                <strong className="text-sm font-extrabold text-slate-900 dark:text-white block">📍 {trip.currentLocation}</strong>
                 <span className="text-slate-500 text-[11px] block">Next: {trip.nextDestination}</span>
               </div>
 
-              <div className="p-3 rounded-xl bg-white dark:bg-[#101726] border border-slate-200 dark:border-slate-800 space-y-0.5">
-                <span className="text-[10px] text-slate-400 font-bold block uppercase">VEHICLE & DRIVER ASSIGNMENT</span>
-                <strong className="text-sm font-extrabold text-slate-900 dark:text-slate-100 block">{trip.assignedVehicle}</strong>
-                <span className="text-emerald-600 font-bold block">Driver: {trip.assignedDriver}</span>
+              <div className="p-3.5 rounded-xl bg-white dark:bg-[#101726] border border-slate-200/90 dark:border-slate-800 space-y-1 shadow-2xs">
+                <span className="text-[10px] text-slate-500 dark:text-slate-400 font-bold block uppercase tracking-wider">VEHICLE & DRIVER ASSIGNMENT</span>
+                <strong className="text-sm font-extrabold text-slate-900 dark:text-white block">{trip.assignedVehicle}</strong>
+                <span className="text-blue-600 font-bold block">Driver: {trip.assignedDriver}</span>
               </div>
 
-              <div className="p-3 rounded-xl bg-white dark:bg-[#101726] border border-slate-200 dark:border-slate-800 space-y-0.5">
-                <span className="text-[10px] text-slate-400 font-bold block uppercase">GUEST MANIFEST STATUS</span>
-                <strong className="text-sm font-extrabold text-indigo-600 dark:text-indigo-400 block">{trip.totalGuestsCount} Guests Total</strong>
+              <div className="p-3.5 rounded-xl bg-white dark:bg-[#101726] border border-slate-200/90 dark:border-slate-800 space-y-1 shadow-2xs">
+                <span className="text-[10px] text-slate-500 dark:text-slate-400 font-bold block uppercase tracking-wider">GUEST MANIFEST STATUS</span>
+                <strong className="text-sm font-extrabold text-blue-600 dark:text-blue-400 block">{trip.totalGuestsCount} Guests Total</strong>
                 <span className="text-slate-500 text-[11px] block">8 Initial + 4 Mid-Trip Joiners</span>
               </div>
             </div>

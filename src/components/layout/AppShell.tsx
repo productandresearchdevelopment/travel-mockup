@@ -29,7 +29,7 @@ export function AppShell({ children }: AppShellProps) {
 
       {/* Main Content Area */}
       <main className="md:pl-60 pt-16 min-h-screen transition-all duration-200">
-        <div className="p-4 sm:p-6 md:p-8 max-w-7xl mx-auto space-y-6">
+        <div className="w-full px-4 sm:px-6 py-5 space-y-5">
           {children}
         </div>
       </main>

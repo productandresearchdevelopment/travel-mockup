@@ -173,20 +173,6 @@ export function SidebarNav({ counts }: SidebarNavProps) {
         </div>
       </nav>
 
-      {/* User Footer */}
-      <div className="p-3 border-t border-slate-200 dark:border-slate-800">
-        <div className="p-2.5 rounded-lg bg-slate-50 dark:bg-[#162034] flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-full bg-blue-600 text-white font-bold text-xs flex items-center justify-center">
-              OP
-            </div>
-            <div>
-              <p className="text-xs font-bold text-slate-800 dark:text-slate-200 leading-none">Ops Dispatcher</p>
-              <p className="text-[10px] text-slate-400">Head Dispatcher</p>
-            </div>
-          </div>
-        </div>
-      </div>
     </aside>
   );
 }

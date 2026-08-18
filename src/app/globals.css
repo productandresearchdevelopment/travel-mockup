@@ -25,12 +25,12 @@
   --text-secondary: #475569;
   --text-muted: #94a3b8;
 
-  /* Primary Brand Violet #624AE8 */
-  --action-primary: #624ae8;
-  --action-primary-hover: #5338d9;
+  /* Primary Brand Royal Blue #2563EB */
+  --action-primary: #2563eb;
+  --action-primary-hover: #1d4ed8;
 
-  --sidebar-active-bg: #f3f0ff;
-  --sidebar-active-text: #624ae8;
+  --sidebar-active-bg: #eff6ff;
+  --sidebar-active-text: #2563eb;
   --sidebar-hover-bg: #f8fafc;
 
   --backdrop-bg: rgba(15, 23, 42, 0.4);
@@ -76,11 +76,11 @@
   --text-secondary: #cbd5e1;
   --text-muted: #64748b;
 
-  --action-primary: #7c66dc;
-  --action-primary-hover: #624ae8;
+  --action-primary: #3b82f6;
+  --action-primary-hover: #2563eb;
 
-  --sidebar-active-bg: #1e1b4b;
-  --sidebar-active-text: #a78bfa;
+  --sidebar-active-bg: #1e3a8a/40;
+  --sidebar-active-text: #60a5fa;
   --sidebar-hover-bg: #162034;
 
   --backdrop-bg: rgba(0, 0, 0, 0.7);
@@ -95,18 +95,39 @@ body {
   overflow-x: hidden;
 }
 
-/* Custom Scrollbar */
+/* Custom Scrollbar for All Browsers & Sidebar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
+}
+
+.dark,
+.dark * {
+  scrollbar-color: #334155 transparent;
+}
+
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
 }
 ::-webkit-scrollbar-track {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
   background: #cbd5e1;
-  border-radius: 4px;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
 }
 .dark ::-webkit-scrollbar-thumb {
   background: #334155;
+}
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}
+
+/* Hide Leaflet Attribution Control */
+.leaflet-control-attribution {
+  display: none !important;
 }

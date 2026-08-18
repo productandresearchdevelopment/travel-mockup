@@ -71,14 +71,14 @@ export function PageHeader({
   };
 
   return (
-    <div className={cn("mb-6 pb-4 border-b border-slate-200/80 dark:border-slate-800/80", className)}>
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+    <div className={cn("mb-4 pb-1 space-y-1", className)}>
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
         <div className="flex items-center gap-3">
           {shouldShowBack && (
             <button
               type="button"
               onClick={handleBack}
-              className="w-9 h-9 shrink-0 rounded-full border border-slate-200/90 dark:border-slate-800 bg-transparent hover:bg-slate-100 dark:hover:bg-slate-800/80 text-slate-700 dark:text-slate-200 flex items-center justify-center hover:border-slate-300 dark:hover:border-slate-700 transition-all duration-200 group"
+              className="w-8 h-8 shrink-0 rounded-full border border-slate-200/90 dark:border-slate-800 bg-white dark:bg-[#101726] hover:bg-slate-100 dark:hover:bg-slate-800/80 text-slate-700 dark:text-slate-200 flex items-center justify-center hover:border-slate-300 dark:hover:border-slate-700 transition-all duration-200 group shadow-xs"
               title="Go Back"
               aria-label="Go Back"
             >
@@ -87,21 +87,21 @@ export function PageHeader({
           )}
 
           <div>
-            <div className="flex items-center gap-3 flex-wrap">
-              <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
+            <div className="flex items-center gap-2.5 flex-wrap">
+              <h1 className="text-lg sm:text-xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
                 {title}
               </h1>
               {statusBadge}
             </div>
             {description && (
-              <p className="mt-1 text-xs sm:text-sm text-slate-500 dark:text-slate-400">
+              <p className="mt-0.5 text-xs sm:text-sm text-slate-500 dark:text-slate-400 font-normal leading-normal">
                 {description}
               </p>
             )}
           </div>
         </div>
 
-        {actions && <div className="flex items-center gap-2.5 shrink-0">{actions}</div>}
+        {actions && <div className="flex items-center gap-2 shrink-0 flex-wrap sm:flex-nowrap">{actions}</div>}
       </div>
     </div>
   );

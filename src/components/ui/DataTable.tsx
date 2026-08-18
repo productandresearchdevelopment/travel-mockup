@@ -217,8 +217,8 @@ export function DataTable<T>({
                     className={cn(
                       "transition-colors duration-150 border-b border-slate-100 dark:border-slate-800/40",
                       isSelected
-                        ? "bg-[#F3F0FF]/60 dark:bg-purple-950/40"
-                        : "hover:bg-[#F8F7FE] dark:hover:bg-[#162034]",
+                        ? "bg-blue-50/80 dark:bg-blue-950/40"
+                        : "hover:bg-slate-50/80 dark:hover:bg-[#162034]",
                       onRowClick && "cursor-pointer"
                     )}
                   >
@@ -226,7 +226,7 @@ export function DataTable<T>({
                       <td className="py-3.5 px-3 text-center" onClick={(e) => e.stopPropagation()}>
                         <input
                           type="checkbox"
-                          className="rounded border-slate-300 text-[#624AE8] focus:ring-[#624AE8] cursor-pointer"
+                          className="rounded border-slate-300 text-blue-600 focus:ring-blue-600 cursor-pointer"
                           checked={isSelected}
                           onChange={(e) => onSelectRow?.(rowKey, e.target.checked)}
                         />
@@ -281,7 +281,7 @@ export function DataTable<T>({
           </button>
 
           {/* Active Page Pill Button */}
-          <span className="w-7 h-7 flex items-center justify-center rounded-lg bg-[#624AE8] text-white font-bold text-xs shadow-xs">
+          <span className="w-7 h-7 flex items-center justify-center rounded-lg bg-blue-600 text-white font-bold text-xs shadow-xs">
             {currentPage}
           </span>
 
