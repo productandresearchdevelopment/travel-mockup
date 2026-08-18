@@ -35,18 +35,22 @@ export function PageHeader({
 }: PageHeaderProps) {
   const router = useRouter();
 
-  // Show back button ONLY when showBackButton is explicitly true, or when backHref/onBack is provided, or on detail/subpages with parent breadcrumb
+  // Show back button ONLY when:
+  // 1) showBackButton is explicitly true
+  // 2) backHref or onBack is explicitly provided
+  // 3) showBackButton is not false AND breadcrumbItems has a parent module href (not just root "/")
+  const isParentModuleHref = (href?: string) => Boolean(href && href !== "/" && href !== "/dashboard");
+
   const shouldShowBack =
     showBackButton === true ||
+    Boolean(backHref) ||
+    Boolean(onBack) ||
     (showBackButton !== false &&
-      (Boolean(backHref) ||
-        Boolean(onBack) ||
-        Boolean(
-          breadcrumbItems &&
-            breadcrumbItems.length > 1 &&
-            breadcrumbItems[0]?.href &&
-            breadcrumbItems[0]?.href !== breadcrumbItems[breadcrumbItems.length - 1]?.href
-        )));
+      Boolean(
+        breadcrumbItems &&
+          breadcrumbItems.length > 1 &&
+          breadcrumbItems.some((item, idx) => idx < breadcrumbItems.length - 1 && isParentModuleHref(item.href))
+      ));
 
   const handleBack = () => {
     if (onBack) {
@@ -54,9 +58,10 @@ export function PageHeader({
     } else if (backHref) {
       router.push(backHref);
     } else if (breadcrumbItems && breadcrumbItems.length > 0) {
-      const parentHref = breadcrumbItems[0]?.href || breadcrumbItems[1]?.href;
-      if (parentHref) {
-        router.push(parentHref);
+      // Find parent module href (skip index of current page)
+      const parentItem = [...breadcrumbItems].reverse().find((item, idx) => idx > 0 && isParentModuleHref(item.href));
+      if (parentItem?.href) {
+        router.push(parentItem.href);
       } else {
         router.back();
       }

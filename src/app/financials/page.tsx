@@ -55,7 +55,7 @@ export default function FinancialsOverviewPage() {
         title="Financials & Profitability Control"
         description="High-level financial summary, revenue tracking, operational costs, payments & profitability drill-down"
         breadcrumbItems={[
-          { label: "Management", href: "/workforce" },
+          { label: "Overview", href: "/" },
           { label: "Financials" },
         ]}
       />

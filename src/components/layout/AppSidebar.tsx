@@ -46,7 +46,14 @@ export function AppSidebar({ mobileOpen = false, setMobileOpen }: AppSidebarProp
   const pathname = usePathname();
 
   const isMainActive = (href: string) => {
-    if (href === "/") return pathname === "/";
+    if (href === "/") return pathname === "/" || pathname === "/dashboard";
+    if (href === "/dispatcher") return pathname === "/dispatcher" || pathname === "/dispatch";
+    if (href === "/trip-operations") return pathname.startsWith("/trip-operations") || pathname.startsWith("/dispatch/trips");
+    if (href === "/live-tracking") return pathname === "/live-tracking" || pathname === "/dispatch/tracking";
+    if (href === "/workforce") return pathname === "/workforce" || (pathname.startsWith("/workforce/") && !pathname.startsWith("/workforce/attendance") && !pathname.startsWith("/workforce/payroll"));
+    if (href === "/attendance") return pathname === "/attendance" || pathname === "/workforce/attendance";
+    if (href === "/payroll") return pathname === "/payroll" || pathname === "/workforce/payroll";
+    if (href === "/financials") return pathname.startsWith("/financials") || pathname.startsWith("/finance");
     return pathname === href || pathname.startsWith(href + "/");
   };
 
@@ -81,7 +88,7 @@ export function AppSidebar({ mobileOpen = false, setMobileOpen }: AppSidebarProp
 
       {/* Navigation Links */}
       <nav className="flex-1 p-3 space-y-5 overflow-y-auto">
-        {/* Overview */}
+        {/* OVERVIEW */}
         <div>
           <Link
             href="/"
@@ -97,16 +104,16 @@ export function AppSidebar({ mobileOpen = false, setMobileOpen }: AppSidebarProp
           </Link>
         </div>
 
-        {/* Operations */}
+        {/* TRIP OPERATIONS */}
         <div className="space-y-1">
           <span className="px-3 text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1">
-            Operations
+            TRIP OPERATIONS
           </span>
           <Link
-            href="/dispatch"
+            href="/dispatcher"
             onClick={() => setMobileOpen && setMobileOpen(false)}
             className={`flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold transition-all ${
-              isMainActive("/dispatch") && !isMainActive("/dispatch/tracking") && !isMainActive("/dispatch/trips")
+              isMainActive("/dispatcher")
                 ? "bg-[#F3F0FF] text-[#624AE8] dark:bg-purple-950/60 dark:text-purple-400 font-bold"
                 : "text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-[#162034] hover:text-slate-900 dark:hover:text-slate-200"
             }`}
@@ -116,10 +123,10 @@ export function AppSidebar({ mobileOpen = false, setMobileOpen }: AppSidebarProp
           </Link>
 
           <Link
-            href="/dispatch/trips"
+            href="/trip-operations"
             onClick={() => setMobileOpen && setMobileOpen(false)}
             className={`flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold transition-all ${
-              isMainActive("/dispatch/trips")
+              isMainActive("/trip-operations")
                 ? "bg-[#F3F0FF] text-[#624AE8] dark:bg-purple-950/60 dark:text-purple-400 font-bold"
                 : "text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-[#162034] hover:text-slate-900 dark:hover:text-slate-200"
             }`}
@@ -129,10 +136,10 @@ export function AppSidebar({ mobileOpen = false, setMobileOpen }: AppSidebarProp
           </Link>
 
           <Link
-            href="/dispatch/tracking"
+            href="/live-tracking"
             onClick={() => setMobileOpen && setMobileOpen(false)}
             className={`flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold transition-all ${
-              isMainActive("/dispatch/tracking")
+              isMainActive("/live-tracking")
                 ? "bg-[#F3F0FF] text-[#624AE8] dark:bg-purple-950/60 dark:text-purple-400 font-bold"
                 : "text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-[#162034] hover:text-slate-900 dark:hover:text-slate-200"
             }`}
@@ -142,10 +149,10 @@ export function AppSidebar({ mobileOpen = false, setMobileOpen }: AppSidebarProp
           </Link>
         </div>
 
-        {/* Resources */}
+        {/* TRIP RESOURCES */}
         <div className="space-y-1">
           <span className="px-3 text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1">
-            Resources
+            TRIP RESOURCES
           </span>
           <Link
             href="/guests"
@@ -265,16 +272,16 @@ export function AppSidebar({ mobileOpen = false, setMobileOpen }: AppSidebarProp
           </Link>
         </div>
 
-        {/* MANAGEMENT */}
+        {/* WORKFORCE & FINANCE */}
         <div className="space-y-1">
           <span className="px-3 text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1">
-            MANAGEMENT
+            WORKFORCE & FINANCE
           </span>
           <Link
             href="/workforce"
             onClick={() => setMobileOpen && setMobileOpen(false)}
             className={`flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold transition-all ${
-              isMainActive("/workforce") && !isMainActive("/workforce/attendance") && !isMainActive("/workforce/payroll")
+              isMainActive("/workforce")
                 ? "bg-[#F3F0FF] text-[#624AE8] dark:bg-purple-950/60 dark:text-purple-400 font-bold"
                 : "text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-[#162034] hover:text-slate-900 dark:hover:text-slate-200"
             }`}
@@ -284,10 +291,10 @@ export function AppSidebar({ mobileOpen = false, setMobileOpen }: AppSidebarProp
           </Link>
 
           <Link
-            href="/workforce/attendance"
+            href="/attendance"
             onClick={() => setMobileOpen && setMobileOpen(false)}
             className={`flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold transition-all ${
-              isMainActive("/workforce/attendance")
+              isMainActive("/attendance")
                 ? "bg-[#F3F0FF] text-[#624AE8] dark:bg-purple-950/60 dark:text-purple-400 font-bold"
                 : "text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-[#162034] hover:text-slate-900 dark:hover:text-slate-200"
             }`}
@@ -297,10 +304,10 @@ export function AppSidebar({ mobileOpen = false, setMobileOpen }: AppSidebarProp
           </Link>
 
           <Link
-            href="/workforce/payroll"
+            href="/payroll"
             onClick={() => setMobileOpen && setMobileOpen(false)}
             className={`flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold transition-all ${
-              isMainActive("/workforce/payroll")
+              isMainActive("/payroll")
                 ? "bg-[#F3F0FF] text-[#624AE8] dark:bg-purple-950/60 dark:text-purple-400 font-bold"
                 : "text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-[#162034] hover:text-slate-900 dark:hover:text-slate-200"
             }`}
@@ -313,7 +320,7 @@ export function AppSidebar({ mobileOpen = false, setMobileOpen }: AppSidebarProp
             href="/financials"
             onClick={() => setMobileOpen && setMobileOpen(false)}
             className={`flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold transition-all ${
-              isMainActive("/financials") || isMainActive("/finance")
+              isMainActive("/financials")
                 ? "bg-[#F3F0FF] text-[#624AE8] dark:bg-purple-950/60 dark:text-purple-400 font-bold"
                 : "text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-[#162034] hover:text-slate-900 dark:hover:text-slate-200"
             }`}
