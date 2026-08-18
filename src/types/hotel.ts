@@ -69,6 +69,7 @@ export interface HotelMaster {
   id: string;
   code: string;
   name: string;
+  imageUrl?: string;
   category: HotelCategory;
   phone: string;
   email: string;

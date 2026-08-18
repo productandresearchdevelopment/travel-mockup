@@ -28,6 +28,7 @@ export interface PayrollRecord {
   workerName: string;
   workerCode: string;
   role: WorkerRole;
+  avatarUrl?: string;
   employmentType: EmploymentType;
   workingDaysCount: number;
   dailyRateRupiah: number;

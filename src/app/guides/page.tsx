@@ -53,9 +53,17 @@ export default function GuidesPage() {
       header: "Guide",
       render: (g) => (
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-full bg-emerald-100 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-300 font-mono font-bold text-xs flex items-center justify-center shrink-0 border border-emerald-200 dark:border-emerald-800">
-            {g.code}
-          </div>
+          {g.avatarUrl ? (
+            <img
+              src={g.avatarUrl}
+              alt={g.fullName}
+              className="w-8 h-8 rounded-full object-cover border border-slate-200 dark:border-slate-700 shadow-2xs shrink-0"
+            />
+          ) : (
+            <div className="w-8 h-8 rounded-full bg-emerald-100 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-300 font-mono font-bold text-xs flex items-center justify-center shrink-0 border border-emerald-200 dark:border-emerald-800">
+              {g.code}
+            </div>
+          )}
           <div>
             <Link
               href={`/guides/${g.id}`}

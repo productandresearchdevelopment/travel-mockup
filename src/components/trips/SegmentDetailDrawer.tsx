@@ -126,7 +126,7 @@ export function SegmentDetailDrawer({
                 <strong className="text-slate-900 dark:text-slate-100 text-sm block">
                   Actual: {segment.actualDeparture || "—:—"}
                 </strong>
-                {segment.departureDelayMinutes > 0 && (
+                {(segment.departureDelayMinutes ?? 0) > 0 && (
                   <span className="text-amber-600 text-[10px] font-bold block">
                     ⚠️ +{segment.departureDelayMinutes} min delay
                   </span>

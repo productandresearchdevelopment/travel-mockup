@@ -37,6 +37,7 @@ export interface DriverMaster {
   id: string;
   code: string;
   fullName: string;
+  avatarUrl?: string;
   phone: string;
   email: string;
   dateOfBirth: string;

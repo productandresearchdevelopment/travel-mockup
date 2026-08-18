@@ -99,6 +99,7 @@ export interface VehicleMaster {
   id: string;
   code: string;
   name: string;
+  imageUrl?: string;
   licensePlate: string;
   vehicleType: string;
   brand: string;

@@ -8,7 +8,6 @@ import { PageHeader } from "@/components/ui/PageHeader";
 import { DetailHeader } from "@/components/ui/DetailHeader";
 import { Badge } from "@/components/ui/Badge";
 import { Tabs } from "@/components/ui/Tabs";
-import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import TripCostsTab from "@/components/trips/TripCostsTab";
 import TripGuestsTab from "@/components/trips/TripGuestsTab";
@@ -41,39 +40,84 @@ import {
 export default function TripOperationDetailPage() {
   const params = useParams();
   const router = useRouter();
-  const id = params.id as string;
+  const rawId = (params.id as string) || "TRP-2026-00421";
+  const tripId = rawId.toUpperCase();
 
   const [activeTab, setActiveTab] = useState("overview");
 
-  // Mock Trip detail data
-  const trip = {
-    id: id || "trip-001",
-    code: "TRP-2026-00421",
-    bookingCode: "BKG-2026-00821",
-    deploymentCode: "DEP-2026-00421",
-    tourPackageName: "East Java Explorer (Yogyakarta - Malang - Probolinggo - Bali)",
-    journeyRoute: "Yogyakarta → Malang → Probolinggo → Bali",
-    startDate: "25 Aug 2026",
-    endDate: "30 Aug 2026",
-    status: "In Progress",
-    progressPercent: 65,
-    currentSegment: "Overland Malang → Probolinggo",
-    currentLocation: "Probolinggo (Hotel Santika)",
-    nextDestination: "Ijen Crater, Banyuwangi",
-    primaryGuestName: "Rossella Cescon",
-    totalGuestsCount: 12,
-    originalGuestCount: 8,
-    joinedMidTripCount: 4,
-    assignedVehicle: "HiAce Premio #02 (B 5678 ABC)",
-    assignedDriver: "Agus Santoso",
-    assignedGuide: "Rian Kurniawan",
-    assignedTM: "Dimas Anggara",
-  };
+  // Determine if trip is Simple or Complex based on ID
+  const isSimpleTrip = tripId.includes("00418");
+
+  // Trip Data Scenarios
+  const trip = useMemo(() => {
+    if (isSimpleTrip) {
+      return {
+        id: "TRP-2026-00418",
+        code: "TRP-2026-00418",
+        bookingCode: "BKG-2026-00750",
+        deploymentCode: "DEP-2026-00750",
+        tourPackageName: "Borobudur & Prambanan Private Day Tour",
+        journeyRoute: "Yogyakarta → Borobudur → Prambanan → Yogyakarta",
+        startDate: "25 Aug 2026",
+        endDate: "25 Aug 2026",
+        status: "In Progress",
+        progressPercent: 75,
+        currentSegment: "Prambanan Temple Exploration",
+        currentLocation: "Prambanan Temple Complex",
+        nextDestination: "The Phoenix Hotel Yogyakarta",
+        primaryGuestName: "James Anderson",
+        totalGuestsCount: 2,
+        originalGuestCount: 2,
+        joinedMidTripCount: 0,
+        assignedVehicle: "Toyota HiAce (AB 1234 CD)",
+        assignedDriver: "Agus Santoso",
+        vendorName: "Jogja Trans",
+        assignedGuide: "Rian Kurniawan",
+        assignedTM: "Dimas Anggara",
+        isSimple: true,
+        vehicleChange: false,
+        driverChange: false,
+        pickupStatus: "Completed (07:00 at Phoenix Hotel)",
+        dropoffStatus: "Pending (18:30 at Phoenix Hotel)",
+      };
+    }
+
+    // Default Complex Trip (TRP-2026-00421)
+    return {
+      id: "TRP-2026-00421",
+      code: "TRP-2026-00421",
+      bookingCode: "BKG-2026-00821",
+      deploymentCode: "DEP-2026-00421",
+      tourPackageName: "East Java Explorer — Bromo, Ijen & Bali",
+      journeyRoute: "Yogyakarta → Malang → Probolinggo → Bali",
+      startDate: "25 Aug 2026",
+      endDate: "29 Aug 2026",
+      status: "In Progress",
+      progressPercent: 65,
+      currentSegment: "Overland Malang → Probolinggo",
+      currentLocation: "Probolinggo (Hotel Santika)",
+      nextDestination: "Ijen Crater, Banyuwangi",
+      primaryGuestName: "Michael Carter",
+      totalGuestsCount: 12,
+      originalGuestCount: 8,
+      joinedMidTripCount: 4,
+      assignedVehicle: "Toyota HiAce #02 (L 8901 GH)",
+      assignedDriver: "Budi Pratama (Handover from Agus Santoso)",
+      vendorName: "East Java Transport",
+      assignedGuide: "Rian Kurniawan",
+      assignedTM: "Dimas Anggara",
+      isSimple: false,
+      vehicleChange: true,
+      driverChange: true,
+      pickupStatus: "Completed (2 Pickups: Phoenix Hotel & Malang Station)",
+      dropoffStatus: "Scheduled (10 Bali Vehicle + 2 Banyuwangi Train Ticket)",
+    };
+  }, [isSimpleTrip]);
 
   const tabsList = [
     { id: "overview", label: "Overview" },
     { id: "guests", label: `Guest Manifest (${trip.totalGuestsCount})` },
-    { id: "transport", label: "Transport Segments" },
+    { id: "transport", label: trip.isSimple ? "Transport" : "Transport (2 Segments)" },
     { id: "pickup_dropoff", label: "Pickup & Drop-off" },
     { id: "costs", label: "Costs & Profitability" },
     { id: "monitoring", label: "Operational Monitoring" },
@@ -84,7 +128,6 @@ export default function TripOperationDetailPage() {
     <AppShell>
       <PageHeader
         title={`${trip.code} — Operational Control`}
-        description={`${trip.tourPackageName} · ${trip.journeyRoute}`}
         breadcrumbItems={[
           { label: "Overview", href: "/" },
           { label: "Trip Operations", href: "/trip-operations" },
@@ -95,11 +138,16 @@ export default function TripOperationDetailPage() {
       {/* HIGHLIGHTED HERO DETAIL BANNER */}
       <DetailHeader
         title={trip.code}
-        subtitle={`${trip.tourPackageName} (${trip.startDate} – ${trip.endDate})`}
+        subtitle={`${trip.tourPackageName} (${trip.startDate}${trip.startDate !== trip.endDate ? ` – ${trip.endDate}` : ""})`}
         status={trip.status}
         metrics={[
           { label: "Primary Guest", value: trip.primaryGuestName },
-          { label: "Total Pax", value: `${trip.totalGuestsCount} Guests (${trip.originalGuestCount} Original + ${trip.joinedMidTripCount} Joined)` },
+          {
+            label: "Total Pax",
+            value: trip.isSimple
+              ? `${trip.totalGuestsCount} Guests (Full Tour)`
+              : `${trip.totalGuestsCount} Guests (${trip.originalGuestCount} Initial + ${trip.joinedMidTripCount} Joined)`,
+          },
           { label: "Current Location", value: trip.currentLocation },
           { label: "Vehicle & Driver", value: `${trip.assignedVehicle} · ${trip.assignedDriver}` },
         ]}
@@ -111,32 +159,61 @@ export default function TripOperationDetailPage() {
       {/* TAB CONTENTS */}
       {activeTab === "overview" && (
         <div className="space-y-6 font-mono text-xs">
-          {/* LIVE OPERATIONAL STATUS & LATEST TIMELINE BANNER */}
+          {/* OPERATIONAL SUMMARY CARD (DYNAMIC FOR SIMPLE VS COMPLEX SCENARIO) */}
           <Card className="p-5 border-blue-200 dark:border-blue-900/60 bg-blue-50/20 dark:bg-blue-950/20 space-y-4">
             <div className="flex justify-between items-center pb-3 border-b border-blue-100 dark:border-blue-900/50">
-              <span className="font-extrabold text-blue-600 dark:text-blue-400 uppercase tracking-wider text-xs flex items-center gap-1.5 font-sans">
-                <Activity className="w-4 h-4 text-blue-600" /> LIVE OPERATIONAL STATUS & PROGRESS
-              </span>
+              <div className="flex items-center gap-2">
+                <span className="font-extrabold text-blue-600 dark:text-blue-400 uppercase tracking-wider text-xs flex items-center gap-1.5 font-sans">
+                  <Activity className="w-4 h-4 text-blue-600" /> OPERATIONAL SUMMARY
+                </span>
+                <Badge variant={trip.isSimple ? "slate" : "blue"}>
+                  {trip.isSimple ? "Single Transport Operation" : "Multi-Segment Overland"}
+                </Badge>
+              </div>
               <Badge variant="blue">Progress: {trip.progressPercent}% Completed</Badge>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5">
-              <div className="p-3.5 rounded-xl bg-white dark:bg-[#101726] border border-slate-200/90 dark:border-slate-800 space-y-1 shadow-2xs">
-                <span className="text-[10px] text-slate-500 dark:text-slate-400 font-bold block uppercase tracking-wider">CURRENT LOCATION</span>
-                <strong className="text-sm font-extrabold text-slate-900 dark:text-white block">📍 {trip.currentLocation}</strong>
-                <span className="text-slate-500 text-[11px] block">Next: {trip.nextDestination}</span>
+            {/* DYNAMIC SUMMARY GRID */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-3">
+              <div className="p-3 rounded-xl bg-white dark:bg-[#101726] border border-slate-200/90 dark:border-slate-800 space-y-0.5 shadow-2xs">
+                <span className="text-[10px] text-slate-500 dark:text-slate-400 font-bold block uppercase">TRIP STATUS</span>
+                <strong className="text-sm font-extrabold text-blue-600 dark:text-blue-400 block">{trip.status}</strong>
               </div>
 
-              <div className="p-3.5 rounded-xl bg-white dark:bg-[#101726] border border-slate-200/90 dark:border-slate-800 space-y-1 shadow-2xs">
-                <span className="text-[10px] text-slate-500 dark:text-slate-400 font-bold block uppercase tracking-wider">VEHICLE & DRIVER ASSIGNMENT</span>
-                <strong className="text-sm font-extrabold text-slate-900 dark:text-white block">{trip.assignedVehicle}</strong>
-                <span className="text-blue-600 font-bold block">Driver: {trip.assignedDriver}</span>
+              <div className="p-3 rounded-xl bg-white dark:bg-[#101726] border border-slate-200/90 dark:border-slate-800 space-y-0.5 shadow-2xs">
+                <span className="text-[10px] text-slate-500 dark:text-slate-400 font-bold block uppercase">TOTAL GUESTS</span>
+                <strong className="text-sm font-extrabold text-slate-900 dark:text-white block">{trip.totalGuestsCount} Guests</strong>
+                <span className="text-[10px] text-slate-500 block">
+                  {trip.isSimple ? "No Guest Changes" : `+${trip.joinedMidTripCount} Added Mid-Trip`}
+                </span>
               </div>
 
-              <div className="p-3.5 rounded-xl bg-white dark:bg-[#101726] border border-slate-200/90 dark:border-slate-800 space-y-1 shadow-2xs">
-                <span className="text-[10px] text-slate-500 dark:text-slate-400 font-bold block uppercase tracking-wider">GUEST MANIFEST STATUS</span>
-                <strong className="text-sm font-extrabold text-blue-600 dark:text-blue-400 block">{trip.totalGuestsCount} Guests Total</strong>
-                <span className="text-slate-500 text-[11px] block">8 Initial + 4 Mid-Trip Joiners</span>
+              <div className="p-3 rounded-xl bg-white dark:bg-[#101726] border border-slate-200/90 dark:border-slate-800 space-y-0.5 shadow-2xs">
+                <span className="text-[10px] text-slate-500 dark:text-slate-400 font-bold uppercase">VEHICLES & DRIVERS</span>
+                <strong className="text-sm font-extrabold text-slate-900 dark:text-white block">
+                  {trip.isSimple ? "1 Vehicle / 1 Driver" : "2 Vehicles / 2 Drivers"}
+                </strong>
+                <span className="text-[10px] text-slate-500 block">
+                  {trip.vehicleChange ? "Handover at Probolinggo" : "Single Assignment"}
+                </span>
+              </div>
+
+              <div className="p-3 rounded-xl bg-white dark:bg-[#101726] border border-slate-200/90 dark:border-slate-800 space-y-0.5 shadow-2xs">
+                <span className="text-[10px] text-slate-500 dark:text-slate-400 font-bold uppercase">PICKUP STATUS</span>
+                <strong className="text-sm font-extrabold text-emerald-600 dark:text-emerald-400 block">✓ Completed</strong>
+                <span className="text-[10px] text-slate-500 block">{trip.isSimple ? "Phoenix Hotel" : "Phoenix & Malang Stn"}</span>
+              </div>
+
+              <div className="p-3 rounded-xl bg-white dark:bg-[#101726] border border-slate-200/90 dark:border-slate-800 space-y-0.5 shadow-2xs">
+                <span className="text-[10px] text-slate-500 dark:text-slate-400 font-bold uppercase">DROP-OFF STATUS</span>
+                <strong className="text-sm font-extrabold text-amber-600 dark:text-amber-400 block">Pending</strong>
+                <span className="text-[10px] text-slate-500 block">{trip.isSimple ? "Phoenix Hotel" : "Bali & Banyuwangi Tkt"}</span>
+              </div>
+
+              <div className="p-3 rounded-xl bg-white dark:bg-[#101726] border border-slate-200/90 dark:border-slate-800 space-y-0.5 shadow-2xs">
+                <span className="text-[10px] text-slate-500 dark:text-slate-400 font-bold uppercase">OPERATIONAL ISSUES</span>
+                <strong className="text-sm font-extrabold text-emerald-600 dark:text-emerald-400 block">None</strong>
+                <span className="text-[10px] text-slate-500 block">On Schedule</span>
               </div>
             </div>
           </Card>

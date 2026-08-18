@@ -46,9 +46,17 @@ export default function DriversPage() {
       header: "Driver",
       render: (d) => (
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-950/80 text-blue-700 dark:text-blue-300 font-mono font-bold text-xs flex items-center justify-center shrink-0 border border-blue-200 dark:border-blue-800">
-            {d.code}
-          </div>
+          {d.avatarUrl ? (
+            <img
+              src={d.avatarUrl}
+              alt={d.fullName}
+              className="w-8 h-8 rounded-full object-cover border border-slate-200 dark:border-slate-700 shadow-2xs shrink-0"
+            />
+          ) : (
+            <div className="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-950/80 text-blue-700 dark:text-blue-300 font-mono font-bold text-xs flex items-center justify-center shrink-0 border border-blue-200 dark:border-blue-800">
+              {d.code}
+            </div>
+          )}
           <div>
             <Link
               href={`/drivers/${d.id}`}

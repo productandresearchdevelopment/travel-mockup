@@ -51,9 +51,17 @@ export default function VehiclesPage() {
       header: "Vehicle",
       render: (v) => (
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 font-mono font-bold text-xs flex items-center justify-center shrink-0">
-            {v.code}
-          </div>
+          {v.imageUrl ? (
+            <img
+              src={v.imageUrl}
+              alt={v.name}
+              className="w-10 h-8 rounded-lg object-cover border border-slate-200 dark:border-slate-700 shadow-2xs shrink-0"
+            />
+          ) : (
+            <div className="w-8 h-8 rounded-lg bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 font-mono font-bold text-xs flex items-center justify-center shrink-0">
+              {v.code}
+            </div>
+          )}
           <div>
             <Link
               href={`/vehicles/${v.id}`}

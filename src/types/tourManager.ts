@@ -31,6 +31,7 @@ export interface TourManagerMaster {
   id: string;
   code: string;
   fullName: string;
+  avatarUrl?: string;
   phone: string;
   email: string;
   city: string;

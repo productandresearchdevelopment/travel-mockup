@@ -51,6 +51,7 @@ export interface DestinationMaster {
   id: string;
   code: string;
   name: string;
+  imageUrl?: string;
   type: DestinationType;
   description: string;
   city: string;

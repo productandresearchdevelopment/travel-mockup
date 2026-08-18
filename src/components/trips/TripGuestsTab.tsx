@@ -1,465 +1,183 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState } from "react";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
-import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/ui/DataTable";
-import { SearchInput } from "@/components/ui/SearchInput";
-import {
-  mockGuestGroupsData,
-  mockGuestAssignmentsData,
-  mockGuestActivityLogs,
-} from "@/data/mockGuestAssignmentsData";
-import {
-  GuestGroup,
-  GuestTripAssignment,
-  GuestActivityLog,
-} from "@/types/guestAssignment";
-import { GuestDetailDrawer } from "./GuestDetailDrawer";
-import { AddGuestModal } from "./AddGuestModal";
-import { AssignTransportModal } from "./AssignTransportModal";
 import {
   Users,
-  UserPlus,
-  Plus,
-  Tag,
-  MapPin,
-  Calendar,
-  Clock,
-  Package,
-  Truck,
-  ShieldCheck,
-  AlertTriangle,
-  History,
-  Eye,
-  Layers,
-  ChevronRight,
 } from "lucide-react";
 
 interface TripGuestsTabProps {
   tripId?: string;
 }
 
-export default function TripGuestsTab({ tripId = "trip-001" }: TripGuestsTabProps) {
-  // Main State
-  const [groups, setGroups] = useState<GuestGroup[]>(mockGuestGroupsData);
-  const [assignments, setAssignments] = useState<GuestTripAssignment[]>(mockGuestAssignmentsData);
-  const [activityLogs, setActivityLogs] = useState<GuestActivityLog[]>(mockGuestActivityLogs);
-  const [searchQuery, setSearchQuery] = useState("");
+export default function TripGuestsTab({ tripId = "TRP-2026-00421" }: TripGuestsTabProps) {
+  const isSimpleTrip = tripId.toUpperCase().includes("00418");
 
-  // Modals & Drawer State
-  const [selectedAssignment, setSelectedAssignment] = useState<GuestTripAssignment | null>(null);
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const [isAddGuestModalOpen, setIsAddGuestModalOpen] = useState(false);
-  const [isAssignTransportModalOpen, setIsAssignTransportModalOpen] = useState(false);
-  const [transportTargetAssignment, setTransportTargetAssignment] = useState<GuestTripAssignment | null>(null);
+  // Simple Trip Dataset with real avatar photos
+  const simpleGuests = [
+    { id: "gst-s1", name: "James Anderson", avatarUrl: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=300&auto=format&fit=crop&q=80", nationality: "United Kingdom", passport: "•••• 4892", package: "Borobudur & Prambanan Private Day Tour", status: "Complete" },
+    { id: "gst-s2", name: "Sophie Anderson", avatarUrl: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=300&auto=format&fit=crop&q=80", nationality: "United Kingdom", passport: "•••• 4893", package: "Borobudur & Prambanan Private Day Tour", status: "Complete" },
+  ];
 
-  // Group creation state
-  const [showGroupModal, setShowGroupModal] = useState(false);
-  const [newGroupName, setNewGroupName] = useState("");
-  const [newGroupJoin, setNewGroupJoin] = useState("Probolinggo");
-  const [newGroupLeave, setNewGroupLeave] = useState("Bali");
+  // Complex Trip Datasets with real avatar photos
+  const initialGuests = [
+    { id: "cg-01", name: "Michael Carter", avatarUrl: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&auto=format&fit=crop&q=80", nationality: "United Kingdom", passport: "•••• 9182", package: "East Java Explorer", status: "Active" },
+    { id: "cg-02", name: "Emily Carter", avatarUrl: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&auto=format&fit=crop&q=80", nationality: "United Kingdom", passport: "•••• 9183", package: "East Java Explorer", status: "Active" },
+    { id: "cg-03", name: "Daniel Wilson", avatarUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&auto=format&fit=crop&q=80", nationality: "Australia", passport: "•••• 7721", package: "East Java Explorer", status: "Active" },
+    { id: "cg-04", name: "Olivia Wilson", avatarUrl: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=300&auto=format&fit=crop&q=80", nationality: "Australia", passport: "•••• 7722", package: "East Java Explorer", status: "Active" },
+    { id: "cg-05", name: "Lucas Martin", avatarUrl: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=300&auto=format&fit=crop&q=80", nationality: "France", passport: "•••• 3341", package: "East Java Explorer", status: "Active" },
+    { id: "cg-06", name: "Emma Martin", avatarUrl: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=300&auto=format&fit=crop&q=80", nationality: "France", passport: "•••• 3342", package: "East Java Explorer", status: "Active" },
+    { id: "cg-07", name: "Thomas Brown", avatarUrl: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=300&auto=format&fit=crop&q=80", nationality: "United States", passport: "•••• 1092", package: "East Java Explorer", status: "Ticket Drop-off (Banyuwangi)", isTicketDropoff: true },
+    { id: "cg-08", name: "Sophia Brown", avatarUrl: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=300&auto=format&fit=crop&q=80", nationality: "United States", passport: "•••• 1093", package: "East Java Explorer", status: "Ticket Drop-off (Banyuwangi)", isTicketDropoff: true },
+  ];
 
-  // Summary Metrics (Requirement 12)
-  const summaryMetrics = useMemo(() => {
-    const totalGuests = assignments.reduce((acc, a) => acc + a.pax, 0);
-    const originalGuests = assignments.filter((a) => !a.addedMidTrip).reduce((acc, a) => acc + a.pax, 0);
-    const addedMidTrip = assignments.filter((a) => a.addedMidTrip).reduce((acc, a) => acc + a.pax, 0);
-    const active = assignments.filter((a) => a.status === "Active" || a.status === "Added During Trip").reduce((acc, a) => acc + a.pax, 0);
-    const completed = assignments.filter((a) => a.status === "Completed").reduce((acc, a) => acc + a.pax, 0);
+  const additionalGuests = [
+    { id: "cg-09", name: "Alessandro Rossi", avatarUrl: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=300&auto=format&fit=crop&q=80", nationality: "Italy", passport: "•••• 5541", package: "East Java Explorer — Additional Joining Package", status: "Added Mid-Trip", additionPoint: "Malang", additionDate: "27 Aug 2026" },
+    { id: "cg-10", name: "Giulia Rossi", avatarUrl: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=300&auto=format&fit=crop&q=80", nationality: "Italy", passport: "•••• 5542", package: "East Java Explorer — Additional Joining Package", status: "Added Mid-Trip", additionPoint: "Malang", additionDate: "27 Aug 2026" },
+    { id: "cg-11", name: "Marco Bianchi", avatarUrl: "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=300&auto=format&fit=crop&q=80", nationality: "Italy", passport: "•••• 8811", package: "East Java Explorer — Additional Joining Package", status: "Added Mid-Trip", additionPoint: "Malang", additionDate: "27 Aug 2026" },
+    { id: "cg-12", name: "Elena Bianchi", avatarUrl: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=300&auto=format&fit=crop&q=80", nationality: "Italy", passport: "•••• 8812", package: "East Java Explorer — Additional Joining Package", status: "Added Mid-Trip", additionPoint: "Malang", additionDate: "27 Aug 2026" },
+  ];
 
-    return { totalGuests, originalGuests, addedMidTrip, active, completed };
-  }, [assignments]);
-
-  // Filtered assignments
-  const filteredAssignments = useMemo(() => {
-    return assignments.filter((a) => {
-      const q = searchQuery.toLowerCase();
-      return (
-        a.guestName.toLowerCase().includes(q) ||
-        a.nationality.toLowerCase().includes(q) ||
-        a.passportNumber.toLowerCase().includes(q) ||
-        a.joinLocation.toLowerCase().includes(q) ||
-        a.leaveLocation.toLowerCase().includes(q) ||
-        a.packageName.toLowerCase().includes(q) ||
-        a.groupName.toLowerCase().includes(q)
-      );
-    });
-  }, [assignments, searchQuery]);
-
-  // Handle Add Guest
-  const handleAddGuest = (newAssignment: GuestTripAssignment) => {
-    setAssignments([newAssignment, ...assignments]);
-
-    // Log Activity
-    const newLog: GuestActivityLog = {
-      id: `gal-${Date.now()}`,
-      timestamp: new Date().toISOString().replace("T", " ").substring(0, 16) + " WIB",
-      action: "Guest Added",
-      details: `${newAssignment.pax} Guests (${newAssignment.guestName}) assigned to ${newAssignment.groupName} at ${newAssignment.joinLocation}. Package: ${newAssignment.packageName}.`,
-      operator: "Dispatcher (Current User)",
-    };
-
-    setActivityLogs([newLog, ...activityLogs]);
-  };
-
-  // Handle Save Transport
-  const handleSaveTransport = (updatedAssignment: GuestTripAssignment) => {
-    setAssignments(
-      assignments.map((a) => (a.id === updatedAssignment.id ? updatedAssignment : a))
-    );
-
-    const newLog: GuestActivityLog = {
-      id: `gal-${Date.now()}`,
-      timestamp: new Date().toISOString().replace("T", " ").substring(0, 16) + " WIB",
-      action: "Transport Changed",
-      details: `Transport segment updated for ${updatedAssignment.guestName} (${updatedAssignment.groupName}).`,
-      operator: "Dispatcher (Current User)",
-    };
-
-    setActivityLogs([newLog, ...activityLogs]);
-  };
-
-  // Handle Create Group
-  const handleCreateGroup = () => {
-    if (!newGroupName) return;
-    const newGrp: GuestGroup = {
-      id: `grp-${Date.now()}`,
-      name: newGroupName,
-      joinLocation: newGroupJoin,
-      leaveLocation: newGroupLeave,
-      packageId: "tp-004",
-      packageName: "Bromo – Bali",
-      badgeVariant: "emerald",
-    };
-    setGroups([...groups, newGrp]);
-    setNewGroupName("");
-    setShowGroupModal(false);
-  };
-
-  const getStatusBadge = (status: string) => {
-    switch (status) {
-      case "Active":
-        return <Badge variant="emerald">● Active</Badge>;
-      case "Added During Trip":
-        return <Badge variant="blue">● Added Mid-Trip</Badge>;
-      case "Scheduled":
-        return <Badge variant="violet">○ Scheduled</Badge>;
-      case "Completed":
-        return <Badge variant="emerald">✓ Completed</Badge>;
-      case "Cancelled":
-        return <Badge variant="danger">✕ Cancelled</Badge>;
-      case "No-show":
-        return <Badge variant="amber">⚠️ No-show</Badge>;
-      default:
-        return <Badge variant="slate">{status}</Badge>;
-    }
-  };
-
-  return (
-    <div className="space-y-6 font-sans">
-      {/* REQUIREMENT 12: COMPACT GUEST SUMMARY BAR */}
-      <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
-        <Card className="p-3.5 bg-slate-900 border border-slate-800 text-white space-y-1">
-          <span className="text-[10px] font-mono text-slate-400 font-bold uppercase block">TOTAL GUESTS</span>
-          <div className="flex items-baseline justify-between">
-            <span className="text-2xl font-extrabold text-white">{summaryMetrics.totalGuests}</span>
-            <span className="text-xs font-mono text-indigo-400 font-bold">12 Pax Total</span>
+  if (isSimpleTrip) {
+    return (
+      <div className="space-y-6 font-sans text-slate-800 dark:text-slate-200">
+        <Card className="p-6 space-y-4">
+          <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800 font-mono text-xs">
+            <div className="flex items-center gap-2">
+              <Users className="w-4 h-4 text-blue-600" />
+              <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider">
+                GUEST MANIFEST (2 Guests)
+              </h3>
+            </div>
+            <Badge variant="emerald">✓ Manifest Complete</Badge>
           </div>
-        </Card>
 
-        <Card className="p-3.5 bg-slate-900 border border-slate-800 text-white space-y-1">
-          <span className="text-[10px] font-mono text-slate-400 font-bold uppercase block">ORIGINAL GUESTS</span>
-          <div className="flex items-baseline justify-between">
-            <span className="text-2xl font-extrabold text-purple-400">{summaryMetrics.originalGuests}</span>
-            <span className="text-[10px] text-slate-400 font-mono">Yogyakarta Departure</span>
-          </div>
-        </Card>
-
-        <Card className="p-3.5 bg-slate-900 border border-slate-800 text-white space-y-1 border-blue-900/80 bg-blue-950/20">
-          <span className="text-[10px] font-mono text-blue-400 font-bold uppercase block">ADDED DURING TRIP</span>
-          <div className="flex items-baseline justify-between">
-            <span className="text-2xl font-extrabold text-blue-400">+{summaryMetrics.addedMidTrip}</span>
-            <Badge variant="blue">● Malang Joiners</Badge>
-          </div>
-        </Card>
-
-        <Card className="p-3.5 bg-slate-900 border border-slate-800 text-white space-y-1">
-          <span className="text-[10px] font-mono text-slate-400 font-bold uppercase block">ACTIVE ON TRIP</span>
-          <div className="flex items-baseline justify-between">
-            <span className="text-2xl font-extrabold text-emerald-400">{summaryMetrics.active}</span>
-            <Badge variant="emerald">● 100% Active</Badge>
-          </div>
-        </Card>
-
-        <Card className="p-3.5 bg-slate-900 border border-slate-800 text-white space-y-1">
-          <span className="text-[10px] font-mono text-slate-400 font-bold uppercase block">COMPLETED</span>
-          <div className="flex items-baseline justify-between">
-            <span className="text-2xl font-extrabold text-slate-400">{summaryMetrics.completed}</span>
-            <span className="text-[10px] text-slate-500 font-mono">0 Drop-off Completed</span>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 font-mono text-xs">
+            {simpleGuests.map((g, idx) => (
+              <div key={g.id} className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-[#162034] flex items-start gap-3.5">
+                <img
+                  src={g.avatarUrl}
+                  alt={g.name}
+                  className="w-10 h-10 rounded-full object-cover border border-slate-200 dark:border-slate-700 shadow-2xs shrink-0"
+                />
+                <div className="space-y-1 grow">
+                  <div className="flex justify-between items-center">
+                    <strong className="text-slate-900 dark:text-slate-100 text-sm font-bold">{idx + 1}. {g.name}</strong>
+                    <Badge variant="emerald">✓ Complete</Badge>
+                  </div>
+                  <p className="text-slate-500 text-[11px]">{g.nationality} · Passport: {g.passport}</p>
+                  <p className="text-blue-600 font-bold text-[11px]">Package: {g.package}</p>
+                </div>
+              </div>
+            ))}
           </div>
         </Card>
       </div>
+    );
+  }
 
-      {/* CONTROLS & ADD GUEST BAR */}
-      <Card className="p-4 space-y-4">
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
-          <div className="flex items-center gap-2 flex-wrap">
-            <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider font-mono flex items-center gap-2">
-              <Users className="w-4 h-4 text-indigo-600" /> Dynamic Guest Assignments ({summaryMetrics.totalGuests} Pax)
-            </h3>
-          </div>
-
-          <div className="flex items-center gap-2 flex-wrap">
-            <div className="w-48 sm:w-60">
-              <SearchInput
-                placeholder="Search guest, nationality, location..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-            </div>
-
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setShowGroupModal(true)}
-              leftIcon={<Layers className="w-3.5 h-3.5 text-indigo-600" />}
-            >
-              + Create Guest Group
-            </Button>
-
-            <Button
-              variant="primary"
-              size="sm"
-              onClick={() => setIsAddGuestModalOpen(true)}
-              leftIcon={<UserPlus className="w-3.5 h-3.5" />}
-            >
-              + Add Guest
-            </Button>
-          </div>
+  return (
+    <div className="space-y-6 font-sans text-slate-800 dark:text-slate-200">
+      {/* COMPLEX TRIP MANIFEST SUMMARY BAR */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 font-mono text-xs">
+        <div className="p-3.5 rounded-xl bg-white dark:bg-[#101726] border border-slate-200/90 dark:border-slate-800 space-y-1 shadow-2xs">
+          <span className="text-[10px] text-slate-500 block font-bold uppercase">INITIAL GUESTS</span>
+          <strong className="text-xl font-extrabold text-slate-900 dark:text-white block">8 Guests</strong>
+          <span className="text-[10px] text-slate-500 block">Yogyakarta Departure</span>
         </div>
 
-        {/* REQUIREMENT 5: GUEST GROUPING & VISUAL DISTINCTION */}
-        <div className="space-y-6 pt-2">
-          {groups.map((group) => {
-            const groupAssignments = filteredAssignments.filter(
-              (a) => a.groupId === group.id || a.groupName.includes(group.name.split(" ")[0])
-            );
+        <div className="p-3.5 rounded-xl bg-white dark:bg-[#101726] border border-blue-200/90 dark:border-blue-900/60 space-y-1 shadow-2xs">
+          <span className="text-[10px] text-blue-600 block font-bold uppercase">ADDITIONAL GUESTS</span>
+          <strong className="text-xl font-extrabold text-blue-600 block">+4 Guests</strong>
+          <span className="text-[10px] text-blue-500 block">Joined at Malang (27 Aug)</span>
+        </div>
 
-            const groupPaxTotal = groupAssignments.reduce((acc, a) => acc + a.pax, 0);
+        <div className="p-3.5 rounded-xl bg-white dark:bg-[#101726] border border-emerald-200/90 dark:border-emerald-900/60 space-y-1 shadow-2xs">
+          <span className="text-[10px] text-emerald-600 block font-bold uppercase">CURRENT MANIFEST</span>
+          <strong className="text-xl font-extrabold text-emerald-600 block">12 Guests Total</strong>
+          <span className="text-[10px] text-emerald-500 block">100% Active</span>
+        </div>
 
-            return (
-              <div
-                key={group.id}
-                className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#101726] shadow-xs overflow-hidden"
-              >
-                {/* COMPACT GROUP HEADER */}
-                <div className="p-4 bg-slate-50/90 dark:bg-[#162034] border-b border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 font-mono text-xs">
-                  <div className="flex items-center gap-2.5 flex-wrap">
-                    <Badge variant={group.badgeVariant || "violet"}>
-                      {group.name}
-                    </Badge>
-                    <span className="font-extrabold text-slate-900 dark:text-slate-100 text-sm">
-                      {groupPaxTotal} Pax Assigned
-                    </span>
-                    <span className="text-slate-400">|</span>
-                    <span className="text-indigo-600 dark:text-indigo-400 font-bold flex items-center gap-1">
-                      <Package className="w-3.5 h-3.5" /> Package: {group.packageName}
-                    </span>
-                  </div>
+        <div className="p-3.5 rounded-xl bg-white dark:bg-[#101726] border border-purple-200/90 dark:border-purple-900/60 space-y-1 shadow-2xs">
+          <span className="text-[10px] text-purple-600 block font-bold uppercase">TICKET DROP-OFF</span>
+          <strong className="text-xl font-extrabold text-purple-600 block">2 Guests</strong>
+          <span className="text-[10px] text-purple-500 block">Banyuwangi Train Station</span>
+        </div>
+      </div>
 
-                  <div className="flex items-center gap-3 text-slate-500 text-[11px]">
-                    <span className="flex items-center gap-1 text-emerald-600 font-bold">
-                      <MapPin className="w-3 h-3" /> Join: {group.joinLocation}
-                    </span>
-                    <ChevronRight className="w-3 h-3 text-slate-400" />
-                    <span className="flex items-center gap-1 text-amber-600 font-bold">
-                      <MapPin className="w-3 h-3" /> Leave: {group.leaveLocation}
-                    </span>
-                  </div>
-                </div>
-
-                {/* GUEST TABLE FOR THIS GROUP */}
-                <DataTable
-                  columns={[
-                    {
-                      key: "guest",
-                      header: "Guest Name & Nationality",
-                      render: (r: GuestTripAssignment) => (
-                        <div className="space-y-0.5 font-sans">
-                          <button
-                            onClick={() => {
-                              setSelectedAssignment(r);
-                              setIsDrawerOpen(true);
-                            }}
-                            className="font-bold text-sm text-slate-900 dark:text-slate-100 hover:text-indigo-600 dark:hover:text-indigo-400 flex items-center gap-1.5 text-left"
-                          >
-                            <span>{r.guestName}</span>
-                          </button>
-                          <span className="text-[10px] text-slate-400 font-mono block">
-                            {r.nationality} · Passport: {r.passportNumber} · {r.phone}
-                          </span>
-                        </div>
-                      ),
-                    },
-                    {
-                      key: "pax",
-                      header: "Pax Count",
-                      render: (r: GuestTripAssignment) => (
-                        <span className="font-mono font-bold text-xs px-2.5 py-1 rounded-md bg-indigo-50 dark:bg-indigo-950/40 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-900/60">
-                          {r.pax} Pax
-                        </span>
-                      ),
-                    },
-                    {
-                      key: "joinLeave",
-                      header: "Join & Leave Information",
-                      render: (r: GuestTripAssignment) => (
-                        <div className="font-mono text-xs space-y-0.5">
-                          <div className="flex items-center gap-1 text-emerald-600 dark:text-emerald-400 font-bold">
-                            <MapPin className="w-3 h-3" /> Join: {r.joinLocation} ({r.joinDate})
-                          </div>
-                          <div className="flex items-center gap-1 text-slate-400 text-[10px]">
-                            <MapPin className="w-3 h-3 text-amber-500" /> Leave: {r.leaveLocation} ({r.leaveDate})
-                          </div>
-                        </div>
-                      ),
-                    },
-                    {
-                      key: "package",
-                      header: "Tour Package (Master)",
-                      render: (r: GuestTripAssignment) => (
-                        <span className="font-mono text-xs font-bold text-slate-800 dark:text-slate-200 block">
-                          {r.packageName}
-                        </span>
-                      ),
-                    },
-                    {
-                      key: "transport",
-                      header: "Transport Segment",
-                      render: (r: GuestTripAssignment) => (
-                        <div className="font-mono text-xs space-y-1">
-                          {r.transportAssignments.length > 0 ? (
-                            r.transportAssignments.map((ts, idx) => (
-                              <div key={idx} className="flex items-center justify-between gap-1 text-[11px]">
-                                <span className="text-slate-700 dark:text-slate-300 font-bold">{ts.vehicleOrTicket}</span>
-                                <Badge variant={ts.assignedPax <= ts.vehicleCapacity ? "emerald" : "danger"} className="text-[9px] px-1 py-0">
-                                  {ts.assignedPax <= ts.vehicleCapacity ? `✓ ${ts.assignedPax}/${ts.vehicleCapacity}` : `⚠️ ${ts.assignedPax}/${ts.vehicleCapacity}`}
-                                </Badge>
-                              </div>
-                            ))
-                          ) : (
-                            <span className="text-slate-400 text-[10px] italic">Unassigned</span>
-                          )}
-                        </div>
-                      ),
-                    },
-                    {
-                      key: "status",
-                      header: "Status & Visual Tag",
-                      render: (r: GuestTripAssignment) => (
-                        <div className="space-y-1 font-mono">
-                          {getStatusBadge(r.status)}
-                          {r.addedMidTrip && (
-                            <div className="text-[9px] font-bold text-blue-600 dark:text-blue-400 block bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-900/60 p-1 rounded">
-                              + Added in {r.addedLocation || "Malang"} on {r.addedDate || "27 Aug 2026"}
-                            </div>
-                          )}
-                        </div>
-                      ),
-                    },
-                    {
-                      key: "actions",
-                      header: "Actions",
-                      render: (r: GuestTripAssignment) => (
-                        <div className="flex items-center gap-1.5 justify-end">
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            className="h-7 text-[11px] px-2 text-indigo-600 font-mono"
-                            onClick={() => {
-                              setTransportTargetAssignment(r);
-                              setIsAssignTransportModalOpen(true);
-                            }}
-                          >
-                            <Truck className="w-3 h-3 mr-1" /> Segment
-                          </Button>
-
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setSelectedAssignment(r);
-                              setIsDrawerOpen(true);
-                            }}
-                            className="w-7 h-7 rounded-full border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800 hover:bg-indigo-50 dark:hover:bg-indigo-950 text-slate-500 hover:text-indigo-600 flex items-center justify-center transition-all"
-                            title="View Detail"
-                          >
-                            <Eye className="w-3.5 h-3.5" />
-                          </button>
-                        </div>
-                      ),
-                    },
-                  ]}
-                  data={groupAssignments}
-                  keyExtractor={(r) => r.id}
-                />
-              </div>
-            );
-          })}
+      {/* GUEST DISTRIBUTION SUMMARY CARD */}
+      <Card className="p-4 bg-blue-50/20 dark:bg-blue-950/20 border-blue-200 dark:border-blue-900/60 font-mono text-xs space-y-2">
+        <span className="font-extrabold text-blue-600 dark:text-blue-400 uppercase text-xs block">
+          GUEST DISTRIBUTION BREAKDOWN ACROSS SEGMENTS
+        </span>
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-[11px]">
+          <div><span className="text-slate-500 block">Segment 1 (Yk → Probolinggo):</span><strong className="text-slate-900 dark:text-white">8 Guests</strong></div>
+          <div><span className="text-slate-500 block">Segment 2 (Probolinggo → Bali):</span><strong className="text-slate-900 dark:text-white">12 Guests</strong></div>
+          <div><span className="text-slate-500 block">Banyuwangi Ticket Drop-off:</span><strong className="text-purple-600 font-bold">2 Guests (Thomas & Sophia)</strong></div>
+          <div><span className="text-slate-500 block">Final Bali Vehicle Drop-off:</span><strong className="text-emerald-600 font-bold">10 Guests</strong></div>
         </div>
       </Card>
 
-      {/* REQUIREMENT 13: GUEST ACTIVITY & AUDIT LOG */}
-      <Card className="p-6 space-y-4 font-mono text-xs">
-        <div className="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800">
-          <h3 className="text-xs font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider flex items-center gap-2">
-            <History className="w-4 h-4 text-indigo-600" /> Guest Activity & Dynamic Audit Log
-          </h3>
-          <span className="text-[10px] text-slate-400">All guest modifications logged for operational transparency</span>
+      {/* INITIAL GUESTS SECTION WITH REAL AVATAR PHOTOS */}
+      <Card className="p-5 space-y-4">
+        <div className="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-slate-800 font-mono text-xs">
+          <div className="flex items-center gap-2">
+            <Badge variant="blue">INITIAL GUESTS (8 PAX)</Badge>
+            <span className="text-slate-500">Package: East Java Explorer</span>
+          </div>
+          <span className="text-slate-400 text-[11px]">Yogyakarta Pickup</span>
         </div>
 
-        <div className="space-y-3">
-          {activityLogs.map((log) => (
-            <div
-              key={log.id}
-              className="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-[#162034] space-y-1"
-            >
-              <div className="flex justify-between items-center">
-                <span className="font-bold text-indigo-600 dark:text-indigo-400">
-                  {log.action}
-                </span>
-                <span className="text-[10px] text-slate-400">{log.timestamp}</span>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3.5 font-mono text-xs">
+          {initialGuests.map((g, idx) => (
+            <div key={g.id} className="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-[#162034] flex items-center gap-3">
+              <img
+                src={g.avatarUrl}
+                alt={g.name}
+                className="w-10 h-10 rounded-full object-cover border border-slate-200 dark:border-slate-700 shadow-2xs shrink-0"
+              />
+              <div className="space-y-0.5 min-w-0">
+                <strong className="text-slate-900 dark:text-white block font-bold truncate">{idx + 1}. {g.name}</strong>
+                <span className="text-slate-500 text-[10px] block">{g.nationality} · {g.passport}</span>
+                {g.isTicketDropoff ? (
+                  <Badge variant="violet" className="text-[9px]">🎫 Ticket Drop-off</Badge>
+                ) : (
+                  <Badge variant="emerald" className="text-[9px]">✓ Vehicle to Bali</Badge>
+                )}
               </div>
-              <p className="text-slate-700 dark:text-slate-300 font-sans text-xs">{log.details}</p>
-              <span className="text-[10px] text-slate-400 block">Operator: {log.operator}</span>
             </div>
           ))}
         </div>
       </Card>
 
-      {/* GUEST DETAIL DRAWER */}
-      <GuestDetailDrawer
-        isOpen={isDrawerOpen}
-        onClose={() => setIsDrawerOpen(false)}
-        assignment={selectedAssignment}
-      />
+      {/* ADDITIONAL GUESTS SECTION WITH REAL AVATAR PHOTOS */}
+      <Card className="p-5 space-y-4 border-blue-200 dark:border-blue-900/60 bg-blue-50/10 dark:bg-blue-950/10">
+        <div className="flex items-center justify-between pb-2 border-b border-slate-200 dark:border-slate-800 font-mono text-xs">
+          <div className="flex items-center gap-2">
+            <Badge variant="blue">+4 GUESTS ADDED MID-TRIP</Badge>
+            <span className="text-blue-600 font-bold">Package: East Java Explorer — Additional Joining Package</span>
+          </div>
+          <span className="text-blue-600 font-bold text-[11px]">Joined at Malang on 27 Aug 2026</span>
+        </div>
 
-      {/* ADD GUEST MODAL */}
-      <AddGuestModal
-        isOpen={isAddGuestModalOpen}
-        onClose={() => setIsAddGuestModalOpen(false)}
-        groups={groups}
-        onAddGuest={handleAddGuest}
-      />
-
-      {/* ASSIGN TRANSPORT MODAL */}
-      <AssignTransportModal
-        isOpen={isAssignTransportModalOpen}
-        onClose={() => setIsAssignTransportModalOpen(false)}
-        assignment={transportTargetAssignment}
-        onSaveTransport={handleSaveTransport}
-      />
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3.5 font-mono text-xs">
+          {additionalGuests.map((g, idx) => (
+            <div key={g.id} className="p-3.5 rounded-xl border border-blue-200 dark:border-blue-900/60 bg-white dark:bg-[#101726] flex items-center gap-3">
+              <img
+                src={g.avatarUrl}
+                alt={g.name}
+                className="w-10 h-10 rounded-full object-cover border border-blue-200 dark:border-blue-800 shadow-2xs shrink-0"
+              />
+              <div className="space-y-0.5 min-w-0">
+                <strong className="text-slate-900 dark:text-white block font-bold truncate">{idx + 9}. {g.name}</strong>
+                <span className="text-slate-500 text-[10px] block">{g.nationality} · {g.passport}</span>
+                <span className="text-blue-600 text-[10px] font-bold block">Joined at Malang Stn</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </Card>
     </div>
   );
 }

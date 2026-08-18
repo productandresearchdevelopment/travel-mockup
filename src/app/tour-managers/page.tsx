@@ -51,9 +51,17 @@ export default function TourManagersPage() {
       header: "Tour Manager",
       render: (tm) => (
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-full bg-purple-100 dark:bg-purple-950/80 text-purple-700 dark:text-purple-300 font-mono font-bold text-xs flex items-center justify-center shrink-0 border border-purple-200 dark:border-purple-800">
-            {tm.code}
-          </div>
+          {tm.avatarUrl ? (
+            <img
+              src={tm.avatarUrl}
+              alt={tm.fullName}
+              className="w-8 h-8 rounded-full object-cover border border-slate-200 dark:border-slate-700 shadow-2xs shrink-0"
+            />
+          ) : (
+            <div className="w-8 h-8 rounded-full bg-purple-100 dark:bg-purple-950/80 text-purple-700 dark:text-purple-300 font-mono font-bold text-xs flex items-center justify-center shrink-0 border border-purple-200 dark:border-purple-800">
+              {tm.code}
+            </div>
+          )}
           <div>
             <Link
               href={`/tour-managers/${tm.id}`}

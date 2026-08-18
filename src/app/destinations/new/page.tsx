@@ -54,19 +54,9 @@ export default function CreateDestinationPage() {
           { label: "Destinations", href: "/destinations" },
           { label: "Add Destination" },
         ]}
-        actions={
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => router.push("/destinations")}
-            leftIcon={<ArrowLeft className="w-3.5 h-3.5" />}
-          >
-            Cancel
-          </Button>
-        }
       />
 
-      <form onSubmit={handleSubmit} className="space-y-6 max-w-4xl">
+      <form onSubmit={handleSubmit} className="w-full space-y-6">
         {/* Section 1: Destination Information */}
         <Card className="p-6 space-y-4">
           <div className="flex items-center gap-2 pb-3 border-b border-slate-100 dark:border-slate-800">

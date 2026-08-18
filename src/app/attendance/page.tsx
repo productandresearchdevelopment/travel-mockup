@@ -10,8 +10,10 @@ import { Card } from "@/components/ui/Card";
 import { DataTable } from "@/components/ui/DataTable";
 import { SearchInput } from "@/components/ui/SearchInput";
 import { Select } from "@/components/ui/Select";
+import { MetricCard } from "@/components/ui/MetricCard";
 import { mockAttendanceData } from "@/data/mockAttendanceData";
 import { AttendanceRecord, AttendanceStatus } from "@/types/attendance";
+import { Users, UserCheck, Calendar, UserX, Clock, ArrowRight } from "lucide-react";
 
 export default function AttendancePage() {
   const [attendanceLogs] = useState<AttendanceRecord[]>(mockAttendanceData);
@@ -24,7 +26,8 @@ export default function AttendancePage() {
       const matchSearch =
         log.workerName.toLowerCase().includes(searchQuery.toLowerCase()) ||
         log.workerCode.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        (log.tripCode && log.tripCode.toLowerCase().includes(searchQuery.toLowerCase()));
+        (log.tripCode &&
+          log.tripCode.toLowerCase().includes(searchQuery.toLowerCase()));
 
       const matchRole = roleFilter === "All" || log.role === roleFilter;
       const matchStatus = statusFilter === "All" || log.status === statusFilter;
@@ -36,7 +39,9 @@ export default function AttendancePage() {
   const summary = useMemo(() => {
     return {
       totalScheduled: attendanceLogs.length,
-      presentCount: attendanceLogs.filter((a) => a.status === "Present" || a.status === "On Assignment").length,
+      presentCount: attendanceLogs.filter(
+        (a) => a.status === "Present" || a.status === "On Assignment",
+      ).length,
       absentCount: attendanceLogs.filter((a) => a.status === "Absent").length,
       leaveCount: attendanceLogs.filter((a) => a.status === "Leave").length,
     };
@@ -63,130 +68,172 @@ export default function AttendancePage() {
       />
 
       {/* TOP KPI CARDS */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 font-mono text-xs">
-        <Card className="p-4 bg-slate-900 text-white border-slate-800 space-y-1">
-          <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">
-            TOTAL SCHEDULED
-          </span>
-          <strong className="text-2xl font-extrabold text-blue-400 block">{summary.totalScheduled}</strong>
-          <span className="text-slate-400 text-[10px]">On Active Shift</span>
-        </Card>
-
-        <Card className="p-4 space-y-1">
-          <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">
-            PRESENT & ON DUTY
-          </span>
-          <strong className="text-2xl font-extrabold text-emerald-600 dark:text-emerald-400 block">{summary.presentCount}</strong>
-          <span className="text-slate-500 text-[10px]">Checked In</span>
-        </Card>
-
-        <Card className="p-4 space-y-1">
-          <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">
-            ON LEAVE
-          </span>
-          <strong className="text-2xl font-extrabold text-amber-600 dark:text-amber-400 block">{summary.leaveCount}</strong>
-          <span className="text-slate-500 text-[10px]">Scheduled Leave</span>
-        </Card>
-
-        <Card className="p-4 space-y-1 border-rose-200 dark:border-rose-900/60 bg-rose-50/20 dark:bg-rose-950/20">
-          <span className="text-[10px] text-rose-600 dark:text-rose-400 font-bold uppercase tracking-wider block">
-            ABSENT
-          </span>
-          <strong className="text-2xl font-extrabold text-rose-600 dark:text-rose-400 block">{summary.absentCount}</strong>
-          <span className="text-rose-600 text-[10px] font-bold">Unexcused</span>
-        </Card>
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5">
+        <MetricCard
+          title="TOTAL SCHEDULED"
+          value={summary.totalScheduled}
+          subtitle="On Active Shift"
+          icon={<Users className="w-3.5 h-3.5" />}
+          variant="indigo"
+        />
+        <MetricCard
+          title="PRESENT & ON DUTY"
+          value={summary.presentCount}
+          subtitle="Checked In Today"
+          icon={<UserCheck className="w-3.5 h-3.5" />}
+          variant="emerald"
+          badge="● On Duty"
+        />
+        <MetricCard
+          title="ON LEAVE / OFF"
+          value={summary.leaveCount}
+          subtitle="Scheduled Leave"
+          icon={<Calendar className="w-3.5 h-3.5" />}
+          variant="amber"
+          badge="Off Shift"
+        />
+        <MetricCard
+          title="ABSENT / UNEXCUSED"
+          value={summary.absentCount}
+          subtitle="Requires Review"
+          icon={<UserX className="w-3.5 h-3.5" />}
+          variant="rose"
+          badge="Unexcused"
+        />
       </div>
 
-      {/* DATA TABLE CARD */}
-      <Card className="p-6 space-y-4 font-mono text-xs">
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
-          <div className="flex items-center gap-2">
-            <h3 className="text-sm font-bold uppercase tracking-wider text-slate-900 dark:text-slate-100">
-              Daily Attendance Roster Log
-            </h3>
-            <Badge variant="violet">25 Aug 2026</Badge>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <div className="w-64">
-              <SearchInput
-                placeholder="Search worker name, code, trip..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-            </div>
-            <Select
-              value={roleFilter}
-              onChange={(e) => setRoleFilter(e.target.value)}
-              options={[
-                { value: "All", label: "All Roles" },
-                { value: "Driver", label: "Drivers" },
-                { value: "Guide", label: "Guides" },
-                { value: "Tour Manager", label: "Tour Managers" },
-              ]}
-            />
-          </div>
-        </div>
-
-        <DataTable
-          columns={[
-            {
-              key: "worker",
-              header: "Worker & Code",
-              render: (r: AttendanceRecord) => (
-                <div className="space-y-0.5 font-mono text-xs">
-                  <span className="font-extrabold text-slate-900 dark:text-slate-100 block">{r.workerName}</span>
-                  <span className="text-slate-400 text-[10px] block">{r.workerCode} ({r.role})</span>
+      {/* UNIFIED DATA TABLE */}
+      <DataTable
+        searchQuery={searchQuery}
+        onSearchChange={(e) => setSearchQuery(e.target.value)}
+        searchPlaceholder="Search worker name, code, trip..."
+        filters={[
+          {
+            key: "role",
+            value: roleFilter,
+            onChange: setRoleFilter,
+            options: [
+              { value: "All", label: "All Roles" },
+              { value: "Driver", label: "Drivers" },
+              { value: "Guide", label: "Guides" },
+              { value: "Tour Manager", label: "Tour Managers" },
+            ],
+          },
+          {
+            key: "status",
+            value: statusFilter,
+            onChange: setStatusFilter,
+            options: [
+              { value: "All", label: "All Statuses" },
+              { value: "Present", label: "Present" },
+              { value: "On Assignment", label: "On Assignment" },
+              { value: "Leave", label: "Leave" },
+              { value: "Off", label: "Off" },
+            ],
+          },
+        ]}
+        columns={[
+          {
+            key: "worker",
+            header: "Worker & Code",
+            render: (r: AttendanceRecord) => (
+              <div className="flex items-center gap-2.5 max-w-[190px]">
+                {r.avatarUrl ? (
+                  <img
+                    src={r.avatarUrl}
+                    alt={r.workerName}
+                    className="w-7 h-7 rounded-full object-cover border border-slate-200 dark:border-slate-700 shadow-xs shrink-0"
+                  />
+                ) : (
+                  <div className="w-7 h-7 rounded-full bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 font-bold flex items-center justify-center text-[10px] shrink-0">
+                    {r.workerName.charAt(0)}
+                  </div>
+                )}
+                <div className="min-w-0 flex-1">
+                  <span
+                    title={r.workerName}
+                    className="font-extrabold text-slate-800 dark:text-slate-200 block text-xs truncate"
+                  >
+                    {r.workerName}
+                  </span>
+                  <span
+                    title={`${r.workerCode} · ${r.role}`}
+                    className="text-[10px] text-slate-500 font-mono block truncate"
+                  >
+                    {r.workerCode} · <span className="font-semibold">{r.role}</span>
+                  </span>
                 </div>
-              ),
-            },
-            {
-              key: "shift",
-              header: "Assignment & Trip",
-              render: (r: AttendanceRecord) => (
-                <div className="space-y-0.5 font-mono text-xs">
-                  <span className="font-bold text-slate-800 dark:text-slate-200 block">{r.assignmentName}</span>
-                  <span className="text-slate-400 text-[10px] block">Trip: {r.tripCode || "Standby"}</span>
-                </div>
-              ),
-            },
-            {
-              key: "checkIn",
-              header: "Check In",
-              render: (r: AttendanceRecord) => (
-                <span className="font-mono font-bold text-emerald-600 text-xs">{r.checkInTime || "—"}</span>
-              ),
-            },
-            {
-              key: "checkOut",
-              header: "Check Out",
-              render: (r: AttendanceRecord) => (
-                <span className="font-mono font-bold text-amber-600 text-xs">{r.checkOutTime || "—"}</span>
-              ),
-            },
-            {
-              key: "hours",
-              header: "Working Hours",
-              render: (r: AttendanceRecord) => (
-                <span className="font-mono font-bold text-slate-900 dark:text-slate-100 text-xs">
-                  {r.workingHours || "—"}
+              </div>
+            ),
+          },
+          {
+            key: "shift",
+            header: "Assignment & Trip",
+            render: (r: AttendanceRecord) => (
+              <div className="space-y-0.5 font-mono text-xs max-w-[210px]">
+                <span
+                  title={r.assignmentName}
+                  className="font-bold text-slate-800 dark:text-slate-200 block truncate"
+                >
+                  {r.assignmentName}
                 </span>
-              ),
-            },
-            {
-              key: "status",
-              header: "Status",
-              render: (r: AttendanceRecord) => (
-                <Badge variant={r.status === "Present" || r.status === "On Assignment" ? "emerald" : r.status === "Leave" ? "amber" : "danger"}>
-                  {r.status}
-                </Badge>
-              ),
-            },
-          ]}
-          data={filteredAttendance}
-          keyExtractor={(r) => r.id}
-        />
-      </Card>
+                <span
+                  title={`Trip: ${r.tripCode || "Standby"}`}
+                  className="text-slate-400 text-[10px] block truncate"
+                >
+                  Trip: {r.tripCode || "Standby"}
+                </span>
+              </div>
+            ),
+          },
+          {
+            key: "checkIn",
+            header: "Check In",
+            render: (r: AttendanceRecord) => (
+              <span className="font-mono font-bold text-emerald-600 text-xs">
+                {r.checkInTime || "—"}
+              </span>
+            ),
+          },
+          {
+            key: "checkOut",
+            header: "Check Out",
+            render: (r: AttendanceRecord) => (
+              <span className="font-mono font-bold text-amber-600 text-xs">
+                {r.checkOutTime || "—"}
+              </span>
+            ),
+          },
+          {
+            key: "hours",
+            header: "Working Hours",
+            render: (r: AttendanceRecord) => (
+              <span className="font-mono font-bold text-slate-900 dark:text-slate-100 text-xs">
+                {r.workingHours || "—"}
+              </span>
+            ),
+          },
+          {
+            key: "status",
+            header: "Status",
+            render: (r: AttendanceRecord) => (
+              <Badge
+                variant={
+                  r.status === "Present" || r.status === "On Assignment"
+                    ? "emerald"
+                    : r.status === "Leave"
+                      ? "amber"
+                      : "danger"
+                }
+              >
+                {r.status}
+              </Badge>
+            ),
+          },
+        ]}
+        data={filteredAttendance}
+        keyExtractor={(r) => r.id}
+      />
     </AppShell>
   );
 }

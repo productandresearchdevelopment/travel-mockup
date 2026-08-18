@@ -138,16 +138,16 @@ export default function OperationalMonitoringTab({ tripId }: OperationalMonitori
 
   return (
     <div className="space-y-6 font-sans text-slate-800 dark:text-slate-200">
-      {/* OWNER VIEW OPERATIONAL HEALTH BAR (REQUIREMENTS 1 & 22) */}
-      <Card className="p-5 bg-gradient-to-r from-slate-900 via-slate-900 to-indigo-950 border-slate-800 text-white space-y-4">
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pb-3 border-b border-slate-800 font-mono text-xs">
+      {/* OWNER VIEW OPERATIONAL HEALTH BAR */}
+      <Card className="p-5 bg-white dark:bg-[#101726] border border-blue-200/90 dark:border-blue-900/60 space-y-4 shadow-xs">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pb-3 border-b border-slate-100 dark:border-slate-800 font-mono text-xs">
           <div className="flex items-center gap-2">
-            <Activity className="w-5 h-5 text-emerald-400" />
+            <Activity className="w-5 h-5 text-blue-600 dark:text-blue-400" />
             <div>
-              <h2 className="text-sm font-extrabold text-white uppercase tracking-wider">
+              <h2 className="text-sm font-extrabold text-slate-900 dark:text-white uppercase tracking-wider">
                 EXECUTIVE OPERATIONAL HEALTH SUMMARY
               </h2>
-              <span className="text-xs text-slate-400">Real-time trip operation tracking & issue monitoring</span>
+              <span className="text-xs text-slate-500 dark:text-slate-400">Real-time trip operation tracking & issue monitoring</span>
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -157,34 +157,34 @@ export default function OperationalMonitoringTab({ tripId }: OperationalMonitori
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 font-mono text-xs">
-          <div className="p-3 rounded-xl bg-slate-800/80 border border-slate-700 space-y-1">
-            <span className="text-[10px] text-slate-400 block font-bold uppercase">ON TIME RATE</span>
-            <strong className="text-xl font-extrabold text-emerald-400">{summary.onTimePercentage}%</strong>
+          <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-emerald-200/80 dark:border-emerald-900/60 space-y-1">
+            <span className="text-[10px] text-emerald-600 dark:text-emerald-400 block font-bold uppercase tracking-wider">ON TIME RATE</span>
+            <strong className="text-xl font-extrabold text-emerald-600 dark:text-emerald-400">{summary.onTimePercentage}%</strong>
           </div>
 
-          <div className="p-3 rounded-xl bg-slate-800/80 border border-slate-700 space-y-1">
-            <span className="text-[10px] text-slate-400 block font-bold uppercase">DELAYED</span>
-            <strong className="text-xl font-extrabold text-amber-400">{summary.delayedPercentage}%</strong>
+          <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-amber-200/80 dark:border-amber-900/60 space-y-1">
+            <span className="text-[10px] text-amber-600 dark:text-amber-400 block font-bold uppercase tracking-wider">DELAYED</span>
+            <strong className="text-xl font-extrabold text-amber-600 dark:text-amber-400">{summary.delayedPercentage}%</strong>
           </div>
 
-          <div className="p-3 rounded-xl bg-slate-800/80 border border-slate-700 space-y-1">
-            <span className="text-[10px] text-slate-400 block font-bold uppercase">AT RISK</span>
-            <strong className="text-xl font-extrabold text-orange-400">{summary.atRiskPercentage}%</strong>
+          <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-orange-200/80 dark:border-orange-900/60 space-y-1">
+            <span className="text-[10px] text-orange-600 dark:text-orange-400 block font-bold uppercase tracking-wider">AT RISK</span>
+            <strong className="text-xl font-extrabold text-orange-600 dark:text-orange-400">{summary.atRiskPercentage}%</strong>
           </div>
 
-          <div className="p-3 rounded-xl bg-slate-800/80 border border-slate-700 space-y-1">
-            <span className="text-[10px] text-slate-400 block font-bold uppercase">MISSED</span>
-            <strong className="text-xl font-extrabold text-rose-400">{summary.missedPercentage}%</strong>
+          <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-rose-200/80 dark:border-rose-900/60 space-y-1">
+            <span className="text-[10px] text-rose-600 dark:text-rose-400 block font-bold uppercase tracking-wider">MISSED</span>
+            <strong className="text-xl font-extrabold text-rose-600 dark:text-rose-400">{summary.missedPercentage}%</strong>
           </div>
 
-          <div className="p-3 rounded-xl bg-slate-800/80 border border-slate-700 space-y-1">
-            <span className="text-[10px] text-slate-400 block font-bold uppercase">ACTIVE ISSUES</span>
-            <strong className="text-xl font-extrabold text-blue-400">{summary.totalActiveIssues} Active</strong>
+          <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-blue-200/80 dark:border-blue-900/60 space-y-1">
+            <span className="text-[10px] text-blue-600 dark:text-blue-400 block font-bold uppercase tracking-wider">ACTIVE ISSUES</span>
+            <strong className="text-xl font-extrabold text-blue-600 dark:text-blue-400">{summary.totalActiveIssues} Active</strong>
           </div>
 
-          <div className="p-3 rounded-xl bg-slate-800/80 border border-rose-900/60 bg-rose-950/20 space-y-1">
-            <span className="text-[10px] text-rose-400 block font-bold uppercase">CRITICAL ALERTS</span>
-            <strong className="text-xl font-extrabold text-rose-400">{summary.criticalIssues} Issue</strong>
+          <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-rose-200/80 dark:border-rose-900/60 space-y-1">
+            <span className="text-[10px] text-rose-600 dark:text-rose-400 block font-bold uppercase tracking-wider">CRITICAL ALERTS</span>
+            <strong className="text-xl font-extrabold text-rose-600 dark:text-rose-400">{summary.criticalIssues} Issue</strong>
           </div>
         </div>
       </Card>

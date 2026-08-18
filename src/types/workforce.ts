@@ -55,6 +55,7 @@ export interface WorkerMaster {
   workerCode: string;
   fullName: string;
   role: WorkerRole;
+  avatarUrl?: string;
   employmentType: EmploymentType;
   phone: string;
   region: string;

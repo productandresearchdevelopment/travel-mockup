@@ -85,6 +85,7 @@ export interface GuestMaster {
   middleName?: string;
   lastName: string;
   fullName: string;
+  avatarUrl?: string;
   gender: GenderType;
   dateOfBirth: string;
   nationality: string;

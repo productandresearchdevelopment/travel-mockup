@@ -59,9 +59,17 @@ export default function DestinationsPage() {
       header: "Destination",
       render: (d) => (
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-full bg-teal-100 dark:bg-teal-950/80 text-teal-700 dark:text-teal-300 font-mono font-bold text-xs flex items-center justify-center shrink-0 border border-teal-200 dark:border-teal-800">
-            {d.code}
-          </div>
+          {d.imageUrl ? (
+            <img
+              src={d.imageUrl}
+              alt={d.name}
+              className="w-10 h-8 rounded-lg object-cover border border-slate-200 dark:border-slate-700 shadow-2xs shrink-0"
+            />
+          ) : (
+            <div className="w-8 h-8 rounded-full bg-teal-100 dark:bg-teal-950/80 text-teal-700 dark:text-teal-300 font-mono font-bold text-xs flex items-center justify-center shrink-0 border border-teal-200 dark:border-teal-800">
+              {d.code}
+            </div>
+          )}
           <div>
             <Link
               href={`/destinations/${d.id}`}

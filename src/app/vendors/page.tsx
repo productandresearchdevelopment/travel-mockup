@@ -166,20 +166,21 @@ export default function VendorsListPage() {
               Add Contract
             </Button>
 
-            <Button
-              variant="primary"
-              size="sm"
-              onClick={() => setShowAddVendorModal(true)}
-              leftIcon={<Plus className="w-3.5 h-3.5" />}
-            >
-              Add Vendor
-            </Button>
+            <Link href="/vendors/new">
+              <Button
+                variant="primary"
+                size="sm"
+                leftIcon={<Plus className="w-3.5 h-3.5" />}
+              >
+                Add Vendor
+              </Button>
+            </Link>
           </div>
         }
       />
 
       {/* TOP SUMMARY KPI CARDS */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
         <MetricCard
           title="TOTAL VENDORS"
           value={summary.total}
@@ -190,7 +191,7 @@ export default function VendorsListPage() {
         <MetricCard
           title="VEHICLES SUPPLIED"
           value={summary.vehiclesSupplied}
-          subtitle="Units"
+          subtitle="Units Fleet"
           icon={<Truck className="w-4 h-4" />}
           variant="blue"
           badge="Fleet"
@@ -198,6 +199,7 @@ export default function VendorsListPage() {
         <MetricCard
           title="ACTIVE CONTRACTS"
           value={summary.activeContracts}
+          subtitle="Rate Agreements"
           icon={<FileCheck className="w-4 h-4" />}
           variant="emerald"
           badge="● Active"
@@ -205,36 +207,26 @@ export default function VendorsListPage() {
         <MetricCard
           title="EST. RENTAL (MONTH)"
           value={`Rp ${summary.monthlyEstimated.toLocaleString("id-ID")}`}
+          subtitle="Budget Forecast"
           icon={<Wallet className="w-4 h-4" />}
           variant="violet"
         />
         <MetricCard
           title="ACTUAL RENTAL SPENT"
           value={`Rp ${summary.monthlyActual.toLocaleString("id-ID")}`}
+          subtitle="Realized Cost"
           icon={<DollarSign className="w-4 h-4" />}
-          variant="amber"
+          variant="blue"
         />
         <MetricCard
           title="COST VARIANCE"
           value={`+Rp ${summary.monthlyVariance.toLocaleString("id-ID")}`}
+          subtitle="Over Budget"
           icon={<AlertTriangle className="w-4 h-4" />}
           variant="amber"
           trend={{ value: "+3.5%", isPositive: false }}
         />
       </div>
-
-      {/* RENTAL CONTROL BANNER */}
-      <Card className="p-4 bg-gradient-to-r from-blue-950/40 via-slate-900 to-slate-900 border-blue-800/40 text-white space-y-2">
-        <div className="flex items-center gap-2">
-          <Lock className="w-4 h-4 text-blue-400" />
-          <h2 className="text-xs font-extrabold uppercase tracking-wider text-blue-300">
-            LOCKED RATE & COST VARIANCE CONTROL ARCHITECTURE
-          </h2>
-        </div>
-        <p className="text-xs text-slate-300 font-sans">
-          Vendor Contracts enforce locked daily/trip rates. Dispatchers cannot manually overwrite rental costs. Any variance between Estimated and Actual rental costs triggers mandatory operational review.
-        </p>
-      </Card>
 
       {/* UNIFIED MASTER DATA TABLE */}
       <DataTable
@@ -375,85 +367,6 @@ export default function VendorsListPage() {
         data={filteredVendors}
         keyExtractor={(r) => r.id}
       />
-
-      {/* MODAL 1: ADD VENDOR */}
-      <Modal isOpen={showAddVendorModal} onClose={() => setShowAddVendorModal(false)} title="Create Master Vendor Partner">
-        <div className="space-y-4 text-xs">
-          <FormField label="Vendor Name *">
-            <Input
-              placeholder="e.g. PT ABC Transport"
-              value={newVendorName}
-              onChange={(e) => setNewVendorName(e.target.value)}
-            />
-          </FormField>
-
-          <FormField label="Legal Business Name">
-            <Input
-              placeholder="e.g. PT ABC Transport Nusantara"
-              value={newLegalName}
-              onChange={(e) => setNewLegalName(e.target.value)}
-            />
-          </FormField>
-
-          <div className="grid grid-cols-2 gap-3">
-            <FormField label="Contact Person *">
-              <Input
-                placeholder="e.g. Budi Hartono"
-                value={newContactPerson}
-                onChange={(e) => setNewContactPerson(e.target.value)}
-              />
-            </FormField>
-
-            <FormField label="Phone Number">
-              <Input
-                placeholder="0812-3456-7890"
-                value={newPhone}
-                onChange={(e) => setNewPhone(e.target.value)}
-              />
-            </FormField>
-          </div>
-
-          <div className="grid grid-cols-2 gap-3">
-            <FormField label="Email">
-              <Input
-                type="email"
-                placeholder="vendor@example.com"
-                value={newEmail}
-                onChange={(e) => setNewEmail(e.target.value)}
-              />
-            </FormField>
-
-            <FormField label="Operating Region">
-              <Select
-                value={newRegion}
-                onChange={(e) => setNewRegion(e.target.value as any)}
-                options={[
-                  { value: "East Java", label: "East Java" },
-                  { value: "Banyuwangi", label: "Banyuwangi" },
-                  { value: "Bali", label: "Bali" },
-                ]}
-              />
-            </FormField>
-          </div>
-
-          <FormField label="Office Address">
-            <Textarea
-              placeholder="Full office or depot address..."
-              value={newAddress}
-              onChange={(e) => setNewAddress(e.target.value)}
-            />
-          </FormField>
-
-          <div className="pt-2 flex justify-end gap-2">
-            <Button variant="outline" onClick={() => setShowAddVendorModal(false)}>
-              Cancel
-            </Button>
-            <Button variant="primary" onClick={handleSaveVendor}>
-              Create Vendor
-            </Button>
-          </div>
-        </div>
-      </Modal>
 
       {/* MODAL 2: ADD CONTRACT */}
       <Modal isOpen={showAddContractModal} onClose={() => setShowAddContractModal(false)} title="Create Rental Contract">

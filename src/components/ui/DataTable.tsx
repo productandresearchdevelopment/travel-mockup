@@ -94,16 +94,23 @@ export function DataTable<T>({
 }: DataTableProps<T>) {
   const [jumpPage, setJumpPage] = useState<string>(String(currentPage));
 
-  const allSelected =
-    data.length > 0 && selectedIds.length === data.length;
+  const allSelected = data.length > 0 && selectedIds.length === data.length;
 
   const startIndex = (currentPage - 1) * pageSize + 1;
   const endIndex = Math.min(currentPage * pageSize, totalItems || data.length);
 
   return (
-    <div className={cn("w-full rounded-2xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-[#101726] shadow-xs p-4 sm:p-5 space-y-4", className)}>
+    <div
+      className={cn(
+        "w-full rounded-2xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-[#101726] shadow-xs p-4 sm:p-5 space-y-4",
+        className,
+      )}
+    >
       {/* TOP INTEGRATED FILTER BAR (Matching Reference UI) */}
-      {(onSearchChange || filters.length > 0 || onExport || onPageSizeChange) && (
+      {(onSearchChange ||
+        filters.length > 0 ||
+        onExport ||
+        onPageSizeChange) && (
         <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3 pb-1">
           {/* Left: Pill Search Input */}
           {onSearchChange && (
@@ -123,7 +130,11 @@ export function DataTable<T>({
               <div key={f.key} className="w-36 sm:w-40">
                 <Select
                   variant="pill"
-                  icon={f.icon || <SlidersHorizontal className="w-3 h-3 text-slate-400" />}
+                  icon={
+                    f.icon || (
+                      <SlidersHorizontal className="w-3 h-3 text-slate-400" />
+                    )
+                  }
                   options={f.options}
                   value={f.value}
                   onChange={(e) => f.onChange(e.target.value)}
@@ -176,11 +187,21 @@ export function DataTable<T>({
                 </th>
               )}
               {columns.map((col) => (
-                <th key={col.key} className={cn("py-3.5 px-4 whitespace-nowrap", col.headerClassName)}>
+                <th
+                  key={col.key}
+                  className={cn(
+                    "py-3.5 px-4 whitespace-nowrap",
+                    col.headerClassName,
+                  )}
+                >
                   {col.header}
                 </th>
               ))}
-              {onRowAction && <th className="py-3.5 px-3 w-10 text-right uppercase">Actions</th>}
+              {onRowAction && (
+                <th className="py-3.5 px-3 w-10 text-right uppercase">
+                  Actions
+                </th>
+              )}
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100 dark:divide-slate-800/60 text-slate-700 dark:text-slate-200">
@@ -199,7 +220,11 @@ export function DataTable<T>({
             ) : data.length === 0 ? (
               <tr>
                 <td
-                  colSpan={columns.length + (selectable ? 1 : 0) + (onRowAction ? 1 : 0)}
+                  colSpan={
+                    columns.length +
+                    (selectable ? 1 : 0) +
+                    (onRowAction ? 1 : 0)
+                  }
                   className="py-10 text-center text-slate-400 font-mono text-xs"
                 >
                   {emptyMessage}
@@ -219,26 +244,44 @@ export function DataTable<T>({
                       isSelected
                         ? "bg-blue-50/80 dark:bg-blue-950/40"
                         : "hover:bg-slate-50/80 dark:hover:bg-[#162034]",
-                      onRowClick && "cursor-pointer"
+                      onRowClick && "cursor-pointer",
                     )}
                   >
                     {selectable && (
-                      <td className="py-3.5 px-3 text-center" onClick={(e) => e.stopPropagation()}>
+                      <td
+                        className="py-3.5 px-3 text-center"
+                        onClick={(e) => e.stopPropagation()}
+                      >
                         <input
                           type="checkbox"
                           className="rounded border-slate-300 text-blue-600 focus:ring-blue-600 cursor-pointer"
                           checked={isSelected}
-                          onChange={(e) => onSelectRow?.(rowKey, e.target.checked)}
+                          onChange={(e) =>
+                            onSelectRow?.(rowKey, e.target.checked)
+                          }
                         />
                       </td>
                     )}
                     {columns.map((col) => (
-                      <td key={col.key} className={cn("py-3.5 px-4 whitespace-nowrap align-middle", col.className)}>
-                        {col.render ? col.render(row, index) : (row as Record<string, unknown>)[col.key] as React.ReactNode}
+                      <td
+                        key={col.key}
+                        className={cn(
+                          "py-3.5 px-4 whitespace-nowrap align-middle",
+                          col.className,
+                        )}
+                      >
+                        {col.render
+                          ? col.render(row, index)
+                          : ((row as Record<string, unknown>)[
+                              col.key
+                            ] as React.ReactNode)}
                       </td>
                     ))}
                     {onRowAction && (
-                      <td className="py-3.5 px-3 text-right" onClick={(e) => e.stopPropagation()}>
+                      <td
+                        className="py-3.5 px-3 text-right"
+                        onClick={(e) => e.stopPropagation()}
+                      >
                         <button
                           onClick={() => onRowAction(row)}
                           className="p-1 rounded-md text-slate-400 hover:text-slate-700 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer"
@@ -259,8 +302,15 @@ export function DataTable<T>({
       <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2 text-xs font-mono text-slate-500 border-t border-slate-100 dark:border-slate-800">
         {/* Left: Result Count Summary */}
         <div>
-          Showing <strong className="text-slate-900 dark:text-white">{startIndex}-{endIndex}</strong> of{" "}
-          <strong className="text-slate-900 dark:text-white">{totalItems || data.length}</strong> results
+          Showing{" "}
+          <strong className="text-slate-900 dark:text-white">
+            {startIndex}-{endIndex}
+          </strong>{" "}
+          of{" "}
+          <strong className="text-slate-900 dark:text-white">
+            {totalItems || data.length}
+          </strong>{" "}
+          results
         </div>
 
         {/* Center: Pagination Controls */}
@@ -312,7 +362,10 @@ export function DataTable<T>({
             onChange={(e) => setJumpPage(e.target.value)}
             onKeyDown={(e) => {
               if (e.key === "Enter") {
-                const pageNum = Math.max(1, Math.min(Number(jumpPage) || 1, totalPages));
+                const pageNum = Math.max(
+                  1,
+                  Math.min(Number(jumpPage) || 1, totalPages),
+                );
                 onPageChange?.(pageNum);
               }
             }}

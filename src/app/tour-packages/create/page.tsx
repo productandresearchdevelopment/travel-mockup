@@ -106,17 +106,9 @@ export default function CreateTourPackagePage() {
           { label: "Tour Package", href: "/tour-packages" },
           { label: "Create Package" },
         ]}
-        actions={
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => router.push("/tour-packages")}
-            leftIcon={<ArrowLeft className="w-3.5 h-3.5" />}
-          >
-            Cancel
-          </Button>
-        }
       />
+
+      <div className="w-full space-y-6">
 
       {/* FORM SECTION 1: BASIC INFORMATION */}
       <Card className="p-6 space-y-4">
@@ -340,6 +332,7 @@ export default function CreateTourPackagePage() {
         <Button variant="primary" onClick={handleSavePackage} className="px-6 font-bold">
           Save Tour Package Master
         </Button>
+      </div>
       </div>
     </AppShell>
   );

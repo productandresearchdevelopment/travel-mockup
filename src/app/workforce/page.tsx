@@ -116,9 +116,11 @@ export default function WorkforceListPage() {
         showBackButton={false}
         breadcrumbItems={[{ label: "Workforce", href: "/workforce" }, { label: "Workforce List" }]}
         actions={
-          <Button variant="primary" size="sm" onClick={() => setShowAddModal(true)} leftIcon={<Plus className="w-3.5 h-3.5" />}>
-            Register New Worker
-          </Button>
+          <Link href="/workforce/new">
+            <Button variant="primary" size="sm" leftIcon={<Plus className="w-3.5 h-3.5" />}>
+              Register New Worker
+            </Button>
+          </Link>
         }
       />
 
@@ -222,11 +224,30 @@ export default function WorkforceListPage() {
             key: "worker",
             header: "Worker Name & Code",
             render: (r: WorkerMaster) => (
-              <div className="space-y-0.5">
-                <Link href={`/workforce/${r.id}`} className="font-bold text-sm text-slate-900 dark:text-slate-100 hover:text-blue-600 dark:hover:text-blue-400">
-                  {r.fullName}
-                </Link>
-                <span className="text-[10px] text-slate-400 font-mono block">{r.workerCode}</span>
+              <div className="flex items-center gap-2.5 max-w-[190px]">
+                {r.avatarUrl ? (
+                  <img
+                    src={r.avatarUrl}
+                    alt={r.fullName}
+                    className="w-7 h-7 rounded-full object-cover border border-slate-200 dark:border-slate-700 shadow-xs shrink-0"
+                  />
+                ) : (
+                  <div className="w-7 h-7 rounded-full bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 font-bold flex items-center justify-center text-[10px] shrink-0">
+                    {r.fullName.charAt(0)}
+                  </div>
+                )}
+                <div className="min-w-0 flex-1">
+                  <Link
+                    href={`/workforce/${r.id}`}
+                    title={r.fullName}
+                    className="font-bold text-xs text-slate-800 dark:text-slate-200 hover:text-blue-600 dark:hover:text-blue-400 block truncate"
+                  >
+                    {r.fullName}
+                  </Link>
+                  <span title={r.workerCode} className="text-[10px] text-slate-500 font-mono block truncate">
+                    {r.workerCode}
+                  </span>
+                </div>
               </div>
             ),
           },
@@ -308,106 +329,6 @@ export default function WorkforceListPage() {
         data={filteredWorkers}
         keyExtractor={(r) => r.id}
       />
-
-      {/* REGISTER NEW WORKER MODAL */}
-      <Modal isOpen={showAddModal} onClose={() => setShowAddModal(false)} title="Register New Field Worker">
-        <div className="space-y-4 text-xs font-sans">
-          <FormField label="Full Name *">
-            <Input
-              placeholder="e.g. Bambang Sukoco"
-              value={newName}
-              onChange={(e) => setNewName(e.target.value)}
-            />
-          </FormField>
-
-          <div className="grid grid-cols-2 gap-3">
-            <FormField label="Role *">
-              <Select
-                value={newRole}
-                onChange={(e) => setNewRole(e.target.value as any)}
-                options={[
-                  { value: "Driver", label: "Driver" },
-                  { value: "Guide", label: "Tour Guide" },
-                  { value: "Tour Manager", label: "Tour Manager" },
-                  { value: "Other Operational", label: "Other Operational" },
-                ]}
-              />
-            </FormField>
-
-            <FormField label="Employment Type *">
-              <Select
-                value={newEmploymentType}
-                onChange={(e) => setNewEmploymentType(e.target.value as any)}
-                options={[
-                  { value: "Daily Worker", label: "Daily Worker" },
-                  { value: "Contract", label: "Contract" },
-                  { value: "Freelance", label: "Freelance" },
-                  { value: "Permanent", label: "Permanent" },
-                ]}
-              />
-            </FormField>
-          </div>
-
-          <div className="grid grid-cols-2 gap-3">
-            <FormField label="Phone Number *">
-              <Input
-                placeholder="+62 812-xxxx-xxxx"
-                value={newPhone}
-                onChange={(e) => setNewPhone(e.target.value)}
-              />
-            </FormField>
-
-            <FormField label="Operating Region">
-              <Select
-                value={newRegion}
-                onChange={(e) => setNewRegion(e.target.value)}
-                options={[
-                  { value: "Surabaya", label: "Surabaya" },
-                  { value: "Malang", label: "Malang" },
-                  { value: "Probolinggo", label: "Probolinggo" },
-                  { value: "Banyuwangi", label: "Banyuwangi" },
-                  { value: "Bali", label: "Bali" },
-                ]}
-              />
-            </FormField>
-          </div>
-
-          <div className="grid grid-cols-2 gap-3">
-            <FormField label="Daily Rate (Rp / day)">
-              <Input
-                type="number"
-                value={newDailyRate}
-                onChange={(e) => setNewDailyRate(Number(e.target.value) || 0)}
-              />
-            </FormField>
-
-            <FormField label="Vehicle Ownership">
-              <Select
-                value={newVehicleOwnership}
-                onChange={(e) => setNewVehicleOwnership(e.target.value as any)}
-                options={[
-                  { value: "No Vehicle", label: "No Vehicle (Requires Rental)" },
-                  { value: "Personal Vehicle", label: "Personal Vehicle" },
-                  { value: "Company Vehicle", label: "Company Vehicle" },
-                ]}
-              />
-            </FormField>
-          </div>
-
-          <div className="p-3 rounded-lg bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-900/60 font-mono text-[11px] text-blue-700 dark:text-blue-300">
-            💡 <strong>Person ≠ Vehicle Principle</strong>: Setting <em>No Vehicle</em> allows Dispatcher to pair this worker with rented vendor vehicles during tour deployment.
-          </div>
-
-          <div className="flex justify-end gap-2 pt-2">
-            <Button variant="outline" onClick={() => setShowAddModal(false)}>
-              Cancel
-            </Button>
-            <Button variant="primary" onClick={handleAddWorker}>
-              Save Worker Profile
-            </Button>
-          </div>
-        </div>
-      </Modal>
     </AppShell>
   );
 }

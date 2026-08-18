@@ -48,9 +48,17 @@ export default function HotelsPage() {
       header: "Hotel",
       render: (h) => (
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-full bg-amber-100 dark:bg-amber-950/80 text-amber-700 dark:text-amber-300 font-mono font-bold text-xs flex items-center justify-center shrink-0 border border-amber-200 dark:border-amber-800">
-            {h.code}
-          </div>
+          {h.imageUrl ? (
+            <img
+              src={h.imageUrl}
+              alt={h.name}
+              className="w-10 h-8 rounded-lg object-cover border border-slate-200 dark:border-slate-700 shadow-2xs shrink-0"
+            />
+          ) : (
+            <div className="w-8 h-8 rounded-full bg-amber-100 dark:bg-amber-950/80 text-amber-700 dark:text-amber-300 font-mono font-bold text-xs flex items-center justify-center shrink-0 border border-amber-200 dark:border-amber-800">
+              {h.code}
+            </div>
+          )}
           <div>
             <Link
               href={`/hotels/${h.id}`}

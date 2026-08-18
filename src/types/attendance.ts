@@ -20,6 +20,7 @@ export interface AttendanceRecord {
   workerName: string;
   workerCode: string;
   role: WorkerRole;
+  avatarUrl?: string;
   assignmentName: string; // e.g. "East Java Explorer"
   tripCode?: string; // e.g. "TRP-2026-00421"
   tripId?: string; // e.g. "trip-001"

@@ -144,14 +144,15 @@ export default function GuestsListPage() {
         showBackButton={false}
         breadcrumbItems={[{ label: "Resources", href: "/vehicles" }, { label: "Guests" }]}
         actions={
-          <Button
-            variant="primary"
-            size="sm"
-            onClick={() => setShowAddGuestModal(true)}
-            leftIcon={<Plus className="w-3.5 h-3.5" />}
-          >
-            Add Guest
-          </Button>
+          <Link href="/guests/new">
+            <Button
+              variant="primary"
+              size="sm"
+              leftIcon={<Plus className="w-3.5 h-3.5" />}
+            >
+              Add Guest
+            </Button>
+          </Link>
         }
       />
 
@@ -247,11 +248,24 @@ export default function GuestsListPage() {
             key: "name",
             header: "Guest Name & Code",
             render: (r: GuestMaster) => (
-              <div className="space-y-0.5">
-                <Link href={`/guests/${r.id}`} className="font-bold text-sm text-slate-900 dark:text-slate-100 hover:text-blue-600 dark:hover:text-blue-400">
-                  {r.fullName}
-                </Link>
-                <span className="text-[10px] text-slate-400 font-mono block">{r.code}</span>
+              <div className="flex items-center gap-3">
+                {r.avatarUrl ? (
+                  <img
+                    src={r.avatarUrl}
+                    alt={r.fullName}
+                    className="w-8 h-8 rounded-full object-cover border border-slate-200 dark:border-slate-700 shadow-2xs shrink-0"
+                  />
+                ) : (
+                  <div className="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-950/80 text-blue-700 dark:text-blue-300 font-mono font-bold text-xs flex items-center justify-center shrink-0 border border-blue-200 dark:border-blue-800">
+                    {r.fullName.charAt(0)}
+                  </div>
+                )}
+                <div className="space-y-0.5">
+                  <Link href={`/guests/${r.id}`} className="font-bold text-sm text-slate-900 dark:text-slate-100 hover:text-blue-600 dark:hover:text-blue-400">
+                    {r.fullName}
+                  </Link>
+                  <span className="text-[10px] text-slate-400 font-mono block">{r.code}</span>
+                </div>
               </div>
             ),
           },
@@ -305,97 +319,6 @@ export default function GuestsListPage() {
         data={filteredGuests}
         keyExtractor={(r) => r.id}
       />
-
-      {/* ADD GUEST MODAL */}
-      <Modal isOpen={showAddGuestModal} onClose={() => setShowAddGuestModal(false)} title="Create Guest / Traveler Profile">
-        <div className="space-y-4 text-xs">
-          <div className="grid grid-cols-2 gap-3">
-            <FormField label="First Name *">
-              <Input
-                placeholder="e.g. Rossella"
-                value={firstName}
-                onChange={(e) => setFirstName(e.target.value)}
-              />
-            </FormField>
-
-            <FormField label="Last Name *">
-              <Input
-                placeholder="e.g. Cescon"
-                value={lastName}
-                onChange={(e) => setLastName(e.target.value)}
-              />
-            </FormField>
-          </div>
-
-          <div className="grid grid-cols-3 gap-3">
-            <FormField label="Gender">
-              <Select
-                value={gender}
-                onChange={(e) => setGender(e.target.value as any)}
-                options={[
-                  { value: "Female", label: "Female" },
-                  { value: "Male", label: "Male" },
-                ]}
-              />
-            </FormField>
-
-            <FormField label="Date of Birth">
-              <Input type="date" value={dob} onChange={(e) => setDob(e.target.value)} />
-            </FormField>
-
-            <FormField label="Nationality">
-              <Input value={nationality} onChange={(e) => setNationality(e.target.value)} />
-            </FormField>
-          </div>
-
-          <div className="grid grid-cols-2 gap-3">
-            <FormField label="Phone Number / WhatsApp">
-              <Input placeholder="+39 340 189 3053" value={phone} onChange={(e) => setPhone(e.target.value)} />
-            </FormField>
-
-            <FormField label="Email Address">
-              <Input type="email" placeholder="rossella@example.com" value={email} onChange={(e) => setEmail(e.target.value)} />
-            </FormField>
-          </div>
-
-          <div className="grid grid-cols-2 gap-3">
-            <FormField label="Passport Number">
-              <Input placeholder="e.g. EC 8932 110" value={passportNum} onChange={(e) => setPassportNum(e.target.value)} />
-            </FormField>
-
-            <FormField label="Passport Expiry Date">
-              <Input type="date" value={passportExpiry} onChange={(e) => setPassportExpiry(e.target.value)} />
-            </FormField>
-          </div>
-
-          <div className="grid grid-cols-2 gap-3">
-            <FormField label="Emergency Contact Name">
-              <Input placeholder="e.g. Luca Cescon" value={emergencyName} onChange={(e) => setEmergencyName(e.target.value)} />
-            </FormField>
-
-            <FormField label="Emergency Contact Phone">
-              <Input placeholder="+39 340 998 7711" value={emergencyPhone} onChange={(e) => setEmergencyPhone(e.target.value)} />
-            </FormField>
-          </div>
-
-          <FormField label="Dietary Requirements">
-            <Input placeholder="e.g. Vegetarian, Gluten-Free, Halal..." value={dietary} onChange={(e) => setDietary(e.target.value)} />
-          </FormField>
-
-          <FormField label="Special Travel Notes">
-            <Textarea placeholder="Special preferences or notes..." value={specialNotes} onChange={(e) => setSpecialNotes(e.target.value)} />
-          </FormField>
-
-          <div className="pt-2 flex justify-end gap-2">
-            <Button variant="outline" onClick={() => setShowAddGuestModal(false)}>
-              Cancel
-            </Button>
-            <Button variant="primary" onClick={handleSaveGuest}>
-              Save Guest Profile
-            </Button>
-          </div>
-        </div>
-      </Modal>
     </AppShell>
   );
 }

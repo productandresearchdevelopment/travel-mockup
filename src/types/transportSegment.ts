@@ -24,8 +24,8 @@ export interface TransportSegment {
   actualDeparture?: string; // e.g. "08:17"
   plannedArrival: string; // e.g. "15:00"
   actualArrival?: string; // e.g. "15:12"
-  departureDelayMinutes: number;
-  arrivalDelayMinutes: number;
+  departureDelayMinutes?: number;
+  arrivalDelayMinutes?: number;
   transportType: SegmentTransportType;
   
   // Vehicle fields
@@ -36,6 +36,7 @@ export interface TransportSegment {
   driverId?: string;
   driverName?: string;
   driverPhone?: string;
+  vendorName?: string;
 
   // Guest assignments
   assignedGuestGroups: string[]; // e.g. ["GROUP A — Main Group (8 Guests)"]

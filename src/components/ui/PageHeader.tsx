@@ -78,7 +78,7 @@ export function PageHeader({
             <button
               type="button"
               onClick={handleBack}
-              className="w-8 h-8 shrink-0 rounded-full border border-slate-200/90 dark:border-slate-800 bg-white dark:bg-[#101726] hover:bg-slate-100 dark:hover:bg-slate-800/80 text-slate-700 dark:text-slate-200 flex items-center justify-center hover:border-slate-300 dark:hover:border-slate-700 transition-all duration-200 group shadow-xs"
+              className="w-8 h-8 shrink-0 rounded-full bg-transparent hover:bg-slate-200/60 dark:hover:bg-slate-800/80 text-slate-700 dark:text-slate-200 flex items-center justify-center transition-all duration-200 group"
               title="Go Back"
               aria-label="Go Back"
             >

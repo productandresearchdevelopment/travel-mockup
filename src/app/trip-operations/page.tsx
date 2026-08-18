@@ -15,9 +15,10 @@ import {
   AlertTriangle,
   Eye,
   Navigation,
+  CheckCircle2,
 } from "lucide-react";
 
-interface TripItem {
+export interface TripItem {
   id: string;
   code: string;
   bookingCode: string;
@@ -36,31 +37,65 @@ interface TripItem {
   tmName: string;
   status: "In Progress" | "Upcoming" | "Delayed" | "Completed" | "Scheduled";
   hasOpenIssue?: boolean;
+  isSimple?: boolean;
+  vehicleChange?: boolean;
+  driverChange?: boolean;
+  addedGuestsCount?: number;
+  ticketDropoff?: boolean;
 }
 
-const mockTripsList: TripItem[] = [
+export const mockTripsList: TripItem[] = [
   {
-    id: "trip-001",
-    code: "TRP-2026-00421",
-    bookingCode: "BKG-2026-00821",
-    tourName: "East Java Explorer (BP, BROMO, IJEN)",
+    id: "TRP-2026-00418",
+    code: "TRP-2026-00418",
+    bookingCode: "BKG-2026-00750",
+    tourName: "Borobudur & Prambanan Day Tour",
     date: "2026-08-25",
-    paxCount: 12,
-    guestNames: "Rossella Cescon (+11 Pax)",
-    journeyRoute: "Yogyakarta → Malang → Probolinggo → Bali",
-    currentLocation: "Probolinggo (Hotel Santika)",
-    nextDestination: "Ijen Crater, Banyuwangi",
-    progressPercent: 65,
-    vehiclePlate: "B 1234 XYZ",
-    vehicleName: "HiAce Premio #02",
+    paxCount: 2,
+    guestNames: "James Anderson, Sophie Anderson",
+    journeyRoute: "Yogyakarta → Borobudur → Prambanan → Yogyakarta",
+    currentLocation: "Prambanan Temple Complex",
+    nextDestination: "The Phoenix Hotel Yogyakarta",
+    progressPercent: 75,
+    vehiclePlate: "AB 1234 CD",
+    vehicleName: "Toyota HiAce",
     driverName: "Agus Santoso",
     guideName: "Rian Kurniawan",
     tmName: "Dimas Anggara",
     status: "In Progress",
-    hasOpenIssue: true,
+    isSimple: true,
+    vehicleChange: false,
+    driverChange: false,
+    addedGuestsCount: 0,
+    ticketDropoff: false,
   },
   {
-    id: "trip-002",
+    id: "TRP-2026-00421",
+    code: "TRP-2026-00421",
+    bookingCode: "BKG-2026-00821",
+    tourName: "East Java Explorer — Bromo, Ijen & Bali",
+    date: "2026-08-25",
+    paxCount: 12,
+    guestNames: "Michael Carter (+11 Guests)",
+    journeyRoute: "Yogyakarta → Malang → Probolinggo → Bali",
+    currentLocation: "Probolinggo (Hotel Santika)",
+    nextDestination: "Ijen Crater, Banyuwangi",
+    progressPercent: 65,
+    vehiclePlate: "L 8901 GH (Prev: AB 4567 EF)",
+    vehicleName: "Toyota HiAce #02",
+    driverName: "Budi Pratama (Prev: Agus Santoso)",
+    guideName: "Rian Kurniawan",
+    tmName: "Dimas Anggara",
+    status: "In Progress",
+    hasOpenIssue: false,
+    isSimple: false,
+    vehicleChange: true,
+    driverChange: true,
+    addedGuestsCount: 4,
+    ticketDropoff: true,
+  },
+  {
+    id: "TRP-2026-00422",
     code: "TRP-2026-00422",
     bookingCode: "BKG-2026-00910",
     tourName: "Bromo Sunrise Express",
@@ -78,25 +113,7 @@ const mockTripsList: TripItem[] = [
     tmName: "Unassigned",
     status: "Delayed",
     hasOpenIssue: true,
-  },
-  {
-    id: "trip-003",
-    code: "TRP-2026-00423",
-    bookingCode: "BKG-2026-00955",
-    tourName: "Bali Cultural Overland",
-    date: "2026-08-27",
-    paxCount: 15,
-    guestNames: "Siti Rahma (+14 Pax)",
-    journeyRoute: "Gilimanuk → Ubud → Kuta",
-    currentLocation: "Ubud Art Village",
-    nextDestination: "Tanah Lot Temple",
-    progressPercent: 85,
-    vehiclePlate: "DK 9901 AB",
-    vehicleName: "Isuzu Elf Long #02",
-    driverName: "Budi Pratama",
-    guideName: "Wayan Sudiarta",
-    tmName: "Kadek Arta",
-    status: "In Progress",
+    isSimple: true,
   },
 ];
 
@@ -133,7 +150,7 @@ export default function TripOperationsPage() {
     <AppShell>
       <PageHeader
         title="Trip Operations Management"
-        description="Real-time execution monitoring, journey timelines, guest dynamic management & operational exceptions"
+        description="Real-time execution monitoring, journey timelines, flexible transport scenarios & guest dynamic management"
         breadcrumbItems={[
           { label: "Overview", href: "/" },
           { label: "Trip Operations" },
@@ -181,7 +198,7 @@ export default function TripOperationsPage() {
         />
       </div>
 
-      {/* UNIFIED MASTER DATA TABLE (Matching Guests & Dispatcher Page System) */}
+      {/* UNIFIED MASTER DATA TABLE */}
       <DataTable
         searchQuery={searchQuery}
         onSearchChange={(e) => setSearchQuery(e.target.value)}
@@ -201,12 +218,17 @@ export default function TripOperationsPage() {
         columns={[
           {
             key: "code",
-            header: "Trip Code & Booking",
+            header: "Trip Code & Type",
             render: (r: TripItem) => (
-              <div className="space-y-0.5 font-mono text-xs">
-                <Link href={`/trip-operations/${r.id}`} className="font-extrabold text-blue-600 hover:underline block">
-                  {r.code}
-                </Link>
+              <div className="space-y-1 font-mono text-xs">
+                <div className="flex items-center gap-2">
+                  <Link href={`/trip-operations/${r.id}`} className="font-extrabold text-blue-600 hover:underline block">
+                    {r.code}
+                  </Link>
+                  <Badge variant={r.isSimple ? "slate" : "blue"} className="text-[9px]">
+                    {r.isSimple ? "Simple Trip" : "Complex Overland"}
+                  </Badge>
+                </div>
                 <span className="text-slate-400 text-[10px] block">{r.bookingCode}</span>
               </div>
             ),
@@ -222,36 +244,47 @@ export default function TripOperationsPage() {
             ),
           },
           {
-            key: "location",
-            header: "Current Location & Next",
+            key: "guests",
+            header: "Guests & PAX",
             render: (r: TripItem) => (
               <div className="space-y-0.5 font-mono text-xs">
-                <span className="font-bold text-emerald-600 dark:text-emerald-400 block">📍 {r.currentLocation}</span>
-                <span className="text-slate-400 text-[10px] block">Next: {r.nextDestination}</span>
+                <span className="font-bold text-slate-900 dark:text-slate-100 block">{r.paxCount} Guests</span>
+                {r.addedGuestsCount && r.addedGuestsCount > 0 ? (
+                  <span className="text-blue-600 dark:text-blue-400 text-[10px] font-bold block">
+                    +{r.addedGuestsCount} Added Mid-Trip
+                  </span>
+                ) : (
+                  <span className="text-slate-400 text-[10px] block">No Guest Changes</span>
+                )}
               </div>
             ),
           },
           {
             key: "crew",
-            header: "Vehicle & Crew",
+            header: "Vehicle & Driver",
             render: (r: TripItem) => (
               <div className="space-y-0.5 font-mono text-xs">
                 <span className="font-bold text-slate-900 dark:text-slate-100 block">{r.vehicleName} ({r.vehiclePlate})</span>
-                <span className="text-slate-500 text-[11px] block">Drv: {r.driverName} · Gde: {r.guideName}</span>
+                <span className="text-slate-500 text-[11px] block">Driver: {r.driverName}</span>
+                {r.vehicleChange && (
+                  <span className="text-purple-600 dark:text-purple-400 text-[10px] font-bold block">
+                    🔄 Vehicle & Driver Changed
+                  </span>
+                )}
               </div>
             ),
           },
           {
             key: "status",
-            header: "Status & Exception",
+            header: "Status",
             render: (r: TripItem) => (
-              <div className="flex items-center gap-1.5">
+              <div className="flex items-center gap-1.5 font-mono">
                 <Badge variant={r.status === "In Progress" ? "blue" : r.status === "Delayed" ? "amber" : "emerald"}>
                   {r.status}
                 </Badge>
                 {r.hasOpenIssue && (
-                  <span className="px-1.5 py-0.5 rounded-full bg-rose-100 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400 font-bold text-[10px] font-mono">
-                    ⚠ Issue
+                  <span className="px-1.5 py-0.5 rounded-full bg-rose-100 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400 font-bold text-[10px]">
+                    ⚠️ Exception
                   </span>
                 )}
               </div>
@@ -266,7 +299,7 @@ export default function TripOperationsPage() {
                   <button
                     type="button"
                     className="w-8 h-8 rounded-full border border-slate-200/90 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-800/60 hover:bg-blue-50 dark:hover:bg-blue-950/60 text-slate-600 dark:text-slate-300 hover:text-blue-600 hover:border-blue-200 dark:hover:border-blue-800 flex items-center justify-center transition-all duration-200 group"
-                    title="View Detail"
+                    title="View Operational Control"
                   >
                     <Eye className="w-4 h-4 text-slate-500 group-hover:text-blue-600 transition-colors" />
                   </button>
