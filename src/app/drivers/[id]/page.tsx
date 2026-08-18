@@ -13,6 +13,10 @@ import { DataTable, Column } from "@/components/ui/DataTable";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { mockDriversData } from "@/data/mockDrivers";
 import { DriverMaster, DriverAssignmentHistory } from "@/types/driver";
+import { mockDailyWorkRecordsData } from "@/data/mockDriverWorkManagementData";
+import { DriverPerformanceCard } from "@/components/trips/DriverPerformanceCard";
+import { DriverWorkRecordModal } from "@/components/trips/DriverWorkRecordModal";
+import { DailyWorkRecord } from "@/types/driverWorkManagement";
 import {
   UserCheck,
   Phone,
@@ -43,8 +47,13 @@ export default function DriverDetailPage() {
   const [opStatus, setOpStatus] = useState(driver.operationalStatus);
   const [masterStatus, setMasterStatus] = useState(driver.masterStatus);
 
+  const [workRecords, setWorkRecords] = useState<DailyWorkRecord[]>(mockDailyWorkRecordsData);
+  const [selectedRecord, setSelectedRecord] = useState<DailyWorkRecord | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const tabsList = [
     { id: "overview", label: "Overview" },
+    { id: "work_records", label: `Daily Work & Payroll Prep (${workRecords.length})` },
     { id: "schedule", label: "Schedule" },
     { id: "assignment", label: "Assignment" },
     { id: "history", label: "History" },
@@ -150,8 +159,108 @@ export default function DriverDetailPage() {
         </div>
       </Card>
 
+      {/* DRIVER PERFORMANCE & RELIABILITY CARD (PART 30) */}
+      <DriverPerformanceCard />
+
       {/* Detail Navigation Tabs */}
       <Tabs items={tabsList} activeTab={activeTab} onChange={setActiveTab} />
+
+      {/* TAB: DAILY WORK RECORDS & PAYROLL PREPARATION (PART 30) */}
+      {activeTab === "work_records" && (
+        <Card className="p-6 space-y-4">
+          <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+            <div>
+              <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider">
+                Daily Work Records, Attendance & Payroll Preparation
+              </h3>
+              <p className="text-xs text-slate-500">Working hours, check-in/out, overtime calculation & net compensation</p>
+            </div>
+            <Badge variant="violet">Daily Rate: Rp 250,000 / Day</Badge>
+          </div>
+
+          <DataTable
+            columns={[
+              {
+                key: "date",
+                header: "Date & Trip Code",
+                render: (r: DailyWorkRecord) => (
+                  <div className="space-y-0.5 font-mono text-xs">
+                    <span className="font-extrabold text-slate-900 dark:text-slate-100 block">{r.date}</span>
+                    <span className="text-blue-600 font-bold block">{r.tripCode}</span>
+                  </div>
+                ),
+              },
+              {
+                key: "attendance",
+                header: "Check In / Out",
+                render: (r: DailyWorkRecord) => (
+                  <div className="space-y-0.5 font-mono text-xs">
+                    <span className="font-bold text-emerald-600 block">In: {r.checkInTime}</span>
+                    <span className="font-bold text-amber-600 block">Out: {r.checkOutTime}</span>
+                  </div>
+                ),
+              },
+              {
+                key: "hours",
+                header: "Hours & OT",
+                render: (r: DailyWorkRecord) => (
+                  <div className="font-mono text-xs">
+                    <span className="font-bold text-slate-900 dark:text-slate-100 block">{r.totalHoursWorked} hrs Total</span>
+                    <span className="text-purple-600 font-bold text-[11px] block">{r.overtimeHours} hrs OT (@ Rp 30k/h)</span>
+                  </div>
+                ),
+              },
+              {
+                key: "compensation",
+                header: "Base & Allowances",
+                render: (r: DailyWorkRecord) => (
+                  <div className="font-mono text-xs space-y-0.5">
+                    <span className="text-slate-700 dark:text-slate-300 block">Base: Rp {r.dailyRateRupiah.toLocaleString("id-ID")}</span>
+                    <span className="text-emerald-600 font-bold block">Meal: Rp {r.mealAllowanceRupiah.toLocaleString("id-ID")}</span>
+                  </div>
+                ),
+              },
+              {
+                key: "netPay",
+                header: "Total Net Pay",
+                render: (r: DailyWorkRecord) => (
+                  <span className="font-mono font-extrabold text-indigo-600 text-sm block">
+                    Rp {r.netPayRupiah.toLocaleString("id-ID")}
+                  </span>
+                ),
+              },
+              {
+                key: "status",
+                header: "Payment Status",
+                render: (r: DailyWorkRecord) => (
+                  <Badge variant={r.paymentStatus === "Approved" ? "emerald" : "amber"}>
+                    {r.paymentStatus}
+                  </Badge>
+                ),
+              },
+              {
+                key: "actions",
+                header: "Action",
+                render: (r: DailyWorkRecord) => (
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="h-7 text-[11px] font-bold"
+                    onClick={() => {
+                      setSelectedRecord(r);
+                      setIsModalOpen(true);
+                    }}
+                  >
+                    Edit / Review
+                  </Button>
+                ),
+              },
+            ]}
+            data={workRecords}
+            keyExtractor={(r) => r.id}
+          />
+        </Card>
+      )}
 
       {/* TAB 1: OVERVIEW */}
       {activeTab === "overview" && (
@@ -386,6 +495,37 @@ export default function DriverDetailPage() {
           </div>
         </Card>
       )}
+
+      <DriverWorkRecordModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        record={selectedRecord}
+        onSubmitRecord={(data) => {
+          if (!selectedRecord) return;
+          const baseRate = selectedRecord.dailyRateRupiah;
+          const otPay = data.overtimeHours * selectedRecord.overtimeRatePerHour;
+          const netPay = baseRate + otPay + data.mealAllowance;
+
+          setWorkRecords(
+            workRecords.map((r) =>
+              r.id === selectedRecord.id
+                ? {
+                    ...r,
+                    checkInTime: data.checkInTime,
+                    checkOutTime: data.checkOutTime,
+                    overtimeHours: data.overtimeHours,
+                    mealAllowanceRupiah: data.mealAllowance,
+                    overtimePayRupiah: otPay,
+                    netPayRupiah: netPay,
+                    grossPayRupiah: netPay,
+                    paymentStatus: data.paymentStatus,
+                    notes: data.notes,
+                  }
+                : r
+            )
+          );
+        }}
+      />
     </AppShell>
   );
 }

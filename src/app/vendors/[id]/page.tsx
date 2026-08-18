@@ -311,15 +311,49 @@ export default function VendorDetailPage() {
         </Card>
       )}
 
-      {/* TAB 5: TRIPS & RENTAL COSTS */}
+      {/* TAB 5: TRIPS & RENTAL COSTS (REQUIREMENTS 24 & 25) */}
       {activeTab === "trips_cost" && (
         <Card className="p-6 space-y-4">
           <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
             <div>
               <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider">
-                Vendor Trips & Cost Variance Control Log
+                Vendor Trips, Rental History & Performance Audit
               </h3>
-              <p className="text-xs text-slate-500">Estimated vs. Actual Rental Cost Audit</p>
+              <p className="text-xs text-slate-500">Historical vehicle rental assignments, cost variance, and reliability metrics</p>
+            </div>
+            <Badge variant="violet">✓ Vendor Score: 98/100</Badge>
+          </div>
+
+          {/* VENDOR PERFORMANCE METRICS (REQUIREMENTS 24 & 25) */}
+          <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 font-mono text-xs">
+            <div className="p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-[#162034] space-y-0.5">
+              <span className="text-[10px] text-slate-400 font-bold block uppercase">TOTAL RENTALS</span>
+              <strong className="text-lg font-extrabold text-slate-900 dark:text-slate-100 block">14 Trips</strong>
+              <span className="text-slate-500 text-[10px]">HiAce, Elf & Innova</span>
+            </div>
+
+            <div className="p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-[#162034] space-y-0.5">
+              <span className="text-[10px] text-slate-400 font-bold block uppercase">TOTAL RENTAL VALUE</span>
+              <strong className="text-lg font-extrabold text-indigo-600 block">Rp 25.500.000</strong>
+              <span className="text-slate-500 text-[10px]">Actual Disbursed</span>
+            </div>
+
+            <div className="p-3 rounded-xl border border-emerald-200 dark:border-emerald-900/60 bg-emerald-50/20 dark:bg-emerald-950/20 space-y-0.5">
+              <span className="text-[10px] text-emerald-600 font-bold block uppercase">ON-TIME RATE</span>
+              <strong className="text-lg font-extrabold text-emerald-600 block">96.4%</strong>
+              <span className="text-emerald-600 text-[10px] block font-bold">✓ High Reliability</span>
+            </div>
+
+            <div className="p-3 rounded-xl border border-amber-200 dark:border-amber-900/60 bg-amber-50/20 dark:bg-amber-950/20 space-y-0.5">
+              <span className="text-[10px] text-amber-600 font-bold block uppercase">VEHICLE ISSUES</span>
+              <strong className="text-lg font-extrabold text-amber-600 block">2 Events</strong>
+              <span className="text-slate-500 text-[10px]">AC & Tire Pressure</span>
+            </div>
+
+            <div className="p-3 rounded-xl border border-purple-200 dark:border-purple-900/60 bg-purple-50/20 dark:bg-purple-950/20 space-y-0.5">
+              <span className="text-[10px] text-purple-600 font-bold block uppercase">REPLACEMENT COUNT</span>
+              <strong className="text-lg font-extrabold text-purple-600 block">1 Event</strong>
+              <span className="text-slate-500 text-[10px]">HiAce Premio Replacement</span>
             </div>
           </div>
 

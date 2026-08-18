@@ -18,6 +18,11 @@ import { Select } from "@/components/ui/Select";
 import { Textarea } from "@/components/ui/Textarea";
 import { mockGuestsData } from "@/data/mockGuestsData";
 import TripCostsTab from "@/components/trips/TripCostsTab";
+import TripGuestsTab from "@/components/trips/TripGuestsTab";
+import PickupDropoffTab from "@/components/trips/PickupDropoffTab";
+import TransportTab from "@/components/trips/TransportTab";
+import OperationalMonitoringTab from "@/components/trips/OperationalMonitoringTab";
+import TripActivityTimeline from "@/components/trips/TripActivityTimeline";
 import {
   Compass,
   MapPin,
@@ -252,8 +257,8 @@ export default function TripOperationsDetailPage() {
 
           <div className="p-3 rounded-xl bg-slate-800/80 border border-slate-700">
             <span className="text-[10px] text-slate-400 block">GUESTS MANIFEST</span>
-            <strong className="text-slate-200 font-bold text-sm block">4 Guests</strong>
-            <span className="text-[9px] text-emerald-400 block">● All 4 Picked Up / On Trip</span>
+            <strong className="text-slate-200 font-bold text-sm block">12 Guests</strong>
+            <span className="text-[9px] text-emerald-400 block">● 8 Orig + 4 Added Mid-Trip</span>
           </div>
 
           <div className="p-3 rounded-xl bg-slate-800/80 border border-slate-700">
@@ -281,20 +286,43 @@ export default function TripOperationsDetailPage() {
         </div>
       </Card>
 
-      {/* TABS */}
+          {/* TABS */}
       <Tabs
         activeTab={activeTab}
         onChange={setActiveTab}
         tabs={[
           { id: "overview", label: "Overview & Resources" },
+          { id: "guests", label: "Guests (12 Pax)" },
+          { id: "transport", label: "Transport (3 Segments)" },
+          { id: "pickup_dropoff", label: "Pickup & Drop-off" },
+          { id: "issues", label: "Issues & Monitoring (6)" },
           { id: "timeline", label: "Operational Timeline" },
           { id: "destinations", label: "Destination Progress (3/6)" },
           { id: "costs", label: "Costs" },
           { id: "notes", label: `Operational Notes (${notes.length})` },
-          { id: "issues", label: `Issues & Checklist (${issues.length})` },
           { id: "audit", label: "Audit Trail" },
         ]}
       />
+
+      {/* TAB GUESTS: DYNAMIC GUEST MANAGEMENT */}
+      {activeTab === "guests" && (
+        <TripGuestsTab tripId={id} />
+      )}
+
+      {/* TAB TRANSPORT: MULTI-SEGMENT & VEHICLE/DRIVER CHANGE */}
+      {activeTab === "transport" && (
+        <TransportTab tripId={id} />
+      )}
+
+      {/* TAB PICKUP & DROP-OFF: OPERATIONAL PICKUP & DROP-OFF MANAGEMENT */}
+      {activeTab === "pickup_dropoff" && (
+        <PickupDropoffTab tripId={id} />
+      )}
+
+      {/* TAB ISSUES & MONITORING: EXCEPTION MANAGEMENT & HEALTH BOARD */}
+      {activeTab === "issues" && (
+        <OperationalMonitoringTab tripId={id} />
+      )}
 
       {/* TAB 1: OVERVIEW & RESOURCES */}
       {activeTab === "overview" && (
@@ -389,66 +417,41 @@ export default function TripOperationsDetailPage() {
               </Link>
             </div>
           </Card>
+
+          {/* LATEST ACTIVITY BANNER CARD (REQUIREMENT 26) */}
+          <Card className="p-5 border-indigo-200 dark:border-indigo-900/60 bg-indigo-50/20 dark:bg-indigo-950/20 space-y-3 font-mono text-xs">
+            <div className="flex justify-between items-center pb-2 border-b border-indigo-200 dark:border-indigo-900/60">
+              <span className="font-bold text-indigo-600 dark:text-indigo-400 flex items-center gap-1.5 uppercase">
+                <Clock className="w-4 h-4" /> LATEST ACTIVITY LOGGED
+              </span>
+              <Button
+                variant="outline"
+                size="sm"
+                className="h-7 text-[11px] font-bold text-indigo-600 border-indigo-300 hover:bg-indigo-100 dark:border-indigo-800 dark:hover:bg-indigo-900/40"
+                onClick={() => setActiveTab("timeline")}
+              >
+                View Full Timeline →
+              </Button>
+            </div>
+
+            <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-2">
+              <div>
+                <span className="font-extrabold text-slate-900 dark:text-slate-100 text-sm block">
+                  Vehicle Changed: HiAce #01 (B 1234 XYZ) → HiAce Premio #02 (B 5678 ABC)
+                </span>
+                <span className="text-slate-500 text-[11px] block">
+                  25 Aug 2026 @ 15:30 WIB · Logged by Deni — Dispatcher · Location: Probolinggo
+                </span>
+              </div>
+              <Badge variant="violet">🔄 Vehicle Changed</Badge>
+            </div>
+          </Card>
         </div>
       )}
 
       {/* TAB 2: OPERATIONAL TIMELINE */}
       {activeTab === "timeline" && (
-        <Card className="p-6 space-y-4 font-mono text-xs">
-          <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider">
-            Operational Execution Timeline & Milestones
-          </h3>
-
-          <div className="space-y-3">
-            <div className="p-3.5 rounded-xl border border-emerald-200 dark:border-emerald-900/60 bg-emerald-50/20 dark:bg-emerald-950/20 flex items-center justify-between">
-              <div>
-                <span className="font-bold text-emerald-600 dark:text-emerald-400 block">25 Aug 03:00 WIB — Pickup Yogyakarta</span>
-                <span className="text-slate-500 block text-[11px]">Pickup all 4 guests at Tugu Station & Hotel.</span>
-              </div>
-              <Badge variant="emerald">✓ Completed</Badge>
-            </div>
-
-            <div className="p-3.5 rounded-xl border border-emerald-200 dark:border-emerald-900/60 bg-emerald-50/20 dark:bg-emerald-950/20 flex items-center justify-between">
-              <div>
-                <span className="font-bold text-emerald-600 dark:text-emerald-400 block">25 Aug 07:00 WIB — Borobudur Temple Tour</span>
-                <span className="text-slate-500 block text-[11px]">Guided temple climb & local guide session.</span>
-              </div>
-              <Badge variant="emerald">✓ Completed</Badge>
-            </div>
-
-            <div className="p-3.5 rounded-xl border border-emerald-200 dark:border-emerald-900/60 bg-emerald-50/20 dark:bg-emerald-950/20 flex items-center justify-between">
-              <div>
-                <span className="font-bold text-emerald-600 dark:text-emerald-400 block">25 Aug 11:00 WIB — Prambanan Temple Tour</span>
-                <span className="text-slate-500 block text-[11px]">Prambanan complex guided walk.</span>
-              </div>
-              <Badge variant="emerald">✓ Completed</Badge>
-            </div>
-
-            <div className="p-3.5 rounded-xl border border-blue-200 dark:border-blue-900/60 bg-blue-50/30 dark:bg-blue-950/30 flex items-center justify-between">
-              <div>
-                <span className="font-bold text-blue-600 dark:text-blue-400 block">27 Aug 03:00 WIB — Mount Bromo Sunrise Tour</span>
-                <span className="text-slate-500 block text-[11px]">Jeep 4x4 transfer to Penanjakan viewpoint & crater trek.</span>
-              </div>
-              <Badge variant="blue">● Current Milestone</Badge>
-            </div>
-
-            <div className="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 flex items-center justify-between text-slate-400">
-              <div>
-                <span className="font-bold block">28 Aug 03:00 WIB — Ijen Crater Blue Flame Trek</span>
-                <span className="block text-[11px]">Midnight trek to Ijen sulfur crater lake.</span>
-              </div>
-              <Badge variant="slate">○ Upcoming</Badge>
-            </div>
-
-            <div className="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 flex items-center justify-between text-slate-400">
-              <div>
-                <span className="font-bold block">28 Aug 18:00 WIB — Ferizy Ferry & Bali Drop-off</span>
-                <span className="block text-[11px]">Ketapang port ferry crossing and hotel drop-off in Ubud/Kuta.</span>
-              </div>
-              <Badge variant="slate">○ Upcoming</Badge>
-            </div>
-          </div>
-        </Card>
+        <TripActivityTimeline tripId={id} />
       )}
 
       {/* TAB 3: DESTINATION PROGRESS */}

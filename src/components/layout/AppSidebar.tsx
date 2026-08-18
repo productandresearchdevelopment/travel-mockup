@@ -18,6 +18,7 @@ import {
   MapPin,
   Package,
   Building,
+  Wallet,
   Settings,
   X,
 } from "lucide-react";
@@ -264,10 +265,10 @@ export function AppSidebar({ mobileOpen = false, setMobileOpen }: AppSidebarProp
           </Link>
         </div>
 
-        {/* Workforce */}
+        {/* MANAGEMENT */}
         <div className="space-y-1">
           <span className="px-3 text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1">
-            Workforce
+            MANAGEMENT
           </span>
           <Link
             href="/workforce"
@@ -307,16 +308,32 @@ export function AppSidebar({ mobileOpen = false, setMobileOpen }: AppSidebarProp
             <Briefcase className="w-4 h-4" />
             <span>Payroll</span>
           </Link>
+
+          <Link
+            href="/financials"
+            onClick={() => setMobileOpen && setMobileOpen(false)}
+            className={`flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold transition-all ${
+              isMainActive("/financials") || isMainActive("/finance")
+                ? "bg-[#F3F0FF] text-[#624AE8] dark:bg-purple-950/60 dark:text-purple-400 font-bold"
+                : "text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-[#162034] hover:text-slate-900 dark:hover:text-slate-200"
+            }`}
+          >
+            <Wallet className="w-4 h-4" />
+            <span>Financials</span>
+          </Link>
         </div>
 
-        {/* System Settings */}
-        <div>
+        {/* SYSTEM */}
+        <div className="space-y-1">
+          <span className="px-3 text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1">
+            SYSTEM
+          </span>
           <Link
             href="/settings"
             onClick={() => setMobileOpen && setMobileOpen(false)}
             className={`flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold transition-all ${
               isMainActive("/settings")
-                ? "bg-blue-50 text-blue-600 dark:bg-blue-950/60 dark:text-blue-400 font-bold"
+                ? "bg-[#F3F0FF] text-[#624AE8] dark:bg-purple-950/60 dark:text-purple-400 font-bold"
                 : "text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-[#162034] hover:text-slate-900 dark:hover:text-slate-200"
             }`}
           >

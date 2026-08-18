@@ -9,6 +9,9 @@ import { SearchInput } from "@/components/ui/SearchInput";
 import { Select } from "@/components/ui/Select";
 import { mockTripCostsData } from "@/data/mockTripCostsData";
 import { TripOperationalCostItem, CostCategory, CostSource, CostStatus } from "@/types/tripCost";
+import { VendorRentalCostCard } from "./VendorRentalCostCard";
+import { TripProfitabilityCard } from "./TripProfitabilityCard";
+import { DailyCostMatrixTable } from "./DailyCostMatrixTable";
 import {
   DollarSign,
   Plus,
@@ -192,49 +195,14 @@ export default function TripCostsTab({ tripId, paxCount = 4 }: TripCostsTabProps
 
   return (
     <div className="space-y-6">
-      {/* TOP COST SUMMARY DASHBOARD */}
-      <div className="grid grid-cols-1 sm:grid-cols-5 gap-3 font-sans">
-        <Card className="p-4 bg-slate-900 text-white border-slate-800 space-y-1 col-span-1 sm:col-span-2">
-          <span className="text-[10px] font-mono text-slate-400 font-bold uppercase tracking-wider block">
-            TOTAL ESTIMATED OPERATIONAL COST
-          </span>
-          <div className="flex items-baseline justify-between">
-            <span className="text-2xl font-extrabold text-emerald-400 font-mono">
-              Rp {summary.totalEstimated.toLocaleString("id-ID")}
-            </span>
-            <div className="text-right">
-              <span className="text-[10px] font-mono text-slate-400 block">COST PER GUEST</span>
-              <span className="font-mono text-xs font-bold text-amber-400">
-                Rp {summary.costPerGuest.toLocaleString("id-ID")} <span className="text-[10px] text-slate-400">({paxCount} PAX)</span>
-              </span>
-            </div>
-          </div>
-        </Card>
+      {/* TRIP FINANCIAL CONTROL & PROFITABILITY SUMMARY (PART 31) */}
+      <TripProfitabilityCard />
 
-        <Card className="p-4 space-y-1">
-          <span className="text-[10px] font-mono text-slate-400 font-bold uppercase block">ACCOMMODATION</span>
-          <span className="text-lg font-extrabold font-mono text-slate-900 dark:text-slate-100 block">
-            Rp {summary.accommodation.toLocaleString("id-ID")}
-          </span>
-          <span className="text-[10px] text-slate-500 font-mono">Hotels & Lodging</span>
-        </Card>
+      {/* VENDOR & VEHICLE RENTAL COST CONTROL (PART 29) */}
+      <VendorRentalCostCard tripId={tripId} userRole="Finance" />
 
-        <Card className="p-4 space-y-1">
-          <span className="text-[10px] font-mono text-slate-400 font-bold uppercase block">TRANSPORTATION</span>
-          <span className="text-lg font-extrabold font-mono text-blue-600 dark:text-blue-400 block">
-            Rp {summary.transportation.toLocaleString("id-ID")}
-          </span>
-          <span className="text-[10px] text-slate-500 font-mono">Vehicle Rental, Train, Ferry</span>
-        </Card>
-
-        <Card className="p-4 space-y-1">
-          <span className="text-[10px] font-mono text-slate-400 font-bold uppercase block">TOUR & TICKETS</span>
-          <span className="text-lg font-extrabold font-mono text-purple-600 dark:text-purple-400 block">
-            Rp {summary.tourActivity.toLocaleString("id-ID")}
-          </span>
-          <span className="text-[10px] text-slate-500 font-mono">Activities & Entrance</span>
-        </Card>
-      </div>
+      {/* DAILY OPERATIONAL COST MATRIX (DATA HARIAN AKOMODASI) */}
+      <DailyCostMatrixTable />
 
       {/* DAILY OPERATIONAL COST TREND MINI CHART */}
       <Card className="p-4 space-y-3 font-sans">

@@ -52,6 +52,62 @@ export const FinanceBopView: React.FC<FinanceBopViewProps> = ({
         </div>
       </div>
 
+      {/* EXECUTIVE OWNER FINANCIAL SUMMARY CARD (REQUIREMENT 35) */}
+      <div className="p-5 rounded-2xl bg-gradient-to-r from-slate-900 via-slate-900 to-indigo-950 border border-slate-800 text-white space-y-3 font-mono text-xs shadow-lg">
+        <div className="flex justify-between items-center pb-2 border-b border-slate-800">
+          <div className="flex items-center gap-2">
+            <DollarSign className="w-5 h-5 text-emerald-400" />
+            <div>
+              <h2 className="text-sm font-extrabold text-white uppercase tracking-wider">
+                EXECUTIVE OWNER TRIP PROFITABILITY CONTROL
+              </h2>
+              <span className="text-xs text-slate-400">High-level financial oversight across active tour deployments</span>
+            </div>
+          </div>
+          <span className="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 font-extrabold border border-emerald-500/40 text-xs">
+            ✓ 30.52% Overall Gross Margin
+          </span>
+        </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">
+          <div className="p-3 rounded-xl bg-slate-800/80 border border-slate-700 space-y-0.5">
+            <span className="text-[10px] text-slate-400 font-bold block uppercase">ACTIVE TRIPS</span>
+            <strong className="text-xl font-extrabold text-white">24 Trips</strong>
+            <span className="text-slate-400 text-[10px] block">Currently Executing</span>
+          </div>
+
+          <div className="p-3 rounded-xl bg-slate-800/80 border border-blue-900/60 bg-blue-950/20 space-y-0.5">
+            <span className="text-[10px] text-blue-400 font-bold uppercase block">TOTAL REVENUE</span>
+            <strong className="text-xl font-extrabold text-blue-400">Rp 285M</strong>
+            <span className="text-slate-400 text-[10px] block">Customer Sales</span>
+          </div>
+
+          <div className="p-3 rounded-xl bg-slate-800/80 border border-amber-900/60 bg-amber-950/20 space-y-0.5">
+            <span className="text-[10px] text-amber-400 font-bold uppercase block">ACTUAL COST</span>
+            <strong className="text-xl font-extrabold text-amber-400">Rp 198M</strong>
+            <span className="text-slate-400 text-[10px] block">Operational Cost</span>
+          </div>
+
+          <div className="p-3 rounded-xl bg-slate-800/80 border border-emerald-900/60 bg-emerald-950/20 space-y-0.5">
+            <span className="text-[10px] text-emerald-400 font-bold uppercase block">GROSS PROFIT</span>
+            <strong className="text-xl font-extrabold text-emerald-400">Rp 87M</strong>
+            <span className="text-emerald-400 text-[10px] block font-bold">Net Operational Margin</span>
+          </div>
+
+          <div className="p-3 rounded-xl bg-slate-800/80 border border-purple-900/60 bg-purple-950/20 space-y-0.5">
+            <span className="text-[10px] text-purple-400 font-bold uppercase block">OUTSTANDING</span>
+            <strong className="text-xl font-extrabold text-purple-400">Rp 42M</strong>
+            <span className="text-slate-400 text-[10px] block">Pending Collection</span>
+          </div>
+
+          <div className="p-3 rounded-xl bg-slate-800/80 border border-rose-900/60 bg-rose-950/20 space-y-0.5">
+            <span className="text-[10px] text-rose-400 font-bold uppercase block">COST OVERRUN</span>
+            <strong className="text-xl font-extrabold text-rose-400">Rp 8M</strong>
+            <span className="text-rose-400 text-[10px] block font-bold">⚠️ Overrun Flagged</span>
+          </div>
+        </div>
+      </div>
+
       {/* TOP KPI CARDS (6 CARDS) */}
       <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-6 gap-3 text-xs">
         <div className="bg-white dark:bg-[#101822] border border-[#E4E7EC] dark:border-[#202B38] p-4 rounded-xl space-y-1 shadow-xs">

@@ -232,6 +232,64 @@ export default function WorkforcePayrollPage() {
         </Card>
       </div>
 
+      {/* DAILY WORKER PAYROLL SUMMARY (REQUIREMENTS 19 & 20) */}
+      <Card className="p-5 space-y-3 border-indigo-200 dark:border-indigo-900/60 bg-indigo-50/20 dark:bg-indigo-950/20 font-mono text-xs">
+        <div className="flex justify-between items-center pb-2 border-b border-indigo-200 dark:border-indigo-900/60">
+          <span className="font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-wider text-xs">
+            DAILY WORKER PAYROLL SUMMARY (PERIOD: 16 – 31 AUG 2026)
+          </span>
+          <Badge variant="violet">✓ 12 Daily Workers Eligible</Badge>
+        </div>
+
+        <div className="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#101726]">
+          <table className="w-full text-left text-xs">
+            <thead className="bg-slate-50 dark:bg-[#162034] text-slate-400 font-bold uppercase text-[10px]">
+              <tr>
+                <th className="py-2.5 px-3">Worker</th>
+                <th className="py-2.5 px-3">Days</th>
+                <th className="py-2.5 px-3">Trips</th>
+                <th className="py-2.5 px-3">Base Pay</th>
+                <th className="py-2.5 px-3">Overtime</th>
+                <th className="py-2.5 px-3">Allowance</th>
+                <th className="py-2.5 px-3">Net Pay</th>
+                <th className="py-2.5 px-3">Status</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100 dark:divide-slate-800 font-mono text-xs">
+              <tr className="hover:bg-slate-50/50 dark:hover:bg-slate-900/40">
+                <td className="py-2.5 px-3 font-bold text-slate-900 dark:text-slate-100">
+                  <Link href="/drivers/drv-001" className="hover:text-blue-600">
+                    Agus Santoso (Daily Worker)
+                  </Link>
+                </td>
+                <td className="py-2.5 px-3">12 Days</td>
+                <td className="py-2.5 px-3">10 Trips</td>
+                <td className="py-2.5 px-3">Rp 3,000,000</td>
+                <td className="py-2.5 px-3 text-purple-600 font-bold">Rp 450,000</td>
+                <td className="py-2.5 px-3 text-emerald-600">Rp 300,000</td>
+                <td className="py-2.5 px-3 font-extrabold text-indigo-600 text-sm">Rp 3,750,000</td>
+                <td className="py-2.5 px-3"><Badge variant="amber">Pending Review</Badge></td>
+              </tr>
+
+              <tr className="hover:bg-slate-50/50 dark:hover:bg-slate-900/40">
+                <td className="py-2.5 px-3 font-bold text-slate-900 dark:text-slate-100">
+                  <Link href="/drivers/drv-002" className="hover:text-blue-600">
+                    Budi Pratama (Daily Worker)
+                  </Link>
+                </td>
+                <td className="py-2.5 px-3">10 Days</td>
+                <td className="py-2.5 px-3">8 Trips</td>
+                <td className="py-2.5 px-3">Rp 2,500,000</td>
+                <td className="py-2.5 px-3 text-purple-600 font-bold">Rp 300,000</td>
+                <td className="py-2.5 px-3 text-emerald-600">Rp 250,000</td>
+                <td className="py-2.5 px-3 font-extrabold text-indigo-600 text-sm">Rp 3,050,000</td>
+                <td className="py-2.5 px-3"><Badge variant="emerald">Approved</Badge></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </Card>
+
       {/* FILTER & SEARCH BAR */}
       <Card className="p-4 space-y-4">
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">

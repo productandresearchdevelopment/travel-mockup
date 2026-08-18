@@ -10,6 +10,11 @@ import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { Tabs } from "@/components/ui/Tabs";
+import TripGuestsTab from "@/components/trips/TripGuestsTab";
+import PickupDropoffTab from "@/components/trips/PickupDropoffTab";
+import TransportTab from "@/components/trips/TransportTab";
+import OperationalMonitoringTab from "@/components/trips/OperationalMonitoringTab";
+import TripActivityTimeline from "@/components/trips/TripActivityTimeline";
 import {
   CalendarCheck,
   Users,
@@ -80,11 +85,29 @@ export default function DeploymentDetailPage() {
         onChange={setActiveTab}
         tabs={[
           { id: "overview", label: "Deployment Overview" },
-          { id: "guests", label: "Guest Manifest (4)" },
+          { id: "guests", label: "Guests (12 Pax)" },
+          { id: "transport", label: "Transport (3 Segments)" },
+          { id: "pickup_dropoff", label: "Pickup & Drop-off" },
+          { id: "issues", label: "Issues & Monitoring (6)" },
           { id: "resources", label: "Assigned Resources" },
           { id: "timeline", label: "Operational Timeline" },
         ]}
       />
+
+      {/* TAB TRANSPORT */}
+      {activeTab === "transport" && (
+        <TransportTab tripId={id} />
+      )}
+
+      {/* TAB PICKUP & DROP-OFF */}
+      {activeTab === "pickup_dropoff" && (
+        <PickupDropoffTab tripId={id} />
+      )}
+
+      {/* TAB ISSUES & MONITORING */}
+      {activeTab === "issues" && (
+        <OperationalMonitoringTab tripId={id} />
+      )}
 
       {/* TAB 1: OVERVIEW */}
       {activeTab === "overview" && (
@@ -180,19 +203,9 @@ export default function DeploymentDetailPage() {
         </div>
       )}
 
-      {/* TAB 2: GUEST MANIFEST */}
+      {/* TAB 2: DYNAMIC GUEST MANAGEMENT */}
       {activeTab === "guests" && (
-        <Card className="p-6 space-y-4">
-          <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider">
-            Full Guest Manifest Details
-          </h3>
-          <div className="space-y-3 font-mono text-xs">
-            <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 space-y-1">
-              <span className="font-bold text-sm text-slate-900 dark:text-slate-100">Rossella Cescon (Primary Booker)</span>
-              <p className="text-slate-500 font-sans">Italy · Passport •••• 8932 · Vegetarian · Prefers Italian/English</p>
-            </div>
-          </div>
-        </Card>
+        <TripGuestsTab tripId={id} />
       )}
 
       {/* TAB 3: ASSIGNED RESOURCES */}
@@ -210,28 +223,7 @@ export default function DeploymentDetailPage() {
 
       {/* TAB 4: OPERATIONAL TIMELINE */}
       {activeTab === "timeline" && (
-        <Card className="p-6 space-y-4 font-mono text-xs">
-          <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider">
-            Operational Execution Timeline (25 Aug – 28 Aug 2026)
-          </h3>
-
-          <div className="space-y-3">
-            <div className="p-3 rounded-lg border border-slate-200 dark:border-slate-800 space-y-1">
-              <span className="font-bold text-blue-600 block">Day 1 — 25 Aug 2026: Yogyakarta Departure</span>
-              <span className="text-slate-500 block">03:00 WIB Pickup Yogyakarta → 07:00 Borobudur Tour → 11:00 Prambanan → Transfer to Malang</span>
-            </div>
-
-            <div className="p-3 rounded-lg border border-slate-200 dark:border-slate-800 space-y-1">
-              <span className="font-bold text-blue-600 block">Day 2 — 27 Aug 2026: Mount Bromo Sunrise Tour</span>
-              <span className="text-slate-500 block">03:00 WIB Bromo Sunrise Jeep → Penanjakan Viewpoint → Sea of Sand → Hotel Santika Malang</span>
-            </div>
-
-            <div className="p-3 rounded-lg border border-slate-200 dark:border-slate-800 space-y-1">
-              <span className="font-bold text-blue-600 block">Day 3 — 28 Aug 2026: Ijen Blue Flame & Bali Drop-off</span>
-              <span className="text-slate-500 block">01:00 WIB Ijen Crater Hike → Ketapang Port Ferizy Ferry → Gilimanuk Port → 18:00 WIB Bali Hotel Drop-off</span>
-            </div>
-          </div>
-        </Card>
+        <TripActivityTimeline tripId={id} />
       )}
     </AppShell>
   );
