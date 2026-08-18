@@ -136,6 +136,7 @@ export default function DriversPage() {
       <PageHeader
         title="Drivers"
         description="Manage drivers available for operational activities."
+        showBackButton={false}
         breadcrumbItems={[{ label: "Drivers" }]}
         actions={
           <>

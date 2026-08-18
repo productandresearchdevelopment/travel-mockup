@@ -85,6 +85,7 @@ export default function TourPackagesListPage() {
       <PageHeader
         title="Tour Package Master Catalog"
         description="Manage commercial tour products, destination sequences, operational requirements, and package costs."
+        showBackButton={false}
         breadcrumbItems={[{ label: "Resources", href: "/vehicles" }, { label: "Tour Package" }]}
         actions={
           <Link href="/tour-packages/create">

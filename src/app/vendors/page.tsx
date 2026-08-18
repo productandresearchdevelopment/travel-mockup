@@ -153,6 +153,7 @@ export default function VendorsListPage() {
       <PageHeader
         title="Vendors & Rental Management"
         description="Manage vehicle vendor partners, active rental contracts, locked rates, and cost variance controls."
+        showBackButton={false}
         breadcrumbItems={[{ label: "Resources", href: "/vehicles" }, { label: "Vendors" }]}
         actions={
           <div className="flex items-center gap-2">

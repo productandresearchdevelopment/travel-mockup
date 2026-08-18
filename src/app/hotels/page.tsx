@@ -163,6 +163,7 @@ export default function HotelsPage() {
       <PageHeader
         title="Hotels"
         description="Manage accommodation partners and room availability."
+        showBackButton={false}
         breadcrumbItems={[{ label: "Hotels" }]}
         actions={
           <>

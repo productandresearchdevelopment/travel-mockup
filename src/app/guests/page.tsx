@@ -141,6 +141,7 @@ export default function GuestsListPage() {
       <PageHeader
         title="Guests & Traveler Management"
         description="Manage international traveler profiles, passports, travel preferences, and tour booking history."
+        showBackButton={false}
         breadcrumbItems={[{ label: "Resources", href: "/vehicles" }, { label: "Guests" }]}
         actions={
           <Button

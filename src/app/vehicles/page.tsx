@@ -150,6 +150,7 @@ export default function VehiclesPage() {
       <PageHeader
         title="Vehicles Fleet Master"
         description="Enterprise SaaS operational resource management and fleet monitoring workspace."
+        showBackButton={false}
         breadcrumbItems={[{ label: "Resources", href: "/vehicles" }, { label: "Vehicles" }]}
         actions={
           <>

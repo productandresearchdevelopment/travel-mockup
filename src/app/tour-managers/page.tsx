@@ -153,6 +153,7 @@ export default function TourManagersPage() {
       <PageHeader
         title="Tour Managers"
         description="Manage tour managers available for operational activities."
+        showBackButton={false}
         breadcrumbItems={[{ label: "Tour Managers" }]}
         actions={
           <>

@@ -13,6 +13,7 @@ export default function SettingsPage() {
       <PageHeader
         title="Settings"
         description="System configuration, resource metadata definitions, and platform preferences."
+        showBackButton={false}
         breadcrumbItems={[{ label: "Settings" }]}
       />
 

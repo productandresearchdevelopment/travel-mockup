@@ -13,7 +13,7 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "Operational Resource Management | Enterprise SaaS",
+  title: "QIFESS TRAVEL",
   description: "Manage core operational resources: Vehicles, Drivers, Guides, Tour Managers, Hotels, and Destinations.",
   keywords: siteConfig.keywords,
 };

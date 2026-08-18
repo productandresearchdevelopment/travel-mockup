@@ -113,6 +113,7 @@ export default function WorkforceListPage() {
       <PageHeader
         title="Workforce Management"
         description="Operational management layer for drivers, tour guides, tour managers, daily workers, and daily rate compensations."
+        showBackButton={false}
         breadcrumbItems={[{ label: "Workforce", href: "/workforce" }, { label: "Workforce List" }]}
         actions={
           <Button variant="primary" size="sm" onClick={() => setShowAddModal(true)} leftIcon={<Plus className="w-3.5 h-3.5" />}>

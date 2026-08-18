@@ -164,6 +164,7 @@ export default function DestinationsPage() {
       <PageHeader
         title="Destinations"
         description="Manage destinations and operational information."
+        showBackButton={false}
         breadcrumbItems={[{ label: "Destinations" }]}
         actions={
           <>

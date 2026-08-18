@@ -35,12 +35,18 @@ export function PageHeader({
 }: PageHeaderProps) {
   const router = useRouter();
 
-  // Show back button if explicitly requested or if it's a detail/subpage with breadcrumbs or backHref/onBack
+  // Show back button ONLY when showBackButton is explicitly true, or when backHref/onBack is provided, or on detail/subpages with parent breadcrumb
   const shouldShowBack =
-    showBackButton ||
-    Boolean(backHref) ||
-    Boolean(onBack) ||
-    (breadcrumbItems && breadcrumbItems.length > 1);
+    showBackButton === true ||
+    (showBackButton !== false &&
+      (Boolean(backHref) ||
+        Boolean(onBack) ||
+        Boolean(
+          breadcrumbItems &&
+            breadcrumbItems.length > 1 &&
+            breadcrumbItems[0]?.href &&
+            breadcrumbItems[0]?.href !== breadcrumbItems[breadcrumbItems.length - 1]?.href
+        )));
 
   const handleBack = () => {
     if (onBack) {

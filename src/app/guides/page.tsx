@@ -151,6 +151,7 @@ export default function GuidesPage() {
       <PageHeader
         title="Guides"
         description="Manage guides available for operational activities."
+        showBackButton={false}
         breadcrumbItems={[{ label: "Guides" }]}
         actions={
           <>

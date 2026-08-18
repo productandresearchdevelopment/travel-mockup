@@ -168,6 +168,7 @@ export default function DispatcherMainPage() {
       <PageHeader
         title="Dispatcher Operational Command"
         description="Plan journeys, assign operational resources, and manage upcoming deployments."
+        showBackButton={false}
         breadcrumbItems={[{ label: "Operations", href: "/dispatch" }, { label: "Dispatcher" }]}
         actions={
           <div className="flex items-center gap-2">
