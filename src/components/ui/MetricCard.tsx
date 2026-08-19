@@ -125,93 +125,111 @@ export function MetricCard({
     <div
       onClick={onClick}
       className={cn(
-        "group relative overflow-hidden rounded-2xl p-4 sm:p-5 shadow-xs hover:-translate-y-0.5 hover:shadow-md transition-all duration-200 ease-out border",
+        "group relative overflow-hidden rounded-2xl p-3.5 sm:p-4 shadow-xs hover:-translate-y-0.5 hover:shadow-md transition-all duration-200 ease-out border min-w-0",
         style.cardBg,
         style.border,
         onClick && "cursor-pointer",
         className
       )}
     >
-      {/* Top Title & Icon Row (Matching Overview Styling) */}
-      <div className="flex items-center justify-between gap-3 mb-2">
-        <span className={cn("text-[10px] font-mono font-extrabold uppercase tracking-wider truncate", style.titleText)}>
+      {/* Top Title, Badge & Icon Row */}
+      <div className="flex items-center justify-between gap-2 mb-2 min-w-0">
+        <span
+          className={cn(
+            "text-[10px] font-mono font-extrabold uppercase tracking-wider truncate min-w-0 flex-1",
+            style.titleText
+          )}
+          title={title}
+        >
           {title}
         </span>
 
-        {icon && (
-          <div
-            className={cn(
-              "w-6 h-6 rounded-lg flex items-center justify-center shrink-0 border transition-all duration-200",
-              style.iconBg,
-              style.iconText,
-              style.iconBorder
-            )}
-          >
-            {icon}
-          </div>
-        )}
+        <div className="flex items-center gap-1.5 shrink-0">
+          {badge && (
+            <div className="shrink-0">
+              {typeof badge === "string" ? (
+                <Badge
+                  variant={
+                    variant === "emerald"
+                      ? "emerald"
+                      : variant === "rose"
+                      ? "danger"
+                      : "blue"
+                  }
+                  className="text-[10px] px-1.5 py-0.5"
+                >
+                  {badge}
+                </Badge>
+              ) : typeof badge === "object" && "text" in (badge as Record<string, unknown>) ? (
+                <Badge
+                  variant={((badge as Record<string, unknown>).variant as any) || "emerald"}
+                  className="text-[10px] px-1.5 py-0.5"
+                >
+                  {(badge as Record<string, unknown>).text as string}
+                </Badge>
+              ) : (
+                (badge as React.ReactNode)
+              )}
+            </div>
+          )}
+
+          {icon && (
+            <div
+              className={cn(
+                "w-5 h-5 sm:w-6 sm:h-6 rounded-lg flex items-center justify-center shrink-0 border transition-all duration-200",
+                style.iconBg,
+                style.iconText,
+                style.iconBorder
+              )}
+            >
+              {icon}
+            </div>
+          )}
+        </div>
       </div>
 
-      {/* Main Metric Value & Subtitle / Badge Row */}
-      <div className="flex items-baseline justify-between gap-2 pt-0.5">
-        <div className="flex items-baseline gap-2">
-          <span className="text-2xl sm:text-3xl font-extrabold tracking-tight font-sans text-slate-900 dark:text-white">
+      {/* Main Metric Value & Subtitle Row */}
+      <div className="flex flex-col min-w-0 pt-0.5 space-y-0.5">
+        <div className="flex items-baseline justify-between gap-2 min-w-0">
+          <span
+            className="text-base sm:text-lg xl:text-xl font-extrabold tracking-tight font-sans text-slate-900 dark:text-white truncate block min-w-0"
+            title={typeof value === "string" || typeof value === "number" ? String(value) : undefined}
+          >
             {value}
           </span>
-          {subtitle && (
-            <span className="text-xs font-medium font-sans text-slate-500 dark:text-slate-400">
-              {subtitle}
-            </span>
+
+          {!badge && trend && (
+            <div
+              className={cn(
+                "flex items-center gap-1 text-[10px] font-sans font-semibold px-1.5 py-0.5 rounded-full shrink-0",
+                trend.isPositive !== false
+                  ? "bg-emerald-50 text-emerald-600 dark:bg-emerald-950/60 dark:text-emerald-400"
+                  : "bg-rose-50 text-rose-600 dark:bg-rose-950/60 dark:text-rose-400"
+              )}
+            >
+              {trend.isPositive !== false ? (
+                <TrendingUp className="w-2.5 h-2.5" />
+              ) : (
+                <TrendingDown className="w-2.5 h-2.5" />
+              )}
+              <span>{trend.value}</span>
+            </div>
           )}
         </div>
 
-        {/* Badge or Trend Right Indicator */}
-        {badge && (
-          <div className="shrink-0">
-            {typeof badge === "string" ? (
-              <Badge
-                variant={
-                  variant === "emerald"
-                    ? "emerald"
-                    : variant === "rose"
-                    ? "danger"
-                    : "blue"
-                }
-              >
-                {badge}
-              </Badge>
-            ) : typeof badge === "object" && "text" in (badge as Record<string, unknown>) ? (
-              <Badge variant={((badge as Record<string, unknown>).variant as any) || "emerald"}>
-                {(badge as Record<string, unknown>).text as string}
-              </Badge>
-            ) : (
-              (badge as React.ReactNode)
-            )}
-          </div>
-        )}
-
-        {!badge && trend && (
-          <div
-            className={cn(
-              "flex items-center gap-1 text-[11px] font-sans font-semibold px-2 py-0.5 rounded-full shrink-0",
-              trend.isPositive !== false
-                ? "bg-emerald-50 text-emerald-600 dark:bg-emerald-950/60 dark:text-emerald-400"
-                : "bg-rose-50 text-rose-600 dark:bg-rose-950/60 dark:text-rose-400"
-            )}
+        {subtitle && (
+          <span
+            className="text-[11px] font-medium font-sans text-slate-500 dark:text-slate-400 truncate block min-w-0"
+            title={subtitle}
           >
-            {trend.isPositive !== false ? (
-              <TrendingUp className="w-3 h-3" />
-            ) : (
-              <TrendingDown className="w-3 h-3" />
-            )}
-            <span>{trend.value}</span>
-          </div>
+            {subtitle}
+          </span>
         )}
       </div>
 
       {/* Optional Custom Footer */}
       {footer && (
-        <div className="mt-3 pt-2.5 border-t border-slate-100 dark:border-slate-800/80 text-xs text-slate-500">
+        <div className="mt-2.5 pt-2 border-t border-slate-100 dark:border-slate-800/80 text-xs text-slate-500 min-w-0 truncate">
           {footer}
         </div>
       )}
