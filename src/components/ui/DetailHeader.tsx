@@ -73,7 +73,11 @@ export function DetailHeader({
           )}
         </div>
 
-        {actions && <div className="flex items-center gap-2 shrink-0">{actions}</div>}
+        {actions && (
+          <div className="flex items-center gap-2 shrink-0 flex-wrap [&_button]:text-white [&_button]:border-white/30 [&_button]:bg-white/15 [&_button:hover]:bg-white/25 [&_button_svg]:!text-white font-semibold">
+            {actions}
+          </div>
+        )}
       </div>
 
       {/* Metrics Row */}

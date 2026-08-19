@@ -203,7 +203,8 @@ export default function VehicleDetailPage() {
               variant="outline"
               size="sm"
               onClick={() => setShowFuelModal(true)}
-              leftIcon={<Fuel className="w-3.5 h-3.5 text-blue-600" />}
+              className="bg-white/15 hover:bg-white/25 text-white border-white/30 backdrop-blur-md shadow-2xs font-semibold"
+              leftIcon={<Fuel className="w-3.5 h-3.5 text-white" />}
             >
               Add Fuel Log
             </Button>
@@ -212,13 +213,19 @@ export default function VehicleDetailPage() {
               variant="outline"
               size="sm"
               onClick={() => setShowIssueModal(true)}
-              leftIcon={<AlertTriangle className="w-3.5 h-3.5 text-rose-500" />}
+              className="bg-white/15 hover:bg-white/25 text-white border-white/30 backdrop-blur-md shadow-2xs font-semibold"
+              leftIcon={<AlertTriangle className="w-3.5 h-3.5 text-amber-300" />}
             >
               Report Issue
             </Button>
 
             <Link href="/dispatch/tracking">
-              <Button variant="outline" size="sm" leftIcon={<Compass className="w-3.5 h-3.5 text-blue-600" />}>
+              <Button
+                variant="outline"
+                size="sm"
+                className="bg-white/15 hover:bg-white/25 text-white border-white/30 backdrop-blur-md shadow-2xs font-semibold"
+                leftIcon={<Compass className="w-3.5 h-3.5 text-white" />}
+              >
                 Track Vehicle
               </Button>
             </Link>
@@ -227,7 +234,7 @@ export default function VehicleDetailPage() {
       />
 
       {/* CURRENT OPERATIONAL STATE BANNER */}
-      <Card className="p-5 bg-gradient-to-r from-blue-950/20 via-slate-900 to-slate-900 border-blue-800/40 text-white space-y-3">
+      <Card className="p-5 bg-slate-900 border-slate-800 text-white space-y-3">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-slate-800 pb-3">
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-xl bg-blue-600 text-white flex items-center justify-center font-bold">
